@@ -1,95 +1,96 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, effect } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 import { Observable, of, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { delay, tap, map, catchError } from 'rxjs/operators';
 
-// Reemplazar imports rotos por rutas correctas
-import { apiUrl } from '../../core/http/api-url';
-import { mockResponse } from '../../core/http/mock-response';
-
-export interface SessionUser {
-  id: string;
-  email: string;
+export interface SessionData {
   nombre: string;
+  email: string;
   rol: string;
-  organizacionId: string;
+  organizacion: string;
 }
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private sessionUserSignal = signal<SessionUser | null>(null);
-  public sessionUser = computed(() => this.sessionUserSignal());
+  // Señal del usuario actual (puede ser null si no hay sesión)
+  public readonly session = signal<SessionData | null>(null);
 
-  constructor(private http: HttpClient) {
-    // Cuando cambia el modo (realmente solo en el arranque)
-    if (environment.useMock) {
-      // Simula sesión iniciada solo si corresponde
-      this.sessionUserSignal.set(null);
-    } else {
-      this.checkSession();
+  constructor(private http: HttpClient, private router: Router) {
+    if (!this.session()) {
+      this.loadSession();
     }
   }
 
-  login(email: string, password: string): Observable<SessionUser> {
+  // Login: llama a POST /auth/login con correo corporativo y contraseña
+  public login(email: string, password: string): Observable<void> {
     if (environment.useMock) {
-      // MOCK: autoriza cualquier correo "@techforb.com" y pass no vacía
-      if (typeof email === 'string' && email.trim().toLowerCase().endsWith('@techforb.com') && password && password.length > 0) {
-        const session: SessionUser = {
-          id: 'e87e4b66-205a-47a4-8b48-cc11e72d9b31',
-          email: email.trim().toLowerCase(),
-          nombre: 'Administrador RH',
-          rol: 'ADMIN_RRHH',
-          organizacionId: 'c470cf0d-d878-41ad-8aa3-2d1ac487ab22',
+      // MOCK: acepta cualquier correo @techforb.com y cualquier contraseña
+      if (email && /@techforb\.com$/i.test(email)) {
+        const data: SessionData = {
+          nombre: 'Administrador RR.HH',
+          email,
+          rol: 'ADMIN',
+          organizacion: 'TECHFORB'
         };
-        this.sessionUserSignal.set(session);
-        // Devuelve datos como el backend
-        return mockResponse(session);
+        this.session.set(data);
+        // Simula delay de red (remplazar al conectar el backend)
+        return of(undefined).pipe(delay(600));
       } else {
-        return throwError(() => 'El correo o la contraseña no son correctos. Revisá los datos e intentá de nuevo.');
+        return throwError(() => ({ message: 'El correo o la contraseña no son correctos. Revisá los datos e intentá de nuevo.' })).pipe(delay(600));
       }
-    } else {
-      // Real: POST /auth/login
-      return this.http.post<SessionUser>(apiUrl('/auth/login'), { email, password }, { withCredentials: true }).pipe(
-        map((session) => {
-          this.sessionUserSignal.set(session);
-          return session;
-        }),
-        catchError((err) => {
-          // Error: problema de acceso
-          return throwError(() => err);
+    }
+    return this.http.post<SessionData>('/api/auth/login', { email, password }, { withCredentials: true })
+      .pipe(
+        tap(data => this.session.set(data)),
+        map(() => {}),
+        catchError(error => {
+          return throwError(() => ({ message: error?.error?.message || 'El correo o la contraseña no son correctos. Revisá los datos e intentá de nuevo.' }));
         })
       );
-    }
   }
 
-  logout(): Observable<void> {
+  // Logout: llama a POST /auth/logout, limpia la sesión y navega a login
+  public logout(): Observable<void> {
     if (environment.useMock) {
-      this.sessionUserSignal.set(null);
-      // MOCK: simula
-      return mockResponse(void 0);
-    } else {
-      return this.http.post<void>(apiUrl('/auth/logout'), null, { withCredentials: true }).pipe(
-        map(() => {
-          this.sessionUserSignal.set(null);
-        })
+      this.session.set(null);
+      // Simula delay corto (remplazar al conectar backend)
+      return of(undefined).pipe(
+        delay(300),
+        tap(() => this.router.navigateByUrl('/login'))
       );
     }
+    return this.http.post<void>('/api/auth/logout', {}, { withCredentials: true }).pipe(
+      tap(() => {
+        this.session.set(null);
+        this.router.navigateByUrl('/login');
+      })
+    );
   }
 
-  checkSession(): void {
+  // Cargar la sesión actual (GET /auth/me)
+  public loadSession(): void {
     if (environment.useMock) {
-      this.sessionUserSignal.set(null);
-    } else {
-      this.http.get<SessionUser>(apiUrl('/auth/me'), { withCredentials: true })
-        .subscribe({
-          next: (session) => {
-            this.sessionUserSignal.set(session);
-          },
-          error: () => {
-            this.sessionUserSignal.set(null);
-          }
-        });
+      // MOCK: persiste la sesión en memoria (remplazar al conectar backend)
+      // Si ya hay sesión, no hace nada.
+      if (!this.session()) {
+        this.session.set(null);
+      }
+      return;
     }
+    this.http.get<SessionData>('/api/auth/me', { withCredentials: true })
+      .pipe(
+        tap(data => this.session.set(data)),
+        catchError(() => {
+          this.session.set(null);
+          return of(undefined);
+        })
+      ).subscribe();
+  }
+
+  // Devuelve true si hay usuario autenticado
+  public isAuthenticated(): boolean {
+    return !!this.session();
   }
 }
