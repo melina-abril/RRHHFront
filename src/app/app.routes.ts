@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
-import { LoginPage } from './core/auth/login-page';
-import { SolicitudPublicaPage } from './features/solicitud-publica/solicitud-publica-page';
+import { LoginPage } from './features/auth/pages/login-page/login-page';
 import { ShellLayout } from './core/layout/shell-layout';
 import { authGuard } from './core/auth/auth.guard';
 
@@ -13,7 +12,7 @@ export const APP_ROUTES: Routes = [
   },
   {
     path: 'solicitud-ausencia/:token',
-    loadComponent: () => Promise.resolve(SolicitudPublicaPage)
+    loadComponent: () => import('./features/solicitud-publica/solicitud-publica-page').then(m => m.SolicitudPublicaPage)
   },
   {
     path: '',

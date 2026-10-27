@@ -1,5 +1,3 @@
-// Tipos equivalentes al DTO del backend InicioSummaryResponse
-
 export interface ModuloSummary {
   nombre: string;
   descripcion: string;
@@ -8,7 +6,7 @@ export interface ModuloSummary {
 export interface InicioSummaryResponse {
   totalColaboradores: number;
   solicitudesPendientes: number;
-  proximoEvento: string; // Fecha ISO, ej: '2024-07-01'
+  proximoEvento: string | null;
   gestionEmpleados: ModuloSummary;
   sueldosBonos: ModuloSummary;
   solicitudes: ModuloSummary;

@@ -1,11 +1,9 @@
-// Modelos del módulo auth, formatos según el contrato backend
-
 export interface LoginRequest {
   email: string;
   password: string;
 }
 
-export interface SesionResponse {
+export interface LoginResponse {
   id: string;
   nombre: string;
   email: string;

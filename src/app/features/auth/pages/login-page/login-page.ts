@@ -1,62 +1,50 @@
-import { Component, signal, effect } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Component, signal } from '@angular/core';
+import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { AuthApiService } from '../../data-access/auth.service';
+import { AuthFeatureService } from '../../data-access/auth.service';
 import { LoginRequest } from '../../models/auth.models';
 
 @Component({
-  selector: 'auth-login-page',
+  selector: 'app-auth-login-page',
   standalone: true,
   templateUrl: './login-page.html',
   styleUrl: './login-page.scss',
-  imports: [ReactiveFormsModule, ]
+  imports: [CommonModule, ReactiveFormsModule]
 })
 export class LoginPage {
-  /** Formulario reactivo tipado */
-  public loginForm: FormGroup;
-  public isLoading = signal(false);
-  public errorMessage = signal<string | null>(null);
+  protected readonly form = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required]]
+  });
+  protected submitted = false;
+  protected submitting = false;
+  protected loginError: string | null = null;
 
   constructor(
-    private fb: FormBuilder,
-    private api: AuthApiService,
-    private router: Router
-  ) {
-    this.loginForm = this.fb.group({
-      email: [
-        '',
-        [Validators.required, Validators.email]
-      ],
-      password: ['', [Validators.required]]
-    });
-  }
+    private readonly fb: FormBuilder,
+    private readonly auth: AuthFeatureService,
+    private readonly router: Router
+  ) {}
 
-  public submit(): void {
-    this.errorMessage.set(null);
-    if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched();
+  public onSubmit(): void {
+    this.submitted = true;
+    this.loginError = null;
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
-    this.isLoading.set(true);
-    const request: LoginRequest = {
-      email: this.loginForm.value.email,
-      password: this.loginForm.value.password
-    };
-    this.api.login(request).subscribe({
+    this.submitting = true;
+    const values = this.form.value as LoginRequest;
+    this.auth.login(values).subscribe({
       next: () => {
-        this.isLoading.set(false);
-        this.errorMessage.set(null);
-        // Redirige a pantalla principal (layout autenticado): ''
-        this.router.navigateByUrl('');
+        this.submitting = false;
+        this.router.navigateByUrl('/');
       },
       error: (err) => {
-        this.isLoading.set(false);
-        this.errorMessage.set(err?.message || 'No pudimos iniciar sesión.');
+        this.submitting = false;
+        this.loginError = err?.message || 'No pudimos iniciar sesión.';
       }
     });
-  }
-
-  public formControl(name: string) {
-    return this.loginForm.get(name)!;
   }
 }

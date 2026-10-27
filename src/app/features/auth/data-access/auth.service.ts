@@ -1,60 +1,86 @@
-// Servicio de datos: login, logout, sesión actual
-
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { of, throwError, Observable } from 'rxjs';
-import { delay, tap, map, catchError } from 'rxjs/operators';
-import { MOCK_SESSION } from './auth.mock';
-import { LoginRequest, SesionResponse } from '../models/auth.models';
+import { mockResponse } from 'src/app/core/http/mock-response';
+import { LoginRequest, LoginResponse } from '../models/auth.models';
+import { Observable, throwError } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
-export class AuthApiService {
-  // Signal del usuario actual
-  public session = signal<SesionResponse | null>(null);
+export class AuthFeatureService {
+  private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) {}
-
-  /** Login: POST /api/auth/login */
-  login(request: LoginRequest): Observable<SesionResponse> {
+  /**
+   * Login: valida credenciales y devuelve los datos de sesión.
+   * Backend: POST /api/auth/login
+   */
+  public login(payload: LoginRequest): Observable<LoginResponse> {
     if (environment.useMock) {
-      // MOCK: solo email=\'rh@techforb.com\' y password=\'demo123\' aceptados
+      // MOCK: Acepta solo rh@techforb.com / demo123
       if (
-        request.email === 'rh@techforb.com'&&
-        request.password === 'demo123'
+        payload.email.toLowerCase() === 'rh@techforb.com' &&
+        payload.password === 'demo123'
       ) {
-        this.session.set(MOCK_SESSION);
-        // mockResponse dummy (se reemplaza al conectar backend)
-        return of(MOCK_SESSION).pipe(delay(600));
+        // Dummy: respuesta equivalente al backend
+        return mockResponse({
+          id: 'f0fac4c1-63b9-47cd-8e99-f87e019aac9f',
+          nombre: 'RH ADMIN',
+          email: 'rh@techforb.com',
+          rol: 'ADMIN_RRHH',
+          organizacionId: 'techforb-org-uuid'
+        });
       } else {
-        return throwError(() => ({ message: 'El correo o la contraseña no son correctos. Revisá los datos e intentá de nuevo.' })).pipe(delay(600));
+        // Dummy: respuesta de error
+        return throwError(() => ({
+          message:
+            'El correo o la contraseña no son correctos. Revisá los datos e intentá de nuevo.'
+        }));
       }
     }
-    return this.http.post<SesionResponse>('/api/auth/login', request, { withCredentials: true }).pipe(
-      tap(res => this.session.set(res)),
+    return this.http.post<LoginResponse>(
+      '/api/auth/login',
+      payload,
+      { withCredentials: true }
+    ).pipe(
+      map(response => response),
       catchError(error => {
-        // el backend responde 401 sin mensaje
-        return throwError(() => ({ message: 'El correo o la contraseña no son correctos. Revisá los datos e intentá de nuevo.' }));
+        // Devuelve mensaje de error legible
+        return throwError(() => ({
+          message:
+            error?.error?.message ||
+            'El correo o la contraseña no son correctos. Revisá los datos e intentá de nuevo.'
+        }));
       })
     );
   }
 
-  /** Logout: POST /api/auth/logout */
-  logout(): Observable<void> {
+  /**
+   * Logout: cierra la sesión autenticada.
+   * Backend: POST /api/auth/logout
+   */
+  public logout(): Observable<void> {
     if (environment.useMock) {
-      this.session.set(null);
-      return of(undefined).pipe(delay(300));
+      // MOCK: simplemente resuelve
+      return mockResponse(undefined);
     }
-    return this.http.post<void>('/api/auth/logout', {}, { withCredentials: true }).pipe(
-      tap(() => this.session.set(null))
-    );
+    return this.http.post<void>('/api/auth/logout', {}, { withCredentials: true });
   }
 
-  /** GET /api/auth/me — devuelve sesión actual validada */
-  getCurrentSession(): Observable<SesionResponse> {
+  /**
+   * Obtiene la información de la sesión actual.
+   * Backend: GET /api/auth/me
+   */
+  public getCurrentSession(): Observable<LoginResponse> {
     if (environment.useMock) {
-      return of(MOCK_SESSION).pipe(delay(300));
+      // MOCK: sólo existe sesión para rh@techforb.com
+      return mockResponse({
+        id: 'f0fac4c1-63b9-47cd-8e99-f87e019aac9f',
+        nombre: 'RH ADMIN',
+        email: 'rh@techforb.com',
+        rol: 'ADMIN_RRHH',
+        organizacionId: 'techforb-org-uuid'
+      });
     }
-    return this.http.get<SesionResponse>('/api/auth/me', { withCredentials: true });
+    return this.http.get<LoginResponse>('/api/auth/me', { withCredentials: true });
   }
 }
