@@ -1,44 +1,41 @@
-# Sistema de Gestión de Recursos Humanos (Frontend)
+# Gestión de RR.HH – Frontend (TECHFORB)
 
-Esta aplicación es el panel administrativo interno para Recursos Humanos de TECHFORB.
+Este proyecto es el frontend de la aplicación Gestión de Recursos Humanos de TECHFORB. Permite al área de RR.HH centralizar la gestión de colaboradores, solicitudes, documentación, sueldos, bonos, horas extras, comunicados y otros procesos internos.
 
-## ¿Cómo levantarla?
+## Levantar la aplicación
 
-1. Clona el repositorio y entra a la carpeta.
-2. Instala dependencias:
+1. Instalar dependencias:
 
-   ```bash
+   ````sh
    npm install
-   ```
+   ````
 
-3. Levanta la app en modo desarrollo (mock, sin backend):
+2. Ejecutar en modo desarrollo (con datos mock):
 
-   ```bash
+   ````sh
    npm start
-   ```
+   ````
+   Esto levanta la app en http://localhost:4200 utilizando mocks locales (sin necesitar backend).
 
-   La aplicación quedará visible en http://localhost:4200
+3. Conectar con el backend (Java + Spring Boot):
 
-4. Para conectarla al backend Java + Spring Boot:
+   - Configurar `src/environments/environment.ts` para poner `useMock: false`.
+   - Asegurarse que el backend corra en http://localhost:8080 o modificar `proxy.conf.json` según corresponda.
 
-   - Modifica `src/environments/environment.ts` y seteá `useMock: false`.
-   - Levanta el backend en http://localhost:8080 (por defecto).
-   - Las requests se envían siempre con cookie de sesión.
+## Estructura principal
 
-## Estructura de carpetas
+- `src/app/core/`   — Autenticación, layout, HTTP comunes.
+- `src/app/features/` — Un módulo funcional por carpeta (inicio de sesión, dashboard, etc.).
+- `src/app/shared/`  — Componentes, pipes y modelos reutilizables.
+- `src/environments/` — Configuración por entorno.
 
-- `src/app/core/`: layout, navegación, sesión y helpers comunes
-- `src/app/features/`: un módulo funcional por carpeta (ej: inicio, colaboradores, sueldos)
-- `src/app/shared/`: componentes, pipes y modelos reutilizables
-- `src/environments/`: configuración por entorno
+## Requisitos
+- Node.js >= 18
+- Angular CLI 21
 
-### Modo mock
+## Ejecución de scripts
+- `npm start`  —  Dev server con watch y modo mock por defecto
+- `npm run build` — Build de producción
 
-En el entorno de desarrollo (`useMock: true`), todos los servicios de datos devuelven respuestas simuladas y la app funciona sin backend conectado.
-
----
-
-## Scripts
-
-- `npm start`: ambiente de desarrollo (modo mock, hot reload)
-- `npm run build`: build de producción
+## Proyecto en modo mock
+La app inicia por defecto en modo mock y muestra datos simulados compatibles con el backend. Desactivar `useMock` en `environment.ts` para conectar con la API real.

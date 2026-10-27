@@ -1,34 +1,38 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
-  "defaultProject": "rrhh-front",
+  "newProjectRoot": "projects",
   "projects": {
     "rrhh-front": {
       "projectType": "application",
-      "root": "src",
+      "schematics": {},
+      "root": "",
       "sourceRoot": "src",
+      "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular/build:application",
           "options": {
             "outputPath": "dist/rrhh-front",
             "index": "src/index.html",
-            "main": "src/main.ts",
             "polyfills": [],
+            "tsConfig": "tsconfig.app.json",
             "assets": [
               "public"
             ],
             "styles": [
               "src/styles.scss"
             ],
-            "tsConfig": "tsconfig.app.json"
+            "serviceWorker": false,
+            "allowedCommonJsDependencies": [],
+            "browser": "src/main.ts"
           }
         },
         "serve": {
           "builder": "@angular/build:dev-server",
           "options": {
-            "browserTarget": "rrhh-front:build",
-            "proxyConfig": "proxy.conf.json"
+            "proxyConfig": "proxy.conf.json",
+            "buildTarget": "rrhh-front:build"
           }
         }
       }

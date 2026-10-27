@@ -1,174 +1,145 @@
-<section class="inicio-wrapper">
-  <section class="intro-section">
-    <span class="panel-label">Panel de inicio</span>
-    <h1>Inicio</h1>
-    @if (state().status === 'ready' && resumen as resumenAux) {
-      <p class="bienvenida">{{ resumenAux.bienvenida }}</p>
-    } @else {
-      <p class="bienvenida">Bienvenido al sistema de Recursos Humanos de TECHFORB. Consultá la actividad general y accedé a los módulos desde un solo lugar.</p>
+<section class="inicio-page">
+  <div class="inicio-header">
+    <span class="inicio-panel-label">Panel de inicio</span>
+    <h1 class="inicio-title">Inicio</h1>
+    @if (summaryState() as s) {
+      @switch (s.status) {
+        @case ('loading') {
+          <p class="inicio-subtext">Cargando datos generales…</p>
+        }
+        @case ('error') {
+          <p class="inicio-error">Error: {{s.message}}</p>
+        }
+        @case ('ready') {
+          <p class="inicio-subtext">{{s.data.bienvenida}}</p>
+        }
+        @case ('empty') {
+          <p class="inicio-subtext">Bienvenido al sistema de Recursos Humanos de TECHFORB. Consultá la actividad general y accedé a los módulos desde un solo lugar.</p>
+        }
+      }
+    }
+  </div>
+
+  <section class="inicio-resumen" aria-labelledby="resumen-title">
+    <div class="inicio-resumen-header">
+      <h2 id="resumen-title">Resumen general</h2>
+    </div>
+
+    @if (summaryState() as s) {
+      @switch (s.status) {
+        @case ('loading') {
+          <div class="inicio-resumen-cards">
+            <div class="inicio-indicador-card loading"></div>
+            <div class="inicio-indicador-card loading"></div>
+            <div class="inicio-indicador-card loading"></div>
+          </div>
+        }
+        @case ('error') {
+          <div class="inicio-resumen-error">No se pudo cargar el resumen.</div>
+        }
+        @case ('ready') {
+          <div class="inicio-resumen-cards">
+            <a class="inicio-indicador-card" routerLink="/empleados">
+              <span class="icon-bg"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-people"/></svg></span>
+              <span class="indicador-label">Colaboradores activos</span>
+              <strong class="indicador-value">{{s.data.totalColaboradores}}</strong>
+              <span class="indicador-legend">{{s.data.totalColaboradores === 0 ? 'Sin colaboradores activos registrados' : 'colaboradores activos registrados'}}</span>
+            </a>
+            <a class="inicio-indicador-card" routerLink="/solicitudes">
+              <span class="icon-bg"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-request"/></svg></span>
+              <span class="indicador-label">Solicitudes pendientes</span>
+              <strong class="indicador-value">{{s.data.solicitudesPendientes}}</strong>
+              <span class="indicador-legend">{{s.data.solicitudesPendientes === 0 ? 'Sin solicitudes para revisar' : 'solicitudes para revisar'}}</span>
+            </a>
+            <a class="inicio-indicador-card" routerLink="/empleados">
+              <span class="icon-bg"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-calendar"/></svg></span>
+              <span class="indicador-label">Próximos eventos</span>
+              <strong class="indicador-value">{{s.data.proximoEvento ? 1 : 0}}</strong>
+              <span class="indicador-legend">{{s.data.proximoEvento ? ('Próximo evento: ' + (s.data.proximoEvento | date:'dd/MM/yyyy')) : 'Cumpleaños y beneficios por vencer'}}</span>
+            </a>
+          </div>
+        }
+        @case ('empty') {
+          <div class="inicio-resumen-cards">
+            <a class="inicio-indicador-card" routerLink="/empleados">
+              <span class="icon-bg"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-people"/></svg></span>
+              <span class="indicador-label">Colaboradores activos</span>
+              <strong class="indicador-value">0</strong>
+              <span class="indicador-legend">Sin colaboradores activos registrados</span>
+            </a>
+            <a class="inicio-indicador-card" routerLink="/solicitudes">
+              <span class="icon-bg"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-request"/></svg></span>
+              <span class="indicador-label">Solicitudes pendientes</span>
+              <strong class="indicador-value">0</strong>
+              <span class="indicador-legend">Sin solicitudes para revisar</span>
+            </a>
+            <a class="inicio-indicador-card" routerLink="/empleados">
+              <span class="icon-bg"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-calendar"/></svg></span>
+              <span class="indicador-label">Próximos eventos</span>
+              <strong class="indicador-value">0</strong>
+              <span class="indicador-legend">Cumpleaños y beneficios por vencer</span>
+            </a>
+          </div>
+        }
+      }
     }
   </section>
 
-  <section aria-labelledby="resumen-heading" class="resumen-section">
-    <div class="resumen-header">
-      <h2 id="resumen-heading">Resumen general</h2>
-      <button type="button" class="btn-primary reload-btn" title="Actualizar" (click)="loadSummary()">
-        <span class="reload-icon"></span>Actualizar
-      </button>
+  <section class="inicio-accesos" aria-labelledby="accesos-title">
+    <div class="inicio-accesos-header">
+      <h2 id="accesos-title">Accesos rápidos</h2>
+      @if (summaryState() as s) {
+        @switch (s.status) {
+          @case ('ready') {
+            <p class="accesos-indicacion">{{s.data.indicacionAccesos}}</p>
+          }
+          @default {
+            <p class="accesos-indicacion">Ingresá directamente al módulo que necesitás.</p>
+          }
+        }
+      }
     </div>
-    @switch (state().status) {
-      @case ('loading') {
-        <loading-state texto="Cargando resumen..." />
-      }
-      @case ('error') {
-        <error-alert [mensaje]="state().message || 'Error al cargar el resumen'" />
-      }
-      @case ('empty') {
-        <empty-state mensaje="No hay información de resumen todavía." />
-      }
-      @case ('ready') {
-        @let resumenAux = state().data;
-        <div class="dashboard-grid">
-          <a class="dashboard-card" routerLink="/colaboradores">
-            <span class="card-icon icon-colaboradores"></span>
-            <div class="card-main">
-              <span class="card-title">Colaboradores activos</span>
-              <strong class="card-value">{{ resumenAux.totalColaboradores }}</strong>
-              <span class="card-desc">
-                @if (resumenAux.totalColaboradores > 0) {
-                  {{ resumenAux.totalColaboradores === 1 ? 'Un colaborador activo' : resumenAux.totalColaboradores + ' colaboradores activos' }}
-                } @else {
-                  Sin colaboradores activos registrados
-                }
-              </span>
-            </div>
-            <span class="arrow-right"></span>
-          </a>
-          <a class="dashboard-card" routerLink="/solicitudes">
-            <span class="card-icon icon-solicitudes"></span>
-            <div class="card-main">
-              <span class="card-title">Solicitudes pendientes</span>
-              <strong class="card-value">{{ resumenAux.solicitudesPendientes }}</strong>
-              <span class="card-desc">
-                @if (resumenAux.solicitudesPendientes > 0) {
-                  {{ resumenAux.solicitudesPendientes === 1 ? 'Una solicitud para revisar' : resumenAux.solicitudesPendientes + ' solicitudes para revisar' }}
-                } @else {
-                  Sin solicitudes para revisar
-                }
-              </span>
-            </div>
-            <span class="arrow-right"></span>
-          </a>
-          <a class="dashboard-card" routerLink="/colaboradores">
-            <span class="card-icon icon-eventos"></span>
-            <div class="card-main">
-              <span class="card-title">Próximos eventos</span>
-              <strong class="card-value">{{ resumenAux.proximoEvento ? 1 : 0 }}</strong>
-              <span class="card-desc">
-                @if (resumenAux.proximoEvento) {
-                  {{ resumenAux.proximoEvento | date: 'dd/MM/yyyy' }}
-                } @else {
-                  Cumpleaños y beneficios por vencer
-                }
-              </span>
-            </div>
-            <span class="arrow-right"></span>
-          </a>
-        </div>
-      }
-    }
-  </section>
-  <section aria-labelledby="accesos-heading" class="accesos-section">
-    @if (state().status === 'ready' && resumen as resumenAux) {
-      <h2 id="accesos-heading">Accesos rápidos</h2>
-      <p class="indicacion">{{ resumenAux.indicacionAccesos }}</p>
-      <div class="accesos-grid">
-        <a class="mk-card" routerLink="/colaboradores">
-          <span class="card-icon icon-colaboradores"></span>
-          <span class="card-main">
-            <strong>{{ resumenAux.gestionEmpleados.nombre }}</strong>
-            <span>{{ resumenAux.gestionEmpleados.descripcion }}</span>
-          </span>
-          <span class="arrow-right"></span>
-        </a>
-        <a class="mk-card" routerLink="/sueldos-y-bonos">
-          <span class="card-icon icon-sueldos"></span>
-          <span class="card-main">
-            <strong>{{ resumenAux.sueldosBonos.nombre }}</strong>
-            <span>{{ resumenAux.sueldosBonos.descripcion }}</span>
-          </span>
-          <span class="arrow-right"></span>
-        </a>
-        <a class="mk-card" routerLink="/solicitudes">
-          <span class="card-icon icon-solicitudes"></span>
-          <span class="card-main">
-            <strong>{{ resumenAux.solicitudes.nombre }}</strong>
-            <span>{{ resumenAux.solicitudes.descripcion }}</span>
-          </span>
-          <span class="arrow-right"></span>
-        </a>
-        <a class="mk-card" routerLink="/comunicados">
-          <span class="card-icon icon-comunicados"></span>
-          <span class="card-main">
-            <strong>{{ resumenAux.comunicados.nombre }}</strong>
-            <span>{{ resumenAux.comunicados.descripcion }}</span>
-          </span>
-          <span class="arrow-right"></span>
-        </a>
-        <a class="mk-card" routerLink="/horas-extras">
-          <span class="card-icon icon-horas-extras"></span>
-          <span class="card-main">
-            <strong>{{ resumenAux.horasExtras.nombre }}</strong>
-            <span>{{ resumenAux.horasExtras.descripcion }}</span>
-          </span>
-          <span class="arrow-right"></span>
-        </a>
-      </div>
-    } @else {
-      <h2 id="accesos-heading">Accesos rápidos</h2>
-      <p class="indicacion">Ingresá directamente al módulo que necesitás.</p>
-      <div class="accesos-grid">
-        <a class="mk-card" routerLink="/colaboradores">
-          <span class="card-icon icon-colaboradores"></span>
-          <span class="card-main">
-            <strong>Gestión de Empleados</strong>
-            <span>Legajos, perfiles y asignaciones</span>
-          </span>
-          <span class="arrow-right"></span>
-        </a>
-        <a class="mk-card" routerLink="/sueldos-y-bonos">
-          <span class="card-icon icon-sueldos"></span>
-          <span class="card-main">
-            <strong>Sueldos y Bonos</strong>
-            <span>Remuneraciones y beneficios</span>
-          </span>
-          <span class="arrow-right"></span>
-        </a>
-        <a class="mk-card" routerLink="/solicitudes">
-          <span class="card-icon icon-solicitudes"></span>
-          <span class="card-main">
-            <strong>Solicitudes</strong>
-            <span>Revisión y seguimiento de pedidos</span>
-          </span>
-          <span class="arrow-right"></span>
-        </a>
-        <a class="mk-card" routerLink="/comunicados">
-          <span class="card-icon icon-comunicados"></span>
-          <span class="card-main">
-            <strong>Comunicados</strong>
-            <span>Mensajes y registro de envíos</span>
-          </span>
-          <span class="arrow-right"></span>
-        </a>
-        <a class="mk-card" routerLink="/horas-extras">
-          <span class="card-icon icon-horas-extras"></span>
-          <span class="card-main">
-            <strong>Horas Extras</strong>
-            <span>Autorizaciones y compensaciones</span>
-          </span>
-          <span class="arrow-right"></span>
-        </a>
-      </div>
-    }
+    <div class="inicio-accesos-cards">
+      <a class="acceso-card" routerLink="/empleados">
+        <span class="icon-bg"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-people"/></svg></span>
+        <span class="acceso-label">
+          <strong>Gestión de Empleados</strong>
+          <span class="acceso-desc">{{(summaryState().status === 'ready') ? summaryState().data.gestionEmpleados.descripcion : 'Legajos, perfiles y asignaciones'}}</span>
+        </span>
+        <svg class="arrow" width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8"><use href="#mk-arrow"/></svg>
+      </a>
+      <a class="acceso-card" routerLink="/sueldos-y-bonos">
+        <span class="icon-bg"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-money"/></svg></span>
+        <span class="acceso-label">
+          <strong>Sueldos y Bonos</strong>
+          <span class="acceso-desc">{{(summaryState().status === 'ready') ? summaryState().data.sueldosBonos.descripcion : 'Remuneraciones y beneficios'}}</span>
+        </span>
+        <svg class="arrow" width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8"><use href="#mk-arrow"/></svg>
+      </a>
+      <a class="acceso-card" routerLink="/solicitudes">
+        <span class="icon-bg"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-request"/></svg></span>
+        <span class="acceso-label">
+          <strong>Solicitudes</strong>
+          <span class="acceso-desc">{{(summaryState().status === 'ready') ? summaryState().data.solicitudes.descripcion : 'Revisión y seguimiento de pedidos'}}</span>
+        </span>
+        <svg class="arrow" width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8"><use href="#mk-arrow"/></svg>
+      </a>
+      <a class="acceso-card" routerLink="/comunicados">
+        <span class="icon-bg"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-message"/></svg></span>
+        <span class="acceso-label">
+          <strong>Comunicados</strong>
+          <span class="acceso-desc">{{(summaryState().status === 'ready') ? summaryState().data.comunicados.descripcion : 'Mensajes y registro de envíos'}}</span>
+        </span>
+        <svg class="arrow" width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8"><use href="#mk-arrow"/></svg>
+      </a>
+      <a class="acceso-card" routerLink="/horas-extras">
+        <span class="icon-bg"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-clock"/></svg></span>
+        <span class="acceso-label">
+          <strong>Horas Extras</strong>
+          <span class="acceso-desc">{{(summaryState().status === 'ready') ? summaryState().data.horasExtras.descripcion : 'Autorizaciones y compensaciones'}}</span>
+        </span>
+        <svg class="arrow" width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8"><use href="#mk-arrow"/></svg>
+      </a>
+    </div>
   </section>
 </section>
