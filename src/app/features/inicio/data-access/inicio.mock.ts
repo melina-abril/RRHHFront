@@ -1,6 +1,7 @@
+// Datos de ejemplo para el resumen de inicio: igual forma que InicioSummaryResponse
 import { InicioSummaryResponse } from '../models/inicio.models';
 
-export const resumenMock: InicioSummaryResponse = {
+export const INICIO_SUMMARY_MOCK: InicioSummaryResponse = {
   totalColaboradores: 27,
   solicitudesPendientes: 3,
   proximoEvento: '2024-07-01',

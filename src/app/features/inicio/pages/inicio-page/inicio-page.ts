@@ -1,56 +1,60 @@
-import { RouterLink } from '@angular/router';
-import { Component, Signal, computed, effect, inject, signal } from '@angular/core';
-import { AsyncPipe, DatePipe, NgIf, NgFor, NgClass } from '@angular/common';
+import { Component, Signal, computed, inject } from '@angular/core';
 import { InicioService } from '../../data-access/inicio.service';
-import { InicioSummaryResponse } from '../../models/inicio.models';
 import { LoadState } from 'src/app/shared/models/load-state';
-import { PageHeader } from 'src/app/shared/components/page-header';
+import { InicioSummaryResponse } from '../../models/inicio.models';
 import { LoadingState } from 'src/app/shared/components/loading-state';
-import { EmptyState } from 'src/app/shared/components/empty-state';
 import { ErrorAlert } from 'src/app/shared/components/error-alert';
 
 @Component({
-  selector: 'app-inicio-page',
+  selector: 'inicio-page',
   standalone: true,
   templateUrl: './inicio-page.html',
   styleUrl: './inicio-page.scss',
-  imports: [RouterLink, NgIf, NgFor, NgClass, AsyncPipe, DatePipe, PageHeader, LoadingState, EmptyState, ErrorAlert]
+  imports: [LoadingState, ErrorAlert]
 })
 export class InicioPage {
-  private readonly inicioService = inject(InicioService);
-  public readonly state: Signal<LoadState<InicioSummaryResponse>> = this.inicioService.resumen;
+  public readonly summaryState = inject(InicioService).summaryState;
 
-  public readonly moduloLinks = [
-    {
-      key: 'gestionEmpleados',
-      icon: 'mk-people',
-      href: '/empleados'
-    },
-    {
-      key: 'sueldosBonos',
-      icon: 'mk-money',
-      href: '/sueldos-y-bonos'
-    },
-    {
-      key: 'solicitudes',
-      icon: 'mk-request',
-      href: '/solicitudes'
-    },
-    {
-      key: 'comunicados',
-      icon: 'mk-message',
-      href: '/comunicados'
-    },
-    {
-      key: 'horasExtras',
-      icon: 'mk-clock',
-      href: '/horas-extras'
+  constructor() {
+    inject(InicioService).loadSummary();
+  }
+
+  get bienvenida(): string {
+    const st = this.summaryState();
+    if (st.status === 'ready') {
+      return st.data.bienvenida;
     }
-  ];
+    // Texto de bienvenida por defecto si no cargó
+    return 'Bienvenido al sistema de Recursos Humanos de TECHFORB. Consultá la actividad general y accedé a los módulos desde un solo lugar.';
+  }
 
-  public readonly cardIcons = {
-    colaboradores: 'mk-people',
-    solicitudes: 'mk-request',
-    eventos: 'mk-calendar'
-  };
+  get indicacionAccesos(): string {
+    const st = this.summaryState();
+    if (st.status === 'ready') {
+      return st.data.indicacionAccesos;
+    }
+    return 'Ingresá directamente al módulo que necesitás.';
+  }
+
+  // Accesos rápidos: textos por módulo
+  get moduloSummaries() {
+    const defaultSummaries = {
+      gestionEmpleados: { nombre: 'Gestión de Empleados', descripcion: 'Legajos, perfiles y asignaciones' },
+      sueldosBonos: { nombre: 'Sueldos y Bonos', descripcion: 'Remuneraciones y beneficios' },
+      solicitudes: { nombre: 'Solicitudes', descripcion: 'Revisión y seguimiento de pedidos' },
+      comunicados: { nombre: 'Comunicados', descripcion: 'Mensajes y registro de envíos' },
+      horasExtras: { nombre: 'Horas Extras', descripcion: 'Autorizaciones y compensaciones' }
+    };
+    const st = this.summaryState();
+    if (st.status === 'ready') {
+      return {
+        gestionEmpleados: st.data.gestionEmpleados,
+        sueldosBonos: st.data.sueldosBonos,
+        solicitudes: st.data.solicitudes,
+        comunicados: st.data.comunicados,
+        horasExtras: st.data.horasExtras
+      };
+    }
+    return defaultSummaries;
+  }
 }

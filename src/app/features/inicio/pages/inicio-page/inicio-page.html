@@ -1,155 +1,220 @@
-<section class="inicio-root">
-  <!-- Texto de bienvenida y orientación -->
+<section class="inicio-main">
   <div class="inicio-header">
-    <span class="inicio-header-label">Panel de inicio</span>
-    <h1>Inicio</h1>
-    <p class="inicio-header-desc">Bienvenido al sistema de Recursos Humanos de TECHFORB. Consultá la actividad general y accedé a los módulos desde un solo lugar.</p>
+    <span class="inicio-header__label">Panel de inicio</span>
+    <h1 class="inicio-header__title">Inicio</h1>
+    <p class="inicio-header__desc">{{ bienvenida }}</p>
   </div>
-
-  <!-- RESUMEN GENERAL -->
-  <section class="inicio-summary">
-    <div class="inicio-summary-heading">
-      <h2>Resumen general</h2>
+  <div class="inicio-summary">
+    <div class="inicio-summary__heading">
+      <h2 class="inicio-summary__title">Resumen general</h2>
     </div>
-    <div class="inicio-summary-cards">
-      <ng-container *ngIf="state() as s">
-        <ng-container [ngSwitch]="s.status">
-          <ng-container *ngSwitchCase="'loading'">
-            <loading-state label="Cargando indicadores..." aria-label="Cargando el resumen de inicio"></loading-state>
-          </ng-container>
-          <ng-container *ngSwitchCase="'error'">
-            <error-alert [message]="s.message"></error-alert>
-          </ng-container>
-          <ng-container *ngSwitchCase="'ready'">
-            <a class="inicio-card" [routerLink]="'/empleados'">
-              <span class="inicio-card-icon">
-                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-people"></use></svg>
-              </span>
-              <span class="inicio-card-content">
-                <span class="inicio-card-title">Colaboradores activos</span>
-                <strong class="inicio-card-val">{{ s.data.totalColaboradores }}</strong>
-                <span class="inicio-card-desc" *ngIf="s.data.totalColaboradores > 0; else noColabs">Personas con legajo vigente</span>
-                <ng-template #noColabs><span class="inicio-card-desc">Sin colaboradores activos registrados</span></ng-template>
-              </span>
-            </a>
-            <a class="inicio-card" [routerLink]="'/solicitudes'">
-              <span class="inicio-card-icon">
-                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-request"></use></svg>
-              </span>
-              <span class="inicio-card-content">
-                <span class="inicio-card-title">Solicitudes pendientes</span>
-                <strong class="inicio-card-val">{{ s.data.solicitudesPendientes }}</strong>
-                <span class="inicio-card-desc" *ngIf="s.data.solicitudesPendientes > 0; else noSolicitudes">Solicitudes para revisar</span>
-                <ng-template #noSolicitudes><span class="inicio-card-desc">Sin solicitudes para revisar</span></ng-template>
-              </span>
-            </a>
-            <a class="inicio-card" [routerLink]="'/empleados'">
-              <span class="inicio-card-icon">
-                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-calendar"></use></svg>
-              </span>
-              <span class="inicio-card-content">
-                <span class="inicio-card-title">Próximos eventos</span>
-                <strong class="inicio-card-val">{{ s.data.proximoEvento ? 1 : 0 }}</strong>
-                <span class="inicio-card-desc">{{ s.data.proximoEvento ? (s.data.proximoEvento | date:'dd/MM/yyyy') : 'Cumpleaños y beneficios por vencer' }}</span>
-              </span>
-            </a>
-          </ng-container>
-          <ng-container *ngSwitchCase="'empty'">
-            <a class="inicio-card" [routerLink]="'/empleados'">
-              <span class="inicio-card-icon">
-                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-people"></use></svg>
-              </span>
-              <span class="inicio-card-content">
-                <span class="inicio-card-title">Colaboradores activos</span>
-                <strong class="inicio-card-val">0</strong>
-                <span class="inicio-card-desc">Sin colaboradores activos registrados</span>
-              </span>
-            </a>
-            <a class="inicio-card" [routerLink]="'/solicitudes'">
-              <span class="inicio-card-icon">
-                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-request"></use></svg>
-              </span>
-              <span class="inicio-card-content">
-                <span class="inicio-card-title">Solicitudes pendientes</span>
-                <strong class="inicio-card-val">0</strong>
-                <span class="inicio-card-desc">Sin solicitudes para revisar</span>
-              </span>
-            </a>
-            <a class="inicio-card" [routerLink]="'/empleados'">
-              <span class="inicio-card-icon">
-                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-calendar"></use></svg>
-              </span>
-              <span class="inicio-card-content">
-                <span class="inicio-card-title">Próximos eventos</span>
-                <strong class="inicio-card-val">0</strong>
-                <span class="inicio-card-desc">Cumpleaños y beneficios por vencer</span>
-              </span>
-            </a>
-          </ng-container>
-        </ng-container>
-      </ng-container>
+    <div class="inicio-summary__cards">
+      <a
+        class="card inicio-resumen-card"
+        href="/empleados"
+        tabindex="0"
+        aria-label="Gestionar colaboradores"
+      >
+        <span class="inicio-resumen-card__icon">
+          <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <use href="#mk-people"></use>
+          </svg>
+        </span>
+        <div class="inicio-resumen-card__info">
+          <span class="inicio-resumen-card__label">Colaboradores activos</span>
+          <strong class="inicio-resumen-card__value">
+            {{ summaryState.status === 'ready' ? summaryState.data.totalColaboradores : 0 }}
+          </strong>
+          <span class="inicio-resumen-card__desc">
+            @if (summaryState.status === 'ready' && summaryState.data.totalColaboradores > 0) {
+              {{ summaryState.data.totalColaboradores === 1 ? 'Hay 1 colaborador activo' : 'Hay ' + summaryState.data.totalColaboradores + ' colaboradores activos' }}
+            } @else {
+              Sin colaboradores activos registrados
+            }
+          </span>
+        </div>
+        <span class="inicio-resumen-card__arrow">
+          <svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" aria-hidden="true">
+            <use href="#mk-arrow"></use>
+          </svg>
+        </span>
+      </a>
+      <a
+        class="card inicio-resumen-card"
+        href="/solicitudes"
+        tabindex="0"
+        aria-label="Solicitudes pendientes"
+      >
+        <span class="inicio-resumen-card__icon">
+          <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <use href="#mk-request"></use>
+          </svg>
+        </span>
+        <div class="inicio-resumen-card__info">
+          <span class="inicio-resumen-card__label">Solicitudes pendientes</span>
+          <strong class="inicio-resumen-card__value">
+            {{ summaryState.status === 'ready' ? summaryState.data.solicitudesPendientes : 0 }}
+          </strong>
+          <span class="inicio-resumen-card__desc">
+            @if (summaryState.status === 'ready' && summaryState.data.solicitudesPendientes > 0) {
+              {{ summaryState.data.solicitudesPendientes === 1 ? 'Hay 1 solicitud pendiente' : 'Hay ' + summaryState.data.solicitudesPendientes + ' solicitudes pendientes' }}
+            } @else {
+              Sin solicitudes para revisar
+            }
+          </span>
+        </div>
+        <span class="inicio-resumen-card__arrow">
+          <svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" aria-hidden="true">
+            <use href="#mk-arrow"></use>
+          </svg>
+        </span>
+      </a>
+      <a
+        class="card inicio-resumen-card"
+        href="/empleados"
+        tabindex="0"
+        aria-label="Próximos eventos"
+      >
+        <span class="inicio-resumen-card__icon">
+          <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <use href="#mk-calendar"></use>
+          </svg>
+        </span>
+        <div class="inicio-resumen-card__info">
+          <span class="inicio-resumen-card__label">Próximos eventos</span>
+          <strong class="inicio-resumen-card__value">
+            @if (summaryState.status === 'ready') {
+              {{ summaryState.data.proximoEvento ? '1' : '0' }}
+            } @else { 0 }
+          </strong>
+          <span class="inicio-resumen-card__desc">
+            Cumpleaños y beneficios por vencer
+          </span>
+        </div>
+        <span class="inicio-resumen-card__arrow">
+          <svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" aria-hidden="true">
+            <use href="#mk-arrow"></use>
+          </svg>
+        </span>
+      </a>
     </div>
-  </section>
-
-  <!-- ACCESOS RÁPIDOS -->
-  <section class="inicio-accesos">
-    <div class="inicio-accesos-heading">
-      <h2>Accesos rápidos</h2>
-      <p>Ingresá directamente al módulo que necesitás.</p>
+  </div>
+  <div class="inicio-accesos">
+    <div class="inicio-accesos__header">
+      <h2 class="inicio-accesos__title">Accesos rápidos</h2>
+      <p class="inicio-accesos__desc">{{ indicacionAccesos }}</p>
     </div>
-    <div class="inicio-accesos-cards">
-      <ng-container *ngIf="state() as s">
-        <ng-container *ngIf="s.status === 'ready'; else skeletons">
-          <a class="inicio-acc-card" [routerLink]="'/empleados'">
-            <span class="inicio-acc-card-icon">
-              <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-people"></use></svg>
-            </span>
-            <span class="inicio-acc-card-content">
-              <strong>Gestión de Empleados</strong>
-              <span>Legajos, perfiles y asignaciones</span>
-            </span>
-          </a>
-          <a class="inicio-acc-card" [routerLink]="'/sueldos-y-bonos'">
-            <span class="inicio-acc-card-icon">
-              <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-money"></use></svg>
-            </span>
-            <span class="inicio-acc-card-content">
-              <strong>Sueldos y Bonos</strong>
-              <span>Remuneraciones y beneficios</span>
-            </span>
-          </a>
-          <a class="inicio-acc-card" [routerLink]="'/solicitudes'">
-            <span class="inicio-acc-card-icon">
-              <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-request"></use></svg>
-            </span>
-            <span class="inicio-acc-card-content">
-              <strong>Solicitudes</strong>
-              <span>Revisión y seguimiento de pedidos</span>
-            </span>
-          </a>
-          <a class="inicio-acc-card" [routerLink]="'/comunicados'">
-            <span class="inicio-acc-card-icon">
-              <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-message"></use></svg>
-            </span>
-            <span class="inicio-acc-card-content">
-              <strong>Comunicados</strong>
-              <span>Mensajes y registro de envíos</span>
-            </span>
-          </a>
-          <a class="inicio-acc-card" [routerLink]="'/horas-extras'">
-            <span class="inicio-acc-card-icon">
-              <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-clock"></use></svg>
-            </span>
-            <span class="inicio-acc-card-content">
-              <strong>Horas Extras</strong>
-              <span>Autorizaciones y compensaciones</span>
-            </span>
-          </a>
-        </ng-container>
-        <ng-template #skeletons>
-          <div *ngFor="let _ of [1,2,3,4,5]" class="inicio-acc-card skeleton"></div>
-        </ng-template>
-      </ng-container>
+    <div class="inicio-accesos__cards">
+      <a
+        class="card inicio-acceso-card"
+        href="/empleados"
+        tabindex="0"
+        aria-label="Ir a Gestión de Empleados"
+      >
+        <span class="inicio-acceso-card__icon">
+          <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <use href="#mk-people"></use>
+          </svg>
+        </span>
+        <span class="inicio-acceso-card__info">
+          <strong>Gestión de Empleados</strong>
+          <span>{{ moduloSummaries.gestionEmpleados.descripcion }}</span>
+        </span>
+        <span class="inicio-acceso-card__arrow">
+          <svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" aria-hidden="true">
+            <use href="#mk-arrow"></use>
+          </svg>
+        </span>
+      </a>
+      <a
+        class="card inicio-acceso-card"
+        href="/sueldos-y-bonos"
+        tabindex="0"
+        aria-label="Ir a Sueldos y Bonos"
+      >
+        <span class="inicio-acceso-card__icon">
+          <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <use href="#mk-money"></use>
+          </svg>
+        </span>
+        <span class="inicio-acceso-card__info">
+          <strong>Sueldos y Bonos</strong>
+          <span>{{ moduloSummaries.sueldosBonos.descripcion }}</span>
+        </span>
+        <span class="inicio-acceso-card__arrow">
+          <svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" aria-hidden="true">
+            <use href="#mk-arrow"></use>
+          </svg>
+        </span>
+      </a>
+      <a
+        class="card inicio-acceso-card"
+        href="/solicitudes"
+        tabindex="0"
+        aria-label="Ir a Solicitudes"
+      >
+        <span class="inicio-acceso-card__icon">
+          <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <use href="#mk-request"></use>
+          </svg>
+        </span>
+        <span class="inicio-acceso-card__info">
+          <strong>Solicitudes</strong>
+          <span>{{ moduloSummaries.solicitudes.descripcion }}</span>
+        </span>
+        <span class="inicio-acceso-card__arrow">
+          <svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" aria-hidden="true">
+            <use href="#mk-arrow"></use>
+          </svg>
+        </span>
+      </a>
+      <a
+        class="card inicio-acceso-card"
+        href="/comunicados"
+        tabindex="0"
+        aria-label="Ir a Comunicados"
+      >
+        <span class="inicio-acceso-card__icon">
+          <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <use href="#mk-message"></use>
+          </svg>
+        </span>
+        <span class="inicio-acceso-card__info">
+          <strong>Comunicados</strong>
+          <span>{{ moduloSummaries.comunicados.descripcion }}</span>
+        </span>
+        <span class="inicio-acceso-card__arrow">
+          <svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" aria-hidden="true">
+            <use href="#mk-arrow"></use>
+          </svg>
+        </span>
+      </a>
+      <a
+        class="card inicio-acceso-card"
+        href="/horas-extras"
+        tabindex="0"
+        aria-label="Ir a Horas Extras"
+      >
+        <span class="inicio-acceso-card__icon">
+          <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <use href="#mk-clock"></use>
+          </svg>
+        </span>
+        <span class="inicio-acceso-card__info">
+          <strong>Horas Extras</strong>
+          <span>{{ moduloSummaries.horasExtras.descripcion }}</span>
+        </span>
+        <span class="inicio-acceso-card__arrow">
+          <svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" aria-hidden="true">
+            <use href="#mk-arrow"></use>
+          </svg>
+        </span>
+      </a>
     </div>
-  </section>
+  </div>
+  @if (summaryState.status === 'loading') {
+    <app-loading-state></app-loading-state>
+  } @else if (summaryState.status === 'error') {
+    <app-error-alert [message]="summaryState.message"></app-error-alert>
+  }
 </section>

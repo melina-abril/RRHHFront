@@ -1,21 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es2022",
-    "module": "esnext",
-    "moduleResolution": "bundler",
     "strict": true,
+    "moduleResolution": "bundler",
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "skipLibCheck": true,
-    "baseUrl": "./",
-    "paths": {
-      "@app/*": ["src/app/*"]
-    }
-  },
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+    "noImplicitOverride": true,
+    "module": "ES2022",
+    "target": "ES2022"
+  }
 }

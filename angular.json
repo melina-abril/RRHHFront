@@ -1,11 +1,11 @@
 {
-  "$schema": "https://json.schemastore.org/angular-cli",
   "version": 1,
   "projects": {
     "rrhh-front": {
       "projectType": "application",
       "root": "",
       "sourceRoot": "src",
+      "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular/build:application",
@@ -14,44 +14,33 @@
             "index": "src/index.html",
             "polyfills": [],
             "tsConfig": "tsconfig.app.json",
-            "assets": [
-              "public"
-            ],
+            "assets": [],
             "styles": [
               "src/styles.scss"
             ],
-            "stylePreprocessorOptions": {
-              "includePaths": [
-                "src/styles"
-              ]
-            },
             "browser": "src/main.ts"
-          },
-          "configurations": {
-            "production": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
-                }
-              ],
-              "outputHashing": "all"
-            },
-            "development": {
-              "buildOptimizer": false,
-              "optimization": false,
-              "sourceMap": true,
-              "extractLicenses": false
-            }
-          },
-          "defaultConfiguration": "production"
+          }
         },
         "serve": {
           "builder": "@angular/build:dev-server",
           "options": {
             "proxyConfig": "proxy.conf.json",
-            "buildTarget": "rrhh-front:build:development"
+            "buildTarget": "rrhh-front:build"
+          }
+        },
+        "watch": {
+          "builder": "@angular/build:application",
+          "options": {
+            "outputPath": "dist/rrhh-front",
+            "index": "src/index.html",
+            "polyfills": [],
+            "tsConfig": "tsconfig.app.json",
+            "assets": [],
+            "styles": [
+              "src/styles.scss"
+            ],
+            "watch": true,
+            "browser": "src/main.ts"
           }
         }
       }

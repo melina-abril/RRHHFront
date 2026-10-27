@@ -1,34 +1,29 @@
-# Gestión de RR.HH - Frontend
+# Gestión de RR.HH (TECHFORB) — Frontend
 
-Esta aplicación es el frontend del sistema de Gestión de Recursos Humanos de TECHFORB.
+Sistema interno para administración centralizada de Recursos Humanos. 
 
-## ¿Cómo levantarla?
+## Levantar la aplicación
 
-1. Cloná el repositorio y ubicáte en la carpeta del proyecto.
-2. Instalá las dependencias:
-
-   ```
+1. Instala dependencias:
+   ```sh
    npm install
    ```
-3. Iniciá el servidor de desarrollo:
-   ```
+2. Inicia en modo desarrollo (mock):
+   ```sh
    npm start
    ```
+3. Accede a http://localhost:4200
 
-- Por defecto, la aplicación levanta en modo mock (useMock: true). Para simular datos reales no es necesario el backend.
-- Para conectar con el backend, cambiá el archivo `src/environments/environment.ts` para poner `useMock: false` y asegurate de que el backend corra en http://localhost:8080 (la app usa proxy `/api`).
+- Por defecto, la aplicación usa datos simulados (mocks) y no requiere backend: puedes verla y navegar todas las pantallas disponibles.
+- Para usar un backend real, pon `useMock: false` en el entorno correspondiente.
 
 ## Estructura de carpetas
 
-- `src/app/core`: Servicios y layout principal.
-- `src/app/features`: Un módulo por funcionalidad importante.
-- `src/app/shared`: Componentes y modelos reutilizables.
-- `src/environments`: Configuración mock/producción.
-- `public/`: Archivos estáticos y favicon.
+- `src/app/core/`: servicios globales, sesión, layout
+- `src/app/features/`: un módulo funcional por carpeta
+- `src/app/shared/`: componentes y modelos reutilizables
+- `src/environments/`: configuración (`apiBaseUrl`, `useMock`)
 
-## Módulos disponibles
+## Añadir módulos funcionales
 
-- Inicio de sesión (login): acceso de RR.HH.
-- Pantalla principal (dashboard): accesos a módulos claves.
-
-Cada módulo nuevo aparecerá en el menú lateral.
+Agrega cada nueva carpeta bajo `src/app/features/` siguiendo el patrón del sistema y registra su ruteo en `app.routes.ts`. El layout, navegación lateral y estilos principales ya lo resuelven automáticamente.
