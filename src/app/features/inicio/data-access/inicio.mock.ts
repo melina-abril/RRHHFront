@@ -1,5 +1,6 @@
 import { InicioSummaryResponse } from '../models/inicio.models';
 
+// Mock realista para /api/inicio/resumen
 export const inicioSummaryMock: InicioSummaryResponse = {
   totalColaboradores: 27,
   solicitudesPendientes: 3,

@@ -1,21 +1,21 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable, effect, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { InicioSummaryResponse } from '../models/inicio.models';
 import { mockResponse } from 'src/app/core/http/mock-response';
-import { inicioSummaryMock } from './inicio.mock';
 import { apiUrl } from 'src/app/core/http/api-url';
+import { InicioSummaryResponse } from '../models/inicio.models';
+import { inicioSummaryMock } from './inicio.mock';
 import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class InicioService {
-  private http = inject(HttpClient);
+  constructor(private http: HttpClient) {}
 
-  getHomepageSummary(): Observable<InicioSummaryResponse> {
+  public getHomepageSummary(): Observable<InicioSummaryResponse> {
     if (environment.useMock) {
-      // Modo mock: devuelve datos simulados
+      // MOCK: responde el mock local (reemplazar al conectar backend)
       return mockResponse(inicioSummaryMock);
     }
-    return this.http.get<InicioSummaryResponse>(apiUrl('/inicio/resumen'));
+    return this.http.get<InicioSummaryResponse>(apiUrl('/api/inicio/resumen'));
   }
 }
