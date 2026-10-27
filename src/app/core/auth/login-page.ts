@@ -1,63 +1,45 @@
-import { Component, signal, computed, effect } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
-import { inject } from '@angular/core';
 
 @Component({
+  imports: [ReactiveFormsModule],
   selector: 'app-login-page',
   standalone: true,
   templateUrl: './login-page.html',
-  styleUrls: ['./login-page.scss'],
-  imports: [CommonModule],
+  styleUrl: './login-page.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginPage {
-  public loginForm: FormGroup;
-  public errorMessage: string | null = null;
-  public submitting = false;
-  private authService = inject(AuthService);
+  private auth = inject(AuthService);
+  private fb = inject(FormBuilder);
   private router = inject(Router);
-  private fb = new FormBuilder();
 
-  constructor() {
-    this.loginForm = this.fb.group({
-      email: [
-        '',
-        [Validators.required, Validators.email, Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.([a-zA-Z]{2,})$')],
-      ],
-      password: ['', Validators.required],
-    });
-  }
+  public form: FormGroup = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required]]
+  });
+  public loading = signal(false);
+  public errorMessage = signal<string | null>(null);
 
-  get email() {
-    return this.loginForm.get('email')!;
-  }
-  get password() {
-    return this.loginForm.get('password')!;
-  }
+  // Al enviar el formulario:
+  public onSubmit(): void {
+    if (this.form.invalid || this.loading()) return;
+    this.loading.set(true);
+    this.errorMessage.set(null);
 
-  public onSubmit() {
-    if (this.loginForm.invalid || this.submitting) return;
-    this.errorMessage = null;
-    this.submitting = true;
-    const { email, password } = this.loginForm.value;
-    this.authService.login(email, password).subscribe({
+    const { email, password } = this.form.value;
+    this.auth.login(email, password).subscribe({
       next: () => {
-        this.submitting = false;
-        this.router.navigateByUrl('/');
+        // Navega a inicio luego de login exitoso
+        this.router.navigateByUrl('/inicio');
       },
-      error: (err: unknown) => {
-        // Mensaje de error genérico (formato de backend: ProblemDetail; modo mock: string)
-        this.submitting = false;
-        if (typeof err === 'string') {
-          this.errorMessage = err;
-        } else if (typeof err === 'object' && err !== null && 'message' in err) {
-          this.errorMessage = (err as { message: string }).message ?? 'El correo o la contraseña no son correctos. Revisá los datos e intentá de nuevo.';
-        } else {
-          this.errorMessage = 'El correo o la contraseña no son correctos. Revisá los datos e intentá de nuevo.';
-        }
+      error: err => {
+        this.errorMessage.set(err?.message || 'El correo o la contraseña no son correctos. Revisá los datos e intentá de nuevo.');
+        this.loading.set(false);
       },
+      complete: () => this.loading.set(false)
     });
   }
 }

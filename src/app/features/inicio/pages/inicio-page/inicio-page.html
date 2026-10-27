@@ -1,100 +1,174 @@
-<section class="inicio-section">
-  <span class="inicio-label">Panel de inicio</span>
-  <h1 class="inicio-title">Inicio</h1>
-  <p class="inicio-sub">Bienvenido al sistema de Recursos Humanos de TECHFORB. Consultá la actividad general y accedé a los módulos desde un solo lugar.</p>
-</section>
+<section class="inicio-wrapper">
+  <section class="intro-section">
+    <span class="panel-label">Panel de inicio</span>
+    <h1>Inicio</h1>
+    @if (state().status === 'ready' && resumen as resumenAux) {
+      <p class="bienvenida">{{ resumenAux.bienvenida }}</p>
+    } @else {
+      <p class="bienvenida">Bienvenido al sistema de Recursos Humanos de TECHFORB. Consultá la actividad general y accedé a los módulos desde un solo lugar.</p>
+    }
+  </section>
 
-<section aria-labelledby="resumen-general-titulo" class="resumen-section">
-  <div class="resumen-header">
-    <h2 id="resumen-general-titulo" class="resumen-title">Resumen general</h2>
-  </div>
-  <div class="resumen-cards">
-    <!-- Colaboradores activos -->
-    <a routerLink="/empleados" class="resumen-card">
-      <span class="resumen-card-icon resumen-persona"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2zm14-15a3 3 0 0 1 0 6m1 4a5 5 0 0 1 3 5"/></svg></span>
-      <div class="resumen-card-content">
-        <span class="resumen-card-label">Colaboradores activos</span>
-        <strong class="resumen-card-value">{{ resumen?.colaboradoresActivos ?? 0 }}</strong>
-        <span class="resumen-card-desc">
-          @if (resumen?.colaboradoresActivos === 0) {
-            Sin colaboradores activos registrados
-          } @else {
-            {{ resumen?.colaboradoresActivos === 1 ? '1 colaborador activo' : resumen?.colaboradoresActivos + ' colaboradores activos' }}
-          }
-        </span>
+  <section aria-labelledby="resumen-heading" class="resumen-section">
+    <div class="resumen-header">
+      <h2 id="resumen-heading">Resumen general</h2>
+      <button type="button" class="btn-primary reload-btn" title="Actualizar" (click)="loadSummary()">
+        <span class="reload-icon"></span>Actualizar
+      </button>
+    </div>
+    @switch (state().status) {
+      @case ('loading') {
+        <loading-state texto="Cargando resumen..." />
+      }
+      @case ('error') {
+        <error-alert [mensaje]="state().message || 'Error al cargar el resumen'" />
+      }
+      @case ('empty') {
+        <empty-state mensaje="No hay información de resumen todavía." />
+      }
+      @case ('ready') {
+        @let resumenAux = state().data;
+        <div class="dashboard-grid">
+          <a class="dashboard-card" routerLink="/colaboradores">
+            <span class="card-icon icon-colaboradores"></span>
+            <div class="card-main">
+              <span class="card-title">Colaboradores activos</span>
+              <strong class="card-value">{{ resumenAux.totalColaboradores }}</strong>
+              <span class="card-desc">
+                @if (resumenAux.totalColaboradores > 0) {
+                  {{ resumenAux.totalColaboradores === 1 ? 'Un colaborador activo' : resumenAux.totalColaboradores + ' colaboradores activos' }}
+                } @else {
+                  Sin colaboradores activos registrados
+                }
+              </span>
+            </div>
+            <span class="arrow-right"></span>
+          </a>
+          <a class="dashboard-card" routerLink="/solicitudes">
+            <span class="card-icon icon-solicitudes"></span>
+            <div class="card-main">
+              <span class="card-title">Solicitudes pendientes</span>
+              <strong class="card-value">{{ resumenAux.solicitudesPendientes }}</strong>
+              <span class="card-desc">
+                @if (resumenAux.solicitudesPendientes > 0) {
+                  {{ resumenAux.solicitudesPendientes === 1 ? 'Una solicitud para revisar' : resumenAux.solicitudesPendientes + ' solicitudes para revisar' }}
+                } @else {
+                  Sin solicitudes para revisar
+                }
+              </span>
+            </div>
+            <span class="arrow-right"></span>
+          </a>
+          <a class="dashboard-card" routerLink="/colaboradores">
+            <span class="card-icon icon-eventos"></span>
+            <div class="card-main">
+              <span class="card-title">Próximos eventos</span>
+              <strong class="card-value">{{ resumenAux.proximoEvento ? 1 : 0 }}</strong>
+              <span class="card-desc">
+                @if (resumenAux.proximoEvento) {
+                  {{ resumenAux.proximoEvento | date: 'dd/MM/yyyy' }}
+                } @else {
+                  Cumpleaños y beneficios por vencer
+                }
+              </span>
+            </div>
+            <span class="arrow-right"></span>
+          </a>
+        </div>
+      }
+    }
+  </section>
+  <section aria-labelledby="accesos-heading" class="accesos-section">
+    @if (state().status === 'ready' && resumen as resumenAux) {
+      <h2 id="accesos-heading">Accesos rápidos</h2>
+      <p class="indicacion">{{ resumenAux.indicacionAccesos }}</p>
+      <div class="accesos-grid">
+        <a class="mk-card" routerLink="/colaboradores">
+          <span class="card-icon icon-colaboradores"></span>
+          <span class="card-main">
+            <strong>{{ resumenAux.gestionEmpleados.nombre }}</strong>
+            <span>{{ resumenAux.gestionEmpleados.descripcion }}</span>
+          </span>
+          <span class="arrow-right"></span>
+        </a>
+        <a class="mk-card" routerLink="/sueldos-y-bonos">
+          <span class="card-icon icon-sueldos"></span>
+          <span class="card-main">
+            <strong>{{ resumenAux.sueldosBonos.nombre }}</strong>
+            <span>{{ resumenAux.sueldosBonos.descripcion }}</span>
+          </span>
+          <span class="arrow-right"></span>
+        </a>
+        <a class="mk-card" routerLink="/solicitudes">
+          <span class="card-icon icon-solicitudes"></span>
+          <span class="card-main">
+            <strong>{{ resumenAux.solicitudes.nombre }}</strong>
+            <span>{{ resumenAux.solicitudes.descripcion }}</span>
+          </span>
+          <span class="arrow-right"></span>
+        </a>
+        <a class="mk-card" routerLink="/comunicados">
+          <span class="card-icon icon-comunicados"></span>
+          <span class="card-main">
+            <strong>{{ resumenAux.comunicados.nombre }}</strong>
+            <span>{{ resumenAux.comunicados.descripcion }}</span>
+          </span>
+          <span class="arrow-right"></span>
+        </a>
+        <a class="mk-card" routerLink="/horas-extras">
+          <span class="card-icon icon-horas-extras"></span>
+          <span class="card-main">
+            <strong>{{ resumenAux.horasExtras.nombre }}</strong>
+            <span>{{ resumenAux.horasExtras.descripcion }}</span>
+          </span>
+          <span class="arrow-right"></span>
+        </a>
       </div>
-      <svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" class="arrow"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
-    </a>
-    <!-- Solicitudes pendientes -->
-    <a routerLink="/solicitudes" class="resumen-card">
-      <span class="resumen-card-icon resumen-request"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8m-8 4h4"/></svg></span>
-      <div class="resumen-card-content">
-        <span class="resumen-card-label">Solicitudes pendientes</span>
-        <strong class="resumen-card-value">{{ resumen?.solicitudesPendientes ?? 0 }}</strong>
-        <span class="resumen-card-desc">
-          @if (resumen?.solicitudesPendientes === 0) {
-            Sin solicitudes para revisar
-          } @else {
-            {{ resumen?.solicitudesPendientes === 1 ? '1 solicitud pendiente' : resumen?.solicitudesPendientes + ' solicitudes pendientes' }}
-          }
-        </span>
+    } @else {
+      <h2 id="accesos-heading">Accesos rápidos</h2>
+      <p class="indicacion">Ingresá directamente al módulo que necesitás.</p>
+      <div class="accesos-grid">
+        <a class="mk-card" routerLink="/colaboradores">
+          <span class="card-icon icon-colaboradores"></span>
+          <span class="card-main">
+            <strong>Gestión de Empleados</strong>
+            <span>Legajos, perfiles y asignaciones</span>
+          </span>
+          <span class="arrow-right"></span>
+        </a>
+        <a class="mk-card" routerLink="/sueldos-y-bonos">
+          <span class="card-icon icon-sueldos"></span>
+          <span class="card-main">
+            <strong>Sueldos y Bonos</strong>
+            <span>Remuneraciones y beneficios</span>
+          </span>
+          <span class="arrow-right"></span>
+        </a>
+        <a class="mk-card" routerLink="/solicitudes">
+          <span class="card-icon icon-solicitudes"></span>
+          <span class="card-main">
+            <strong>Solicitudes</strong>
+            <span>Revisión y seguimiento de pedidos</span>
+          </span>
+          <span class="arrow-right"></span>
+        </a>
+        <a class="mk-card" routerLink="/comunicados">
+          <span class="card-icon icon-comunicados"></span>
+          <span class="card-main">
+            <strong>Comunicados</strong>
+            <span>Mensajes y registro de envíos</span>
+          </span>
+          <span class="arrow-right"></span>
+        </a>
+        <a class="mk-card" routerLink="/horas-extras">
+          <span class="card-icon icon-horas-extras"></span>
+          <span class="card-main">
+            <strong>Horas Extras</strong>
+            <span>Autorizaciones y compensaciones</span>
+          </span>
+          <span class="arrow-right"></span>
+        </a>
       </div>
-      <svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" class="arrow"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
-    </a>
-    <!-- Próximos eventos -->
-    <a routerLink="/empleados" class="resumen-card">
-      <span class="resumen-card-icon resumen-calendar"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18m-13 5h3"/></svg></span>
-      <div class="resumen-card-content">
-        <span class="resumen-card-label">Próximos eventos</span>
-        <strong class="resumen-card-value">{{ resumen?.eventosProximos ?? 0 }}</strong>
-        <span class="resumen-card-desc">Cumpleaños y beneficios por vencer</span>
-      </div>
-      <svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" class="arrow"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
-    </a>
-  </div>
-  <ng-container *ngIf="state.status === 'loading'">
-    <shared-loading-state texto="Cargando resumen de inicio..." />
-  </ng-container>
-  <ng-container *ngIf="state.status === 'error'">
-    <shared-error-alert [mensaje]="state.message" />
-  </ng-container>
-</section>
-
-<section aria-labelledby="accesos-titulo" class="accesos-section">
-  <div class="accesos-header">
-    <h2 id="accesos-titulo" class="accesos-title">Accesos rápidos</h2>
-    <p class="accesos-desc">Ingresá directamente al módulo que necesitás.</p>
-  </div>
-  <div class="accesos-cards">
-    <!-- Gestión de Empleados -->
-    <a routerLink="/empleados" class="accesos-card">
-      <span class="accesos-card-icon"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2zm14-15a3 3 0 0 1 0 6m1 4a5 5 0 0 1 3 5"/></svg></span>
-      <span class="accesos-card-labels"><strong>Gestión de Empleados</strong><span>Legajos, perfiles y asignaciones</span></span>
-      <svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" class="arrow"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
-    </a>
-    <!-- Sueldos y Bonos -->
-    <a routerLink="/sueldos-y-bonos" class="accesos-card">
-      <span class="accesos-card-icon"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M5 9h1m12 6h1"/></svg></span>
-      <span class="accesos-card-labels"><strong>Sueldos y Bonos</strong><span>Remuneraciones y beneficios</span></span>
-      <svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" class="arrow"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
-    </a>
-    <!-- Solicitudes -->
-    <a routerLink="/solicitudes" class="accesos-card">
-      <span class="accesos-card-icon"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8m-8 4h4"/></svg></span>
-      <span class="accesos-card-labels"><strong>Solicitudes</strong><span>Revisión y seguimiento de pedidos</span></span>
-      <svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" class="arrow"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
-    </a>
-    <!-- Comunicados -->
-    <a routerLink="/comunicados" class="accesos-card">
-      <span class="accesos-card-icon"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 5h18v13H8l-5 3zM7 10h10m-10 4h7"/></svg></span>
-      <span class="accesos-card-labels"><strong>Comunicados</strong><span>Mensajes y registro de envíos</span></span>
-      <svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" class="arrow"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
-    </a>
-    <!-- Horas Extras -->
-    <a routerLink="/horas-extras" class="accesos-card">
-      <span class="accesos-card-icon"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
-      <span class="accesos-card-labels"><strong>Horas Extras</strong><span>Autorizaciones y compensaciones</span></span>
-      <svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" class="arrow"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
-    </a>
-  </div>
+    }
+  </section>
 </section>

@@ -1,25 +1,35 @@
-/* Paleta principal - variables en :root en styles.scss */
-.inicio-section {
+.inicio-wrapper {
+  width: 100%;
+  max-width: 930px;
+  min-height: 680px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 36px 18px 54px;
+}
+.intro-section {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  margin-bottom: 6px;
 }
-.inicio-label {
+.panel-label {
   color: var(--brand-accent);
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: .1em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
-.inicio-title {
+h1 {
   margin: 0;
   color: var(--text-primary);
   font-size: 26px;
   font-weight: 650;
   letter-spacing: -0.025em;
-  line-height: 1.25;
 }
-.inicio-sub {
+.bienvenida {
   margin: 0;
   color: var(--text-secondary);
   font-size: 14px;
@@ -27,7 +37,7 @@
 .resumen-section {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
 }
 .resumen-header {
   display: flex;
@@ -35,19 +45,56 @@
   justify-content: space-between;
   gap: 12px;
 }
-.resumen-title {
+.resumen-header h2 {
   margin: 0;
   color: var(--primary);
   font-size: 20px;
   font-weight: 650;
   letter-spacing: -0.025em;
 }
-.resumen-cards {
+.reload-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: var(--brand-light);
+  color: var(--brand-main);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: none;
+  transition: background 0.15s;
+}
+.reload-btn:hover {
+  background: var(--brand-accent);
+  color: #fff;
+}
+.reload-icon {
+  width: 15px;
+  height: 15px;
+  border-radius: 999px;
+  display: inline-block;
+  background: none;
+  position: relative;
+}
+.reload-icon:before {
+  content: '';
+  display: block;
+  width: 15px;
+  height: 15px;
+  border: 2px solid var(--brand-main);
+  border-right-color: transparent;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+.dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 205px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(206px, 1fr));
   gap: 16px;
 }
-.resumen-card {
+.dashboard-card {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -55,91 +102,97 @@
   padding: 20px;
   box-sizing: border-box;
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  border-radius: 16px;
   background: var(--surface);
   box-shadow: var(--shadow-card);
   color: var(--text-primary);
   text-decoration: none;
-  transition: box-shadow .2s, transform .2s;
-  cursor: pointer;
+  transition: box-shadow 0.16s, transform 0.18s;
 }
-.resumen-card:hover {
+.dashboard-card:hover {
   box-shadow: var(--shadow-hover);
   transform: translateY(-2px);
 }
-.resumen-card .arrow {
-  margin-left: auto;
-  margin-top: 6px;
-  flex: none;
-}
-.resumen-card-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.card-icon {
+  display: grid;
+  place-items: center;
   width: 40px;
   height: 40px;
   border-radius: 12px;
   background: var(--soft-background);
-  color: var(--accent);
-  font-size: 18px;
-}
-.resumen-persona {
   color: var(--brand-accent);
+  margin-bottom: 5px;
 }
-.resumen-request {
-  color: var(--brand-accent);
+.icon-colaboradores svg {
+  stroke: var(--brand-accent);
 }
-.resumen-calendar {
-  color: var(--brand-accent);
+.icon-solicitudes svg {
+  stroke: var(--brand-accent);
 }
-.resumen-card-content {
+.icon-sueldos svg {
+  stroke: var(--brand-accent);
+}
+.icon-eventos svg {
+  stroke: var(--brand-accent);
+}
+.icon-comunicados svg {
+  stroke: var(--brand-accent);
+}
+.icon-horas-extras svg {
+  stroke: var(--brand-accent);
+}
+.card-main {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
-.resumen-card-label {
+.card-title {
   font-size: 12px;
   font-weight: 600;
   color: var(--text-secondary);
 }
-.resumen-card-value {
+.card-value {
   font-size: 30px;
+  font-weight: 650;
   line-height: 1.1;
   letter-spacing: -0.03em;
 }
-.resumen-card-desc {
+.card-desc {
   font-size: 12px;
   color: var(--text-secondary);
 }
-
+.arrow-right {
+  flex: none;
+  width: 17px;
+  height: 17px;
+  display: inline-block;
+  background: none;
+  mask: url('data:image/svg+xml;utf8,<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="%237C3CC2" stroke-width="1.8" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>') no-repeat center center;
+  background-color: var(--brand-accent);
+}
 .accesos-section {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
-.accesos-header {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.accesos-title {
+.accesos-section h2 {
   margin: 0;
   color: var(--primary);
   font-size: 20px;
   font-weight: 650;
   letter-spacing: -0.025em;
 }
-.accesos-desc {
+.indicacion {
   margin: 0;
   color: var(--text-secondary);
   font-size: 13px;
 }
-.accesos-cards {
+.accesos-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   gap: 16px;
 }
-.accesos-card {
+.mk-card {
   min-height: 150px;
   display: flex;
   flex-direction: column;
@@ -148,47 +201,59 @@
   padding: 20px;
   box-sizing: border-box;
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  border-radius: 16px;
   background: var(--surface);
   box-shadow: var(--shadow-card);
   color: var(--text-primary);
   text-decoration: none;
-  transition: box-shadow .2s, transform .2s;
+  transition: box-shadow 0.16s, transform 0.18s;
 }
-.accesos-card:hover {
+.mk-card:hover {
   box-shadow: var(--shadow-hover);
   transform: translateY(-2px);
 }
-.accesos-card-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  background: var(--soft-background);
-  color: var(--brand-accent);
-  font-size: 18px;
+.mk-card .card-icon {
+  margin-bottom: 0;
 }
-.accesos-card-labels {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+.mk-card .card-main strong {
+  display: block;
   font-size: 14px;
+  font-weight: 650;
 }
-.accesos-card-labels span {
+.mk-card .card-main span {
+  display: block;
+  margin-top: 4px;
   color: var(--text-secondary);
   font-size: 12px;
 }
-.accesos-card .arrow {
-  margin-left: auto;
-  margin-top: 6px;
-  flex: none;
+@media (max-width: 800px) {
+  .inicio-wrapper {
+    max-width: 98vw;
+    padding: 22px 2vw 36px;
+  }
 }
-@media (max-width: 799px) {
-  .inicio-title { font-size: 22px; }
-  .resumen-title, .accesos-title { font-size: 17px; }
-  .resumen-cards, .accesos-cards {
+@media (max-width: 599px) {
+  .inicio-wrapper {
+    padding: 12px 0 30px;
+    gap: 16px;
+  }
+  .dashboard-grid, .accesos-grid {
     grid-template-columns: 1fr;
+    gap: 13px;
+  }
+  .dashboard-card,
+  .mk-card {
+    min-height: 98px;
+    padding: 12px 11px;
+    border-radius: 10px;
+  }
+  .card-value {
+    font-size: 19px;
+  }
+  h1 {
+    font-size: 19px;
+  }
+  h2 {
+    font-size: 17px;
   }
 }
