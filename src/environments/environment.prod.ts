@@ -1,5 +1,4 @@
 export const environment = {
-  production: true,
-  apiBaseUrl: '/api',
+  apiBaseUrl: 'https://api-rrhh.techforb.com',
   useMock: false
 };

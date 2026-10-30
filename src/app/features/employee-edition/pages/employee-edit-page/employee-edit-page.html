@@ -1,0 +1,122 @@
+<main class="employee-edit-screen">
+  <header class="employee-edit-header">
+    <div class="employee-edit-header__breadcrumb">
+      <span>Gestión de Empleados</span>
+      <span aria-hidden="true">/</span>
+      <span>Ficha individual</span>
+      <span aria-hidden="true">/</span>
+      <span class="active">Editar información</span>
+    </div>
+    <h1>Editar información</h1>
+    <p class="employee-edit-header__desc">
+      Actualizá los datos del colaborador sin perder el historial de cambios.
+    </p>
+    <button type="button" class="employee-edit-back" (click)="onBack()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+      Volver a la ficha
+    </button>
+  </header>
+
+  <section *ngIf="employee(); else notFound" class="employee-edit-summary" aria-label="Resumen del colaborador">
+    <div class="employee-edit-avatar">{{ initials(employee()) }}</div>
+    <div class="employee-edit-summary-info">
+      <div class="employee-edit-summary-main">
+        <h2>{{ employee().nombre }} {{ employee().apellido }}</h2>
+        <span class="status-badge status-green">{{ employee().estado ?? 'Activo' }}</span>
+      </div>
+      <div class="employee-edit-summary-data">
+        <span>Legajo <strong>{{ employee().legajo }}</strong></span>
+        <span>Categoría interna <strong>{{ employee().categoria }}</strong></span>
+        <span>Rol actual <strong>{{ employee().rolLaboral }}</strong></span>
+      </div>
+    </div>
+  </section>
+  <ng-template #notFound>
+    <app-empty-state title="Colaborador no encontrado" message="No existe un colaborador con ese identificador." />
+  </ng-template>
+  <form *ngIf="employee()" [formGroup]="form" class="employee-edit-form" autocomplete="off" novalidate (ngSubmit)="onSubmit()">
+    <p class="employee-edit-form__asterisk">
+      Los campos marcados con <span class="asterisk">*</span> son obligatorios
+    </p>
+    <section class="employee-edit-form-section">
+      <div class="employee-edit-form-section__header">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7C3CC2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4.5 20c.6-4 3.2-6 7.5-6s6.9 2 7.5 6"/></svg>
+        <h2 id="personales">Datos personales</h2>
+      </div>
+      <div class="employee-edit-form-grid">
+        <div>
+          <label for="nombre">Nombre <span class="asterisk">*</span></label>
+          <input id="nombre" formControlName="nombre" type="text" [class.invalid]="form.controls.nombre.invalid && form.controls.nombre.touched">
+        </div>
+        <div>
+          <label for="apellido">Apellido <span class="asterisk">*</span></label>
+          <input id="apellido" formControlName="apellido" type="text" [class.invalid]="form.controls.apellido.invalid && form.controls.apellido.touched">
+        </div>
+        <div>
+          <label for="fechaNacimiento">Fecha de nacimiento <span class="asterisk">*</span></label>
+          <input id="fechaNacimiento" formControlName="fechaNacimiento" type="date" [class.invalid]="form.controls.fechaNacimiento.invalid && form.controls.fechaNacimiento.touched">
+        </div>
+        <div>
+          <label for="paisResidencia">País de residencia <span class="asterisk">*</span></label>
+          <select id="paisResidencia" formControlName="paisResidencia" [class.invalid]="form.controls.paisResidencia.invalid && form.controls.paisResidencia.touched">
+            <option value="">Seleccioná…</option>
+            <option>Argentina</option>
+            <option>México</option>
+            <option>Uruguay</option>
+            <option>Chile</option>
+            <option>Colombia</option>
+            <option>Brasil</option>
+            <option>Perú</option>
+            <option>Otro país de Latinoamérica</option>
+          </select>
+        </div>
+        <div>
+          <label for="correoPersonal">Correo personal <span class="asterisk">*</span></label>
+          <input id="correoPersonal" formControlName="correoPersonal" type="email" [class.invalid]="form.controls.correoPersonal.invalid && form.controls.correoPersonal.touched">
+        </div>
+        <div>
+          <label for="dedicacion">Dedicación <span class="asterisk">*</span></label>
+          <select id="dedicacion" formControlName="dedicacion" [class.invalid]="form.controls.dedicacion.invalid && form.controls.dedicacion.touched">
+            <option value="full time">Full time</option>
+            <option value="part time">Part time</option>
+          </select>
+        </div>
+        <div>
+          <label for="modalidadTrabajo">Modalidad de trabajo <span class="asterisk">*</span></label>
+          <select id="modalidadTrabajo" formControlName="modalidadTrabajo" [class.invalid]="form.controls.modalidadTrabajo.invalid && form.controls.modalidadTrabajo.touched">
+            <option value="remota">Remota</option>
+            <option value="híbrida">Híbrida</option>
+            <option value="presencial">Presencial</option>
+          </select>
+        </div>
+        <div>
+          <label for="rolLaboral">Rol laboral <span class="asterisk">*</span></label>
+          <input id="rolLaboral" formControlName="rolLaboral" type="text" [class.invalid]="form.controls.rolLaboral.invalid && form.controls.rolLaboral.touched">
+        </div>
+        <div>
+          <label for="categoria">Categoría</label>
+          <input id="categoria" formControlName="categoria" type="text" readonly aria-description="Dato de consulta. Los cambios de categoría se gestionan por separado.">
+        </div>
+      </div>
+    </section>
+    <!-- Información corporativa y detalles pueden ir aquí -->
+    <aside class="employee-edit-history" aria-label="Historial de cambios">
+      <div class="employee-edit-history__icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7C3CC2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"/><path d="M12 11v5m0-8h.01" />
+        </svg>
+      </div>
+      <div class="employee-edit-history__info">
+        <h3>Historial de cambios</h3>
+        <p class="employee-edit-history__desc">Las modificaciones conservan la fecha, el usuario responsable y los valores anteriores y nuevos.</p>
+        <p class="employee-edit-history__updated" *ngIf="employee().ultimaActualizacion">Última actualización: {{ employee().ultimaActualizacion | date: 'dd/MM/yyyy · HH:mm' }}</p>
+      </div>
+    </aside>
+    <footer class="employee-edit-actions">
+      <button type="button" class="secondary" (click)="onCancel()">Cancelar</button>
+      <button type="submit" class="primary">Guardar cambios</button>
+    </footer>
+    <app-error-alert *ngIf="saveState().status === 'error'" [message]="saveState().message" />
+  </form>
+  <app-loading-state *ngIf="loading()" />
+</main>

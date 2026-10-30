@@ -1,3 +1,5 @@
+// Modelos para el resumen de inicio (pantalla principal)
+
 export interface ModuloSummary {
   nombre: string;
   descripcion: string;
@@ -6,7 +8,7 @@ export interface ModuloSummary {
 export interface InicioSummaryResponse {
   totalColaboradores: number;
   solicitudesPendientes: number;
-  proximoEvento: string | null;
+  proximoEvento: string;
   gestionEmpleados: ModuloSummary;
   sueldosBonos: ModuloSummary;
   solicitudes: ModuloSummary;

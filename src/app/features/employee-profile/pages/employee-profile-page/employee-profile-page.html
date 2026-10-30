@@ -1,0 +1,147 @@
+<div class="profile-main-wrapper">
+  <header class="profile-header">
+    <div class="profile-breadcrumb">
+      <span>Gestión de Empleados</span>
+      <span class="bc-slash">/</span>
+      <span class="bc-here">Ficha individual</span>
+    </div>
+    <button type="button" class="btn btn-secondary" (click)="onBack()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/><path d="M9 12h12"/></svg>
+      Volver al listado
+    </button>
+  </header>
+
+  <main class="profile-content">
+    @if (state(); as s) {
+      @switch(s.status) {
+        @case('loading') {
+          <app-loading-state />
+        }
+        @case('error') {
+          <app-error-alert [message]="s.message" />
+        }
+        @case('empty') {
+          <app-empty-state message="No se encontró la ficha del colaborador." title="Sin datos" />
+        }
+        @case('ready') {
+        <section class="profile-hero-row">
+          <div class="profile-avatar">{{ getInitials(s.data.nombre, s.data.apellido) }}</div>
+          <div class="profile-main-data">
+            <div class="profile-name-row">
+              <h1>{{ s.data.nombre }} {{ s.data.apellido }}</h1>
+              <span class="badge badge-cat">{{ s.data.categoria }}</span>
+              <span class="badge badge-status-active"><span class="dot"></span>{{ s.data.estado }}</span>
+            </div>
+            <div class="profile-legajo-row">
+              Legajo <span class="profile-legajo">{{ s.data.legajo }}</span><span class="dot-sep">·</span>{{ s.data.rolLaboral }}
+            </div>
+            <div class="profile-project-row">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7C3CC2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12a20 20 0 0 0 18 0"/></svg>
+              <span>{{ s.data.cliente }} <span class="dot-sep">·</span> {{ s.data.proyecto }}</span>
+            </div>
+          </div>
+          <div class="profile-action"><button type="button" class="btn btn-primary" (click)="onEdit()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L9 17l-4 1 1-4L16.5 3.5Z"/></svg>
+            Editar información
+          </button></div>
+        </section>
+
+        <!-- Tabs de secciones. Sólo Datos personales activo (mockup, no tabs funcionales) -->
+        <div class="profile-tabs">
+          <button type="button" role="tab" aria-selected="true" class="tab main">Datos personales</button>
+          <button type="button" role="tab" aria-selected="false" class="tab">Información laboral</button>
+          <button type="button" role="tab" aria-selected="false" class="tab">Asignaciones</button>
+          <button type="button" role="tab" aria-selected="false" class="tab">Perfil técnico</button>
+          <button type="button" role="tab" aria-selected="false" class="tab">Documentación</button>
+          <button type="button" role="tab" aria-selected="false" class="tab">Beneficios</button>
+          <button type="button" role="tab" aria-selected="false" class="tab">Evaluaciones</button>
+          <button type="button" role="tab" aria-selected="false" class="tab">Bitácora</button>
+          <button type="button" role="tab" aria-selected="false" class="tab">Sueldos y Bonos</button>
+        </div>
+
+        <section class="section-header">
+          <div class="section-title-group">
+            <h2>Datos personales</h2>
+            @if (s.data.nombre && s.data.apellido) {
+              <p class="section-desc">Información de identificación y contacto de {{ s.data.nombre }} {{ s.data.apellido }}.</p>
+            }
+          </div>
+          <button type="button" class="btn btn-secondary profile-editbtn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L9 17l-4 1 1-4L16.5 3.5Z"/></svg>
+            Editar datos personales
+          </button>
+        </section>
+
+        <div class="profile-data-blocks">
+          <section class="profile-data-panel">
+            <div class="data-panel-header">
+              <div class="iconbox id"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M5.5 17a3.5 3.5 0 0 1 7 0M15 9h4M15 13h4"/></svg></div>
+              <h3>Identificación</h3>
+            </div>
+            <div class="panel-grid">
+              <div>
+                <div class="field-label">Documento de identidad</div>
+                <div class="field-value">No informado</div>
+              </div>
+              <div>
+                <div class="field-label">CUIL</div>
+                <div class="field-value">No informado</div>
+              </div>
+              <div>
+                <div class="field-label">Fecha de nacimiento</div>
+                <div class="field-value">@if(s.data.fechaNacimiento) { {{ s.data.fechaNacimiento | date: 'dd/MM/yyyy' }} } @else { No informado }</div>
+              </div>
+              <div>
+                <div class="field-label">Nacionalidad</div>
+                <div class="field-value">No informado</div>
+              </div>
+              <div>
+                <div class="field-label">País de residencia</div>
+                <div class="field-value">@if(s.data.paisResidencia) { {{ s.data.paisResidencia }} } @else { No informado }</div>
+              </div>
+              <div>
+                <div class="field-label">Número de legajo</div>
+                <div class="field-value">{{ s.data.legajo }} <span class="note">· No modificable</span></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="profile-data-panel">
+            <div class="data-panel-header">
+              <div class="iconbox contact"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></div>
+              <h3>Contacto y domicilio</h3>
+            </div>
+            <div class="panel-grid">
+              <div>
+                <div class="field-label">Correo electrónico personal</div>
+                <div class="field-value"><a [href]="'mailto:' + s.data.correoPersonal" class="profile-email-link">{{ s.data.correoPersonal || 'No informado' }}</a></div>
+              </div>
+              <div>
+                <div class="field-label">Teléfono</div>
+                <div class="field-value">No informado</div>
+              </div>
+              <div class="span-2">
+                <div class="field-label">Domicilio</div>
+                <div class="field-value">No informado</div>
+              </div>
+              <div>
+                <div class="field-label">Contacto de emergencia</div>
+                <div class="field-value">No informado</div>
+              </div>
+              <div>
+                <div class="field-label">Teléfono de emergencia</div>
+                <div class="field-value">No informado</div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div class="last-update-row">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7C3CC2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+          Última actualización: 12 de febrero de 2026
+        </div>
+        }
+      }
+    }
+  </main>
+</div>
