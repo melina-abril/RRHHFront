@@ -1,0 +1,62 @@
+.employee-table-wrapper {
+  overflow-x: auto;
+}
+
+.employee-table {
+  width: 100%;
+  min-width: 950px;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 12px;
+  background: var(--surface);
+}
+
+th {
+  background: #F8F6FB;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  text-align: left;
+  padding: 12px 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+td {
+  padding: 13px 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.emp-table__name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.emp-table__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.status-green {
+  background: #E6F5EC;
+  color: #207349;
+}
+
+.status-red {
+  background: #FCE8EC;
+  color: #B32F48;
+}
+
+.emp-table__ver {
+  background: none;
+  color: var(--primary);
+  border: none;
+  font-weight: 650;
+  cursor: pointer;
+}
+.emp-table__ver:hover {
+  text-decoration: underline;
+}

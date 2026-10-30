@@ -1,0 +1,215 @@
+/* Maquetado y estilo respetando brandStyle. Adaptado a clases, sin colores fijos. */
+.onboarding-root {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 32px 56px;
+  background: var(--page-bg);
+  color: var(--text-primary);
+  font-family: 'Inter','Segoe UI',Arial,sans-serif;
+  font-size: 14px;
+  min-height: 100vh;
+}
+.onboarding-form {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+.required-indicator {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+.asterisk {
+  color: var(--error);
+  font-weight: 700;
+}
+.form-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 24px;
+  margin-bottom: 0;
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.section-header h2 {
+  margin: 0;
+  color: var(--primary);
+  font-size: 20px;
+  font-weight: 650;
+  letter-spacing: -0.025em;
+}
+.section-header p {
+  margin: 2px 0 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+.section-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: var(--soft-background);
+  color: var(--accent);
+  font-size: 17px;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 24px;
+}
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.form-field input,
+.form-field select {
+  width: 100%;
+  height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 14px;
+  transition: border-color .1s;
+}
+.form-field input:focus,
+.form-field select:focus {
+  border-color: var(--accent);
+  outline: 2px solid rgba(124,60,194,0.13);
+}
+.form-field input.is-invalid,
+.form-field select.is-invalid {
+  border-color: var(--error);
+  outline: 1.5px solid var(--error);
+}
+.form-field label {
+  font-weight: 550;
+  color: var(--text-primary);
+  font-size: 14px;
+}
+.form-wide {
+  grid-column: 1/-1;
+}
+.legend-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+.legend-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: var(--soft-background);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+.legend-title {
+  font-weight: 600;
+  font-size: 15px;
+}
+.legend-desc {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+.badge-active {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #E6F5EC;
+  color: #207349;
+  font-size: 12px;
+  font-weight: 600;
+}
+.note-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  align-items: start;
+}
+.subgrid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.corp-legend {
+  margin: 20px 0 0;
+  padding: 12px 16px;
+  background: var(--soft-background);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+.footer-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 8px 0 0;
+}
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  padding: 11px 18px;
+  min-width: 170px;
+  min-height: 44px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.btn-primary:disabled {
+  opacity: .68;
+  cursor: not-allowed;
+}
+.btn-primary:hover:not(:disabled) {
+  background: #602B9A;
+  transform: translateY(-1px);
+}
+.btn-secondary {
+  background: var(--surface-soft);
+  color: var(--primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  padding: 11px 18px;
+  min-width: 112px;
+  min-height: 44px;
+}
+@media (max-width: 900px) {
+  .form-grid, .card-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}
+@media (max-width: 600px) {
+  .onboarding-root {
+    padding: 16px 2vw;
+  }
+  .form-section {
+    padding: 12px;
+  }
+}

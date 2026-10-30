@@ -1,46 +1,42 @@
 {
+  "$schema": "https://schematics.angular.io/schemas/collection-schema.json",
   "version": 1,
   "projects": {
     "rrhh-front": {
       "projectType": "application",
       "root": "",
       "sourceRoot": "src",
-      "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular/build:application",
           "options": {
             "outputPath": "dist/rrhh-front",
-            "index": "src/index.html",
-            "polyfills": [],
-            "tsConfig": "tsconfig.app.json",
-            "assets": [],
+            "browser": "src/main.ts",
             "styles": [
               "src/styles.scss"
             ],
-            "browser": "src/main.ts"
+            "assets": [
+              "public"
+            ]
+          },
+          "configurations": {
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
+            },
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "sourceMap": false
+            }
           }
         },
         "serve": {
           "builder": "@angular/build:dev-server",
           "options": {
             "proxyConfig": "proxy.conf.json",
-            "buildTarget": "rrhh-front:build"
-          }
-        },
-        "watch": {
-          "builder": "@angular/build:application",
-          "options": {
-            "outputPath": "dist/rrhh-front",
-            "index": "src/index.html",
-            "polyfills": [],
-            "tsConfig": "tsconfig.app.json",
-            "assets": [],
-            "styles": [
-              "src/styles.scss"
-            ],
-            "watch": true,
-            "browser": "src/main.ts"
+            "buildTarget": "rrhh-front:build:development"
           }
         }
       }

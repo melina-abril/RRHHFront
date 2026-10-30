@@ -1,29 +1,47 @@
-# Gestión de RR.HH (TECHFORB) — Frontend
+# Sistema de Gestión de RR.HH — Frontend
 
-Sistema interno para administración centralizada de Recursos Humanos. 
+Este es el frontend Angular 21 standalone del sistema de Gestión de Recursos Humanos de TECHFORB.
 
-## Levantar la aplicación
+## Instalación y arranque
 
 1. Instala dependencias:
-   ```sh
+   
+   ```
    npm install
    ```
-2. Inicia en modo desarrollo (mock):
-   ```sh
+
+2. Arranca el proyecto:
+   
+   ```
    npm start
    ```
-3. Accede a http://localhost:4200
 
-- Por defecto, la aplicación usa datos simulados (mocks) y no requiere backend: puedes verla y navegar todas las pantallas disponibles.
-- Para usar un backend real, pon `useMock: false` en el entorno correspondiente.
+   Esto lo ejecuta en modo desarrollo (`ng serve`).
 
-## Estructura de carpetas
+3. Acceso:
+   Abre http://localhost:4200 en tu navegador.
 
-- `src/app/core/`: servicios globales, sesión, layout
-- `src/app/features/`: un módulo funcional por carpeta
-- `src/app/shared/`: componentes y modelos reutilizables
-- `src/environments/`: configuración (`apiBaseUrl`, `useMock`)
+## Conexión backend/mock
 
-## Añadir módulos funcionales
+- Por defecto (`src/environments/environment.ts`), `useMock` es `true`.
+- La aplicación está lista para funcionar **sin backend**: todos los servicios de datos devuelven mocks realistas.
+- Para conectar al backend Java Spring, pon `useMock: false` y asegurate que la API corra en http://localhost:8080 (ajusta `apiBaseUrl` de ser necesario).
 
-Agrega cada nueva carpeta bajo `src/app/features/` siguiendo el patrón del sistema y registra su ruteo en `app.routes.ts`. El layout, navegación lateral y estilos principales ya lo resuelven automáticamente.
+## Estructura
+
+- `src/app/core/`: piezas únicas de la app (autenticación, layout, http).
+- `src/app/features/`: un módulo funcional por carpeta (ej. `employee-list`, `employee-profile`, etc.).
+- `src/app/shared/`: componentes y tipos reutilizables.
+- `src/environments/`: configuración de entorno.
+- Estilos en `src/styles.scss` usando variables CSS de la paleta corporativa.
+
+## Comandos útiles
+
+- `npm start` — Levanta la app en http://localhost:4200
+- `npm run build` — Genera build estática de producción en `dist/`
+
+## Notas
+
+- El login está habilitado para usuarios de TECHFORB (`@techforb.com`), pero en mock acepta cualquier correo válido de ese dominio.
+- Los componentes y servicios de cada funcionalidad están bajo `src/app/features/{modulo}`.
+- Para rutas, lazy-loading y estilo visual, sigue las buenas prácticas y convenciones del proyecto.

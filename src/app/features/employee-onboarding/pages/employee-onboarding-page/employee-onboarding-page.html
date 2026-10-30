@@ -1,0 +1,172 @@
+<section class="onboarding-root">
+  <app-page-header [title]="'Nuevo colaborador'"
+    [subtitle]="'Completá los datos para registrar a la persona y crear su ficha individual.'">
+    <ng-template #actions>
+      <span class="required-indicator">Los campos marcados con <span class="asterisk">*</span> son obligatorios</span>
+    </ng-template>
+  </app-page-header>
+  <form [formGroup]="form" class="onboarding-form" autocomplete="off" (ngSubmit)="onSubmit()" novalidate>
+    <!-- DATOS PERSONALES -->
+    <section class="form-section">
+      <div class="section-header">
+        <span class="section-icon personal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.5"/><path d="M5 20v-1.5a7 7 0 0 1 14 0V20H5Z"/></svg></span>
+        <div><h2>Datos personales</h2><p>Información de identificación y contacto.</p></div>
+      </div>
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="nombre">Nombre <span class="asterisk">*</span></label>
+          <input id="nombre" formControlName="nombre" type="text" autocomplete="given-name" placeholder="Ingresá el nombre" [class.is-invalid]="invalid('nombre')">
+        </div>
+        <div class="form-field">
+          <label for="apellido">Apellido <span class="asterisk">*</span></label>
+          <input id="apellido" formControlName="apellido" type="text" autocomplete="family-name" placeholder="Ingresá el apellido" [class.is-invalid]="invalid('apellido')">
+        </div>
+        <div class="form-field">
+          <label for="fechaNacimiento">Fecha de nacimiento <span class="asterisk">*</span></label>
+          <input id="fechaNacimiento" formControlName="fechaNacimiento" type="date" placeholder="dd/mm/aaaa" [class.is-invalid]="invalid('fechaNacimiento')">
+        </div>
+        <div class="form-field">
+          <label for="paisResidencia">País de residencia <span class="asterisk">*</span></label>
+          <select id="paisResidencia" formControlName="paisResidencia" [class.is-invalid]="invalid('paisResidencia')">
+            <option value="" disabled selected>Seleccioná un país</option>
+            <option>Argentina</option><option>México</option><option>Uruguay</option><option>Chile</option><option>Colombia</option><option>Brasil</option><option>Perú</option><option>Otro país de Latinoamérica</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="documento">Documento de identidad</label>
+          <input id="documento" formControlName="documento" type="text" placeholder="Número de documento o identificación">
+        </div>
+        <div class="form-field">
+          <label for="nacionalidad">Nacionalidad</label>
+          <input id="nacionalidad" formControlName="nacionalidad" type="text" placeholder="Ingresá la nacionalidad">
+        </div>
+        <div class="form-field">
+          <label for="correoPersonal">Correo personal <span class="asterisk">*</span></label>
+          <input id="correoPersonal" formControlName="correoPersonal" type="email" autocomplete="email" placeholder="nombre@correo.com" [class.is-invalid]="invalid('correoPersonal')">
+        </div>
+        <div class="form-field">
+          <label for="telefono">Teléfono</label>
+          <input id="telefono" formControlName="telefono" type="tel" autocomplete="tel" placeholder="+54 11 1234 5678">
+        </div>
+        <div class="form-field form-wide">
+          <label for="domicilio">Domicilio</label>
+          <input id="domicilio" formControlName="domicilio" type="text" autocomplete="street-address" placeholder="Calle, número, localidad y provincia o estado">
+        </div>
+        <div class="form-field">
+          <label for="contactoEmergencia">Contacto de emergencia</label>
+          <input id="contactoEmergencia" formControlName="contactoEmergencia" type="text" placeholder="Nombre y apellido">
+        </div>
+        <div class="form-field">
+          <label for="telefonoEmergencia">Teléfono de emergencia</label>
+          <input id="telefonoEmergencia" formControlName="telefonoEmergencia" type="tel" placeholder="Incluí el código internacional">
+        </div>
+      </div>
+    </section>
+    <!-- DATOS LABORALES -->
+    <section class="form-section">
+      <div class="section-header">
+        <span class="section-icon contract"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18"/></svg></span>
+        <div><h2>Datos laborales</h2><p>Condiciones de ingreso y posición dentro de TECHFORB.</p></div>
+      </div>
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="fechaIngreso">Fecha de ingreso <span class="asterisk">*</span></label>
+          <input id="fechaIngreso" formControlName="fechaIngreso" type="date" placeholder="dd/mm/aaaa" [class.is-invalid]="invalid('fechaIngreso')">
+        </div>
+        <div class="form-field">
+          <label for="categoria">Categoría interna <span class="asterisk">*</span></label>
+          <select id="categoria" formControlName="categoria" [class.is-invalid]="invalid('categoria')">
+            <option value="" disabled selected>Seleccioná una categoría</option>
+            <option>Pasante</option><option>Permanente</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="contratacion">Tipo de contratación</label>
+          <select id="contratacion" formControlName="contratacion">
+            <option value="" selected>Seleccioná un tipo</option>
+            <option>Contractor</option><option>Relación de dependencia</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="dedicacion">Dedicación <span class="asterisk">*</span></label>
+          <select id="dedicacion" formControlName="dedicacion" [class.is-invalid]="invalid('dedicacion')">
+            <option value="" disabled selected>Seleccioná una dedicación</option>
+            <option>Full time</option><option>Part time</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="modalidadTrabajo">Modalidad de trabajo <span class="asterisk">*</span></label>
+          <select id="modalidadTrabajo" formControlName="modalidadTrabajo" [class.is-invalid]="invalid('modalidadTrabajo')">
+            <option value="" disabled selected>Seleccioná una modalidad</option>
+            <option>Remota</option><option>Híbrida</option><option>Presencial</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label for="rolLaboral">Rol laboral <span class="asterisk">*</span></label>
+          <input id="rolLaboral" formControlName="rolLaboral" type="text" placeholder="Ingresá el rol laboral" [class.is-invalid]="invalid('rolLaboral')">
+        </div>
+      </div>
+      <div class="legend-grid">
+        <div class="legend-card"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7C3CC2" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
+          <div>
+            <div class="legend-title">Legajo automático</div>
+            <div class="legend-desc">Se generará al guardar; no se puede editar.</div>
+          </div>
+        </div>
+        <div class="legend-card"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7C3CC2" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="m8 12 2.5 2.5L16 9"/></svg>
+          <div>
+            <div class="legend-title">Estado inicial: <span class="badge-active">Activo</span></div>
+            <div class="legend-desc">Se aplicará al registrar al colaborador.</div>
+          </div>
+        </div>
+      </div>
+      <div class="note-row">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7C3CC2" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+        <span>¿Ya trabajó en TECHFORB? Utilizá el proceso de reingreso para conservar su legajo original.</span>
+      </div>
+    </section>
+    <!-- DATOS CORPORATIVOS Y ASIGNACIÓN -->
+    <div class="card-grid">
+      <section class="form-section">
+        <div class="section-header">
+          <span class="section-icon corp"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="15" rx="2"/><path d="m3 8 9 6 9-6"/></svg></span>
+          <div><h2>Datos corporativos</h2><p>Opcionales; podés completarlos después.</p></div>
+        </div>
+        <div class="subgrid">
+          <div class="form-field"><label for="correoCorporativo">Correo TECHFORB</label>
+            <input id="correoCorporativo" formControlName="correoCorporativo" type="email" placeholder="nombre@techforb.com">
+          </div>
+          <div class="form-field"><label for="equipo">Área o equipo</label>
+            <input id="equipo" formControlName="equipo" type="text" placeholder="Ingresá el área o equipo">
+          </div>
+        </div>
+        <div class="legend-desc corp-legend">El alta del colaborador no crea una cuenta de acceso.</div>
+      </section>
+      <section class="form-section">
+        <div class="section-header">
+          <span class="section-icon assign"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M8 15h3"/></svg></span>
+          <div><h2>Asignación inicial</h2><p>Opcional; también podés agregarla después.</p></div>
+        </div>
+        <div class="subgrid">
+          <div class="form-field"><label for="cliente">Cliente</label><select id="cliente" formControlName="cliente"><option value="" selected>Seleccioná un cliente</option><option>Mercado Libre</option><option>Banco Galicia</option><option>PedidosYa</option></select></div>
+          <div class="form-field"><label for="paisProyecto">País del proyecto</label><select id="paisProyecto" formControlName="paisProyecto" disabled><option value="" selected>Seleccioná primero un cliente</option></select></div>
+          <div class="form-field"><label for="proyecto">Proyecto</label><select id="proyecto" formControlName="proyecto" disabled><option value="" selected>Seleccioná primero un país</option></select></div>
+          <div class="form-field"><label for="referente">Líder o referente</label><select id="referente" formControlName="referente" disabled><option value="" selected>Seleccioná primero un proyecto</option></select></div>
+          <div class="form-field"><label for="rolProyecto">Rol dentro del proyecto</label>
+            <input id="rolProyecto" formControlName="rolProyecto" type="text" placeholder="Ingresá el rol">
+          </div>
+          <div class="form-field"><label for="fechaInicioProyecto">Fecha de inicio</label>
+            <input id="fechaInicioProyecto" formControlName="fechaInicioProyecto" type="date" placeholder="dd/mm/aaaa">
+          </div>
+        </div>
+      </section>
+    </div>
+    <!-- Acciones y error guardado -->
+    <div class="footer-actions">
+      <button type="button" class="btn-secondary" (click)="onCancelar()">Cancelar</button>
+      <button type="submit" class="btn-primary" [disabled]="saveState().status === 'loading'">Guardar colaborador</button>
+    </div>
+    <app-loading-state *ngIf="saveState().status === 'loading'"></app-loading-state>
+    <app-error-alert *ngIf="saveState().status === 'error'" [message]="saveState().message!"></app-error-alert>
+  </form>
+</section>

@@ -1,0 +1,83 @@
+<div class="el-header-path">Colaboradores / Listado</div>
+<app-page-header title="Gestión de Empleados">
+  <ng-template #actions>
+    <button class="btn-primary" type="button" (click)="onNewEmployee()">
+      <span class="el-btn-plus">+</span> Nuevo colaborador
+    </button>
+  </ng-template>
+</app-page-header>
+<div class="el-count-summary">
+  <span><strong class="el-green">{{activeCount}}</strong> colaboradores activos</span>
+  <span class="el-dot"></span>
+  <span><strong>{{totalCount}}</strong> colaboradores registrados</span>
+</div>
+<form class="el-filters-section" (ngSubmit)="applyFilters()" autocomplete="off">
+  <div class="el-filters-row">
+    <label>Buscar colaborador
+      <input type="search" class="el-input-search" [(ngModel)]="filters.search" name="search" placeholder="Nombre, apellido o legajo" aria-label="Buscar por nombre, apellido o legajo">
+    </label>
+    <button class="btn-secondary el-clean-btn" type="button" (click)="resetFilters()">Limpiar filtros</button>
+  </div>
+  <div class="el-selects-row">
+    <label>Categoría
+      <select [(ngModel)]="filters.categoria" name="categoria">
+        <option value="">Todas las categorías</option>
+        <option value="Pasante">Pasante</option>
+        <option value="Permanente">Permanente</option>
+      </select>
+    </label>
+    <label>Cliente
+      <select [(ngModel)]="filters.cliente" name="cliente">
+        <option value="">Todos los clientes</option>
+        <option value="Banco del Plata">Banco del Plata</option>
+        <option value="Grupo Andino">Grupo Andino</option>
+        <option value="Nexo Salud">Nexo Salud</option>
+      </select>
+    </label>
+    <label>Proyecto
+      <select [(ngModel)]="filters.proyecto" name="proyecto">
+        <option value="">Todos los proyectos</option>
+        <option value="Banca digital">Banca digital</option>
+        <option value="Portal clientes">Portal clientes</option>
+        <option value="Plataforma logística">Plataforma logística</option>
+        <option value="Integraciones API">Integraciones API</option>
+        <option value="Portal pacientes">Portal pacientes</option>
+      </select>
+    </label>
+    <label>Estado
+      <select [(ngModel)]="filters.estado" name="estado">
+        <option value="">Todos los estados</option>
+        <option value="Activo">Activo</option>
+        <option value="Inactivo">Inactivo</option>
+      </select>
+    </label>
+  </div>
+</form>
+<div class="el-list-box" *ngIf="state() as s">
+  @switch(s.status) {
+    @case('loading') {
+      <app-loading-state></app-loading-state>
+    }
+    @case('error') {
+      <app-error-alert [message]="s.message"></app-error-alert>
+    }
+    @case('empty') {
+      <app-empty-state message="No se encontraron colaboradores que coincidan." title="Sin resultados"></app-empty-state>
+    }
+    @case('ready') {
+      <section class="el-table-section">
+        <div class="el-table-titlebar">
+          <h2>Listado de colaboradores <span class="el-badge">{{s.data.items.length}}</span></h2>
+          @if (isAllDefaultFilters) {
+            <span class="el-all-tag">Todos los registros</span>
+          }
+        </div>
+        <employee-table [employees]="s.data.items" (viewProfile)="onViewProfile($event)"></employee-table>
+        <footer class="el-footer">
+          <span>Mostrando <strong>{{s.data.items.length}}</strong> de <strong>{{s.data.total}}</strong> colaboradores</span>
+          <!-- Paginación real a implementar si la API lo permite -->
+        </footer>
+      </section>
+    }
+  }
+</div>
