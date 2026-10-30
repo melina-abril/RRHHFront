@@ -1,7 +1,5 @@
+import type { ColaboradorResumen, ColaboradorFicha, MovResumen } from '../models/colaboradores.models';
 import type { Page } from '../../../shared/models/page';
-import type { ColaboradorResumen, ColaboradorFicha, EstadoColaborador, MovResumen } from '../models/colaboradores.models';
-
-const now = () => (new Date()).toISOString().slice(0, 10);
 
 export const COLABORADORES_MOCK_PAGE: Page<ColaboradorResumen> = {
   items: [
@@ -64,8 +62,8 @@ export const COLABORADORES_MOCK_PAGE: Page<ColaboradorResumen> = {
       legajo: 'TFB-0007',
       nombreCompleto: 'Camila Suárez',
       categoria: 'Permanente',
-      cliente: '',
-      proyecto: '',
+      cliente: '—',
+      proyecto: '—',
       estado: 'EGRESADO'
     },
     {
@@ -73,8 +71,8 @@ export const COLABORADORES_MOCK_PAGE: Page<ColaboradorResumen> = {
       legajo: 'TFB-0008',
       nombreCompleto: 'Nicolás Vega',
       categoria: 'Pasante',
-      cliente: '',
-      proyecto: '',
+      cliente: '—',
+      proyecto: '—',
       estado: 'EGRESADO'
     }
   ],
@@ -83,79 +81,43 @@ export const COLABORADORES_MOCK_PAGE: Page<ColaboradorResumen> = {
   total: 8
 };
 
-export const COLABORADORES_MOCK_FICHAS: Record<number, ColaboradorFicha> = {
-  1: {
-    id: 1,
-    legajo: 'TFB-0001',
-    nombre: 'Lucía',
-    apellido: 'Fernández',
-    documentoTipo: 'DNI',
-    documentoNumero: '32456789',
-    paisResidencia: 'Argentina',
-    fechaNacimiento: '1987-03-21',
-    correoPersonal: 'lucia.fernandez@gmail.com',
-    fechaIngreso: '2021-03-12',
-    categoria: 'Permanente',
-    dedicacion: 'Full time',
-    modalidadTrabajo: 'Remota',
-    rolLaboral: 'Desarrolladora backend sénior',
-    emailCorporativo: 'lfernandez@techforb.com',
-    estado: 'ACTIVO',
-    asignaciones: [
-      {
-        cliente: 'Banco del Plata',
-        proyecto: 'Banca digital',
-        rol: 'Desarrolladora frontend',
-        inicio: '2021-03-12',
-        fin: null
-      },
-      {
-        cliente: 'Banco del Plata',
-        proyecto: 'Portal clientes',
-        rol: 'Desarrolladora frontend',
-        inicio: '2023-01-10',
-        fin: null
-      }
-    ],
-    beneficios: ['Vacaciones', 'Días Off'],
-    documentos: ['Documento de Identidad', 'Recibo de sueldo'],
-    evaluaciones: ['Marzo 2023: Verde'],
-    bitacora: ['Ingreso: 2021-03-12'],
-    remuneraciones: ['2025-12: $2.200.000'],
-    bonos: ['Bono desempeño 2024']
-  },
-  2: {
-    id: 2,
-    legajo: 'TFB-0002',
-    nombre: 'Martín',
-    apellido: 'Herrera',
-    documentoTipo: 'DNI',
-    documentoNumero: '29547382',
-    paisResidencia: 'Argentina',
-    fechaNacimiento: '1985-07-09',
-    correoPersonal: 'martin.herrera@gmail.com',
-    fechaIngreso: '2020-07-08',
-    categoria: 'Permanente',
-    dedicacion: 'Full time',
-    modalidadTrabajo: 'Remota',
-    rolLaboral: 'Líder técnico',
-    emailCorporativo: 'mherrera@techforb.com',
-    estado: 'ACTIVO',
-    asignaciones: [
-      {
-        cliente: 'Grupo Andino',
-        proyecto: 'Plataforma logística',
-        rol: 'Líder técnico',
-        inicio: '2020-07-08',
-        fin: null
-      }
-    ],
-    beneficios: ['Vacaciones', 'Días Off', 'Licencia de mudanza'],
-    documentos: [],
-    evaluaciones: ['Marzo 2023: Amarillo'],
-    bitacora: ['Ingreso: 2020-07-08'],
-    remuneraciones: ['2025-12: $1.980.000'],
-    bonos: []
-  }
-  // ...otros fichas ficticios (solo 1 y 2 completos para el mock principal)
+export const COLABORADOR_FICHA_MOCK: ColaboradorFicha = {
+  id: 1,
+  legajo: 'TFB-0001',
+  nombre: 'Lucía',
+  apellido: 'Fernández',
+  documentoTipo: 'DNI',
+  documentoNumero: '32456789',
+  paisResidencia: 'Argentina',
+  fechaNacimiento: '1987-03-21',
+  correoPersonal: 'lucia.fernandez@gmail.com',
+  fechaIngreso: '2021-03-12',
+  categoria: 'Permanente',
+  dedicacion: 'Full time',
+  modalidadTrabajo: 'Remota',
+  rolLaboral: 'Desarrolladora frontend',
+  emailCorporativo: 'lucia.fernandez@techforb.com',
+  estado: 'ACTIVO',
+  asignaciones: [
+    {
+      cliente: 'Banco del Plata',
+      proyecto: 'Banca digital',
+      rol: 'Desarrolladora frontend',
+      inicio: '2021-03-15',
+      fin: null
+    },
+    {
+      cliente: 'Banco del Plata',
+      proyecto: 'Portal clientes',
+      rol: 'Desarrolladora frontend',
+      inicio: '2022-11-01',
+      fin: null
+    }
+  ],
+  beneficios: ['Vacaciones 2026', 'Días off 2026'],
+  documentos: ['CV actualizado.pdf', 'Contrato de ingreso.pdf'],
+  evaluaciones: ['Trimestre 2024-1: Verde', 'Trimestre 2024-2: Amarillo'],
+  bitacora: ['Reconocimiento por cliente 2023', 'Observación puntual 2024'],
+  remuneraciones: ['Enero 2024', 'Febrero 2024'],
+  bonos: ['Bono semestral 2024-01']
 };

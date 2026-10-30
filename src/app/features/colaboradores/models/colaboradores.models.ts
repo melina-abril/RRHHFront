@@ -15,8 +15,8 @@ export interface ColaboradorResumen {
   legajo: string;
   nombreCompleto: string;
   categoria: string;
-  cliente?: string;
-  proyecto?: string;
+  cliente: string;
+  proyecto: string;
   estado: EstadoColaborador;
 }
 
@@ -43,7 +43,7 @@ export interface ColaboradorFicha {
   dedicacion: string;
   modalidadTrabajo: string;
   rolLaboral: string;
-  emailCorporativo?: string;
+  emailCorporativo?: string | null;
   estado: EstadoColaborador;
   asignaciones: MovResumen[];
   beneficios: string[];
@@ -67,7 +67,7 @@ export interface CrearColaboradorRequest {
   dedicacion: string;
   modalidadTrabajo: string;
   rolLaboral: string;
-  emailCorporativo?: string;
+  emailCorporativo?: string | null;
 }
 
 export interface EditarColaboradorRequest {
@@ -82,5 +82,5 @@ export interface EditarColaboradorRequest {
   dedicacion: string;
   modalidadTrabajo: string;
   rolLaboral: string;
-  emailCorporativo?: string;
+  emailCorporativo?: string | null;
 }

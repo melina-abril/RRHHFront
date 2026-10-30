@@ -1,46 +1,49 @@
-# Sistema de Gestión de Recursos Humanos – Frontend
+# Sistema de Gestión de RR.HH (TECHFORB)
+
+Aplicación web interna de Recursos Humanos para TECHFORB, implementada en Angular 21 con arquitectura modular, sin zone.js y componentes standalone.
 
 ## Levantar la aplicación
 
-1. Instala dependencias:
-   ```
-   npm install
-   ```
-
-2. Ejecuta en desarrollo con hot reload:
-   ```
-   npm start
-   ```
-   Esto levanta la app en http://localhost:4200 con proxy automático a http://localhost:8080 para las requests de /api.
-
-### Entornos y configuración
-- El entorno de desarrollo (src/environments/environment.ts) usa `apiBaseUrl: ''` y `useMock: false`, mandando todas las llamadas /api al backend Java/Spring Boot.
-- Para desarrollar sin backend, puedes poner `useMock: true` en `src/environments/environment.ts`: todos los servicios del front muestran la app completa usando datos de ejemplo realistas, sin llamada HTTP real.
-- El entorno de producción (src/environments/environment.prod.ts) apunta a una URL de ejemplo y nunca usa mocks.
-
-### Build de producción
-Compílalo con:
+```sh
+npm install
+npm start
 ```
-npm run build
-```
-El resultado queda en `dist/rrhh-front`.
+
+- Desarrollo: UI completa, conecta al backend Java Spring Boot en http://localhost:8080 vía proxy (todas las requests a `/api` son enviadas al backend; las URLs se construyen con `apiUrl(path)`).
+- Producción: `ng build` genera el build y se conecta al backend de ejemplo (`https://api-rrhh.techforb.com`).
+- El modo mock (sin backend) puede activarse poniendo `useMock: true` en `src/environments/environment.ts`. En este modo los datos son locales y no se requiere backend ni proxy.
 
 ## Estructura de carpetas
-- `src/app/features/` — Un módulo funcional por carpeta (colaboradores, inicio, etc.)
-- `src/app/core/` — Piezas únicas de la aplicación (autenticación, layout)
-- `src/app/shared/` — Componentes reutilizables entre módulos
-- `src/environments/` — Configuración de entorno
-- `src/styles.scss` — Variables CSS, reset, clases compartidas
 
-## Stack
-- Angular 21 standalone y zoneless (sin zone.js, sólo signals para el estado)
-- No utiliza Angular Material, PrimeNG ni otras librerías UI: los componentes visuales son propios, adaptados de la guía de estilos y variables CSS globales.
+- `src/app/core/auth/` — Inicio/cierre de sesión, guard y pantalla de login (protegido todo salvo `/login` y formulario público).
+- `src/app/core/layout/` — Encabezado, navegación superior y layout principal de la app.
+- `src/app/features/` — Un módulo por funcionalidad. Ejemplo: `colaboradores/` para gestión de empleados con listado, alta, edición y ficha.
+- `src/app/shared/` — Componentes, pipes y modelos reutilizables, para tablas, filtros, estados de carga, etc.
+
+## Variables de entorno y configuración
+
+- `src/environments/environment.ts`
+  - `apiBaseUrl`: (string) Prefijo de URL de la API. En desarrollo es vacío (`''`) porque el proxy lo resuelve.
+  - `useMock`: (boolean) Para usar datos mock sin backend.
+- Proxy de desarrollo en `proxy.conf.json` (desarrollo, no producción):
+  - Todos los requests a `/api` van a `http://localhost:8080`.
 
 ## Comandos útiles
-- `npm start`: Levanta la app en modo desarrollo
-- `npm run build`: Build de producción a `dist/rrhh-front`
 
-## Problemas comunes
-- Si la API no responde, revisa que el backend Java esté corriendo en http://localhost:8080.
-- Los estilos usan variables CSS de `src/styles.scss` y de la brand de TECHFORB. No modifiques los colores en línea: usa siempre las variables.
-- Para ver la app sin backend, pon `useMock: true` en `src/environments/environment.ts`.
+- `npm install` — Instala dependencias
+- `npm start` — Levanta el servidor de desarrollo (`ng serve`)
+- `npm run build` — Build de producción
+
+## Convenciones
+
+- Angular 21, standalone, sin zone.js, rutas como loadChildren/lazy loading, tipado estricto.
+- Estado/reactividad con signals, imports relativos.
+- Todos los componentes y páginas usan las variables y reglas de estilo en `src/styles.scss`. No usar Angular Material, Bootstrap, ni UI externas.
+
+## Módulos implementados
+
+- **Inicio:** Tablero principal con indicadores e ingreso a otros módulos.
+- **Colaboradores:** Gestión de empleados (listado, alta, ficha, edición, egreso, reingreso).
+- *(El menú muestra solo los módulos ya desarrollados. Próximos módulos: Sueldos y Bonos, Solicitudes, Comunicados, Horas Extras.)*
+
+Para más detalles, ver los archivos en cada carpeta.

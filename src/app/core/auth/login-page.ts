@@ -1,59 +1,67 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
+import { AuthService } from './auth.service';
+import { CommonModule } from '@angular/common';
+import './login-page.scss';
 
+/**
+ * Pantalla de login para la cuenta administradora de Recursos Humanos de TECHFORB
+ * Incluye textos informativos del destino del acceso (HU-026) y aviso para colaboradores
+ */
 @Component({
-  selector: 'app-login-page',
+  selector: 'app-login',
   standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './login-page.html',
-  styleUrl: './login-page.scss',
-  imports: [CommonModule, ReactiveFormsModule]
+  styleUrl: './login-page.scss'
 })
 export class LoginPage {
-  protected form = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', Validators.required]
+  readonly fb = new FormBuilder();
+  readonly form = this.fb.group({
+    email: ['rrhh@techforb.com', [Validators.required, Validators.email]],
+    password: ['', [Validators.required]]
   });
-
-  protected loading = signal(false);
-  protected error = signal<string | null>(null);
-
+  readonly loading = signal(false);
+  readonly loginError = signal<string | null>(null);
   constructor(
-    private readonly fb: FormBuilder,
     private readonly auth: AuthService,
     private readonly router: Router
   ) {}
 
-  get email() { return this.form.controls['email']; }
-  get password() { return this.form.controls['password']; }
-
-  protected onSubmit(): void {
-    if (this.form.invalid || this.loading()) {
+  async onSubmit(): Promise<void> {
+    this.loginError.set(null);
+    if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
     this.loading.set(true);
-    this.error.set(null);
     const { email, password } = this.form.value;
-    this.auth.login(email!, password!).then(
-      () => {
-        this.loading.set(false);
-        this.router.navigateByUrl('/');
-      },
-      (err: any) => {
-        this.loading.set(false);
-        if (err === 'unauthorized' || (err?.status === 401)) {
-          this.error.set('unauthorized');
-        } else if (typeof err === 'string') {
-          this.error.set(err);
-        } else if (err && err.error && typeof err.error.detail === 'string') {
-          this.error.set(err.error.detail);
-        } else {
-          this.error.set('Ocurrió un error inesperado.');
-        }
-      }
-    );
+    try {
+      await this.auth.login(email ?? '', password ?? '');
+      // Redirige a inicio
+      this.router.navigateByUrl('/');
+    } catch (e: any) {
+      // Credenciales incorrectas o error
+      this.loginError.set('No pudimos iniciar sesión. El correo o la contraseña no son correctos. Revisá los datos e intentá de nuevo.');
+      this.form.get('password')?.setValue('');
+    } finally {
+      this.loading.set(false);
+    }
+  }
+
+  get emailError(): string | null {
+    const ctrl = this.form.get('email');
+    if (!ctrl || !ctrl.touched) return null;
+    if (ctrl.hasError('required')) return 'El correo es obligatorio.';
+    if (ctrl.hasError('email')) return 'Debe ingresar un correo electrónico válido.';
+    return null;
+  }
+
+  get passwordError(): string | null {
+    const ctrl = this.form.get('password');
+    if (!ctrl || !ctrl.touched) return null;
+    if (ctrl.hasError('required')) return 'La contraseña es obligatoria.';
+    return null;
   }
 }

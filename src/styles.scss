@@ -1,4 +1,4 @@
-/* --- Variables y paleta de colores TECHFORB RRHH --- */
+/* brand-palette:start — managed by the form, do not edit by hand */
 :root {
   --primary: #4B1F7E;
   --accent: #7C3CC2;
@@ -12,18 +12,28 @@
   --success: #268258;
   --warning: #B26A17;
   --error: #C03B52;
+}
+/* brand-palette:end */
 
+:root {
   --brand-main: #4B1F7E;
   --brand-accent: #7C3CC2;
   --brand-light: #EDE4F6;
   --brand-gradient: linear-gradient(135deg, #4B1F7E 0%, #7C3CC2 100%);
   --page-bg: #F8F7FB;
+  --surface: #FFFFFF;
   --surface-soft: #F3EFF8;
+  --border: #E5DFEA;
+  --text-primary: #25212B;
+  --text-secondary: #6B6574;
+  --success: #268258;
+  --warning: #B26A17;
+  --error: #C03B52;
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
-  --shadow-card: 0 3px 16px rgba(43,24,66,0.045);
-  --shadow-hover: 0 8px 24px rgba(43,24,66,0.09);
+  --shadow-card: 0 3px 16px rgba(43, 24, 66, 0.045);
+  --shadow-hover: 0 8px 24px rgba(43, 24, 66, 0.09);
 }
 
 body {
@@ -44,27 +54,24 @@ h2 { font-size: 20px; }
 h3 { font-size: 16px; }
 
 /* Menú lateral */
-.sidebar,
-.app-sidebar {
+.sidebar, .app-sidebar {
   background: var(--brand-main);
-  color: #fff;
+  color: #FFFFFF;
 }
-.sidebar a,
-.app-sidebar a {
+.sidebar a, .app-sidebar a {
   color: #F1E9FA;
   border-radius: var(--radius-sm);
   transition: background 0.2s ease;
 }
-.sidebar a:hover,
-.app-sidebar a:hover {
+.sidebar a:hover, .app-sidebar a:hover {
   background: rgba(255,255,255,0.12);
 }
-.sidebar a.active,
-.app-sidebar a.active {
+.sidebar a.active, .app-sidebar a.active {
   background: rgba(255,255,255,0.18);
-  color: #fff;
+  color: #FFFFFF;
   font-weight: 600;
 }
+
 /* Tarjetas y paneles */
 .card, .dashboard-card, .panel {
   background: var(--surface);
@@ -73,7 +80,7 @@ h3 { font-size: 16px; }
   box-shadow: var(--shadow-card);
 }
 .dashboard-card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 .dashboard-card:hover {
   transform: translateY(-2px);
@@ -82,13 +89,13 @@ h3 { font-size: 16px; }
 /* Botones */
 .btn-primary {
   background: var(--brand-main);
-  color: #fff;
+  color: #FFF;
   border: none;
   border-radius: var(--radius-sm);
   font-weight: 600;
   padding: 11px 18px;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition: background 0.2s, transform 0.2s;
 }
 .btn-primary:hover {
   background: #602B9A;
@@ -102,14 +109,14 @@ h3 { font-size: 16px; }
 }
 /* Formularios */
 input, select, textarea {
-  background: #fff;
+  background: #FFF;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   color: var(--text-primary);
   padding: 10px 12px;
 }
 input:focus, select:focus, textarea:focus {
-  outline: 2px solid rgba(124,60,194,0.22);
+  outline: 2px solid rgba(124, 60, 194, 0.22);
   outline-offset: 1px;
   border-color: var(--brand-accent);
 }
@@ -161,28 +168,28 @@ tbody tr:hover {
   color: #B32F48;
 }
 /* Pestañas */
-.tab.active,
-.tabs .active {
+.tab.active, .tabs .active {
   color: var(--brand-main);
   border-bottom: 2px solid var(--brand-accent);
   font-weight: 600;
 }
-/* Login */
+/* Pantalla de inicio de sesión */
 .login-page {
   background: linear-gradient(135deg, #F8F7FB 0%, #EEE5F7 100%);
 }
 .login-card {
-  background: #fff;
+  background: #FFF;
   border-radius: 20px;
-  box-shadow: 0 16px 48px rgba(43,24,66,0.12);
+  box-shadow: 0 16px 48px rgba(43, 24, 66, 0.12);
 }
+/* Accesibilidad y movimientos */
 button:focus-visible, a:focus-visible {
   outline: 2px solid var(--brand-accent);
   outline-offset: 3px;
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
-    transition: none !important;
-    animation: none !important;
+    transition: none!important;
+    animation: none!important;
   }
 }

@@ -1,127 +1,95 @@
-<section class="inicio-header">
-  <span class="inicio-header__label">Panel de inicio</span>
-  <h1>Inicio</h1>
-  <p>Bienvenido al sistema de Recursos Humanos de TECHFORB. Consultá la actividad general y accedé a los módulos desde un solo lugar.</p>
-</section>
-
-<section aria-labelledby="inicio-resumen-title" class="inicio-summary">
-  <div class="inicio-summary__header">
-    <h2 id="inicio-resumen-title">Resumen general</h2>
-  </div>
-  <div class="inicio-summary__cards">
-    <a class="inicio-summary__card" routerLink="/colaboradores">
-      <span class="inicio-summary__icon-bg"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-people"/></svg></span>
-      <span class="inicio-summary__arrow"><svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8"><use href="#mk-arrow"/></svg></span>
-      <span class="inicio-summary__texts">
-        <span class="inicio-summary__subtitle">Colaboradores activos</span>
-        @if (resumenState(); as r)
-          @switch (r.status) {
-            @case ('loading')
-              <strong class="inicio-summary__count">&hellip;</strong>
-              <span class="inicio-summary__info">Cargando colaboradores...</span>
-            @case ('ready')
-              <strong class="inicio-summary__count">{{ r.data.colaboradoresActivos }}</strong>
-              <span class="inicio-summary__info" *ngIf="r.data.colaboradoresActivos === 0">Sin colaboradores activos registrados</span>
-              <span class="inicio-summary__info" *ngIf="r.data.colaboradoresActivos !== 0">Activos actualmente</span>
-            @case ('empty')
-              <strong class="inicio-summary__count">0</strong>
-              <span class="inicio-summary__info">Sin colaboradores activos registrados</span>
-            @case ('error')
-              <strong class="inicio-summary__count">—</strong>
-              <span class="inicio-summary__info">No se pudo cargar</span>
-          }
-        @else
-          <strong class="inicio-summary__count">—</strong>
-          <span class="inicio-summary__info">No disponible</span>
-        @end
-      </span>
-    </a>
-    <a class="inicio-summary__card" routerLink="/solicitudes">
-      <span class="inicio-summary__icon-bg"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-request"/></svg></span>
-      <span class="inicio-summary__arrow"><svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8"><use href="#mk-arrow"/></svg></span>
-      <span class="inicio-summary__texts">
-        <span class="inicio-summary__subtitle">Solicitudes pendientes</span>
-        @if (resumenState(); as r)
-          @switch (r.status) {
-            @case ('loading')
-              <strong class="inicio-summary__count">&hellip;</strong>
-              <span class="inicio-summary__info">Cargando solicitudes...</span>
-            @case ('ready')
-              <strong class="inicio-summary__count">{{ r.data.solicitudesPendientes }}</strong>
-              <span class="inicio-summary__info" *ngIf="r.data.solicitudesPendientes === 0">Sin solicitudes para revisar</span>
-              <span class="inicio-summary__info" *ngIf="r.data.solicitudesPendientes !== 0">Pendientes de revisión</span>
-            @case ('empty')
-              <strong class="inicio-summary__count">0</strong>
-              <span class="inicio-summary__info">Sin solicitudes para revisar</span>
-            @case ('error')
-              <strong class="inicio-summary__count">—</strong>
-              <span class="inicio-summary__info">No se pudo cargar</span>
-          }
-        @else
-          <strong class="inicio-summary__count">—</strong>
-          <span class="inicio-summary__info">No disponible</span>
-        @end
-      </span>
-    </a>
-    <a class="inicio-summary__card" routerLink="/colaboradores">
-      <span class="inicio-summary__icon-bg"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-calendar"/></svg></span>
-      <span class="inicio-summary__arrow"><svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8"><use href="#mk-arrow"/></svg></span>
-      <span class="inicio-summary__texts">
-        <span class="inicio-summary__subtitle">Próximos eventos</span>
-        @if (resumenState(); as r)
-          @switch (r.status) {
-            @case ('loading')
-              <strong class="inicio-summary__count">&hellip;</strong>
-              <span class="inicio-summary__info">Cargando eventos...</span>
-            @case ('ready')
-              <strong class="inicio-summary__count">{{ r.data.proximosEventos }}</strong>
-              <span class="inicio-summary__info">Cumpleaños y beneficios por vencer</span>
-            @case ('empty')
-              <strong class="inicio-summary__count">0</strong>
-              <span class="inicio-summary__info">Sin próximos eventos</span>
-            @case ('error')
-              <strong class="inicio-summary__count">—</strong>
-              <span class="inicio-summary__info">No se pudo cargar</span>
-          }
-        @else
-          <strong class="inicio-summary__count">—</strong>
-          <span class="inicio-summary__info">No disponible</span>
-        @end
-      </span>
-    </a>
-  </div>
-</section>
-
-<section aria-labelledby="inicio-accesos-title" class="inicio-access">
-  <div class="inicio-access__header">
-    <h2 id="inicio-accesos-title">Accesos rápidos</h2>
-    <p>Ingresá directamente al módulo que necesitás.</p>
-  </div>
-  <div class="inicio-access__cards">
-    <a class="inicio-access__card" routerLink="/colaboradores">
-      <span class="inicio-access__icon-bg"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-people"/></svg></span>
-      <span class="inicio-access__content"><strong>Gestión de Empleados</strong><span>Legajos, perfiles y asignaciones</span></span>
-      <span class="inicio-access__arrow"><svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8"><use href="#mk-arrow"/></svg></span>
-    </a>
-    <a class="inicio-access__card" routerLink="/sueldos-y-bonos">
-      <span class="inicio-access__icon-bg"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-money"/></svg></span>
-      <span class="inicio-access__content"><strong>Sueldos y Bonos</strong><span>Remuneraciones y beneficios</span></span>
-      <span class="inicio-access__arrow"><svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8"><use href="#mk-arrow"/></svg></span>
-    </a>
-    <a class="inicio-access__card" routerLink="/solicitudes">
-      <span class="inicio-access__icon-bg"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-request"/></svg></span>
-      <span class="inicio-access__content"><strong>Solicitudes</strong><span>Revisión y seguimiento de pedidos</span></span>
-      <span class="inicio-access__arrow"><svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8"><use href="#mk-arrow"/></svg></span>
-    </a>
-    <a class="inicio-access__card" routerLink="/comunicados">
-      <span class="inicio-access__icon-bg"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-message"/></svg></span>
-      <span class="inicio-access__content"><strong>Comunicados</strong><span>Mensajes y registro de envíos</span></span>
-      <span class="inicio-access__arrow"><svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8"><use href="#mk-arrow"/></svg></span>
-    </a>
-    <a class="inicio-access__card" routerLink="/horas-extras">
-      <span class="inicio-access__icon-bg"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-clock"/></svg></span>
-      <span class="inicio-access__content"><strong>Horas Extras</strong><span>Autorizaciones y compensaciones</span></span>
-      <span class="inicio-access__arrow"><svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8"><use href="#mk-arrow"/></svg></span>
-    </a>
-  </div>
-</section>
+<main class="inicio-page">
+  <header class="inicio-header">
+    <span class="tag">TECHFORB RH</span>
+    <h1>Inicio</h1>
+    <p class="intro">
+      Bienvenido al sistema de Recursos Humanos de TECHFORB. Consultá la actividad general y accedé a los módulos desde un solo lugar.
+    </p>
+  </header>
+  <section class="resumen-section" aria-labelledby="resumen-titulo">
+    <h2 id="resumen-titulo">Resumen general</h2>
+    @if (resumenState(); as state)
+      @switch (state.status)
+        @case ('loading')
+          <div class="resumen-loading">Cargando indicadores…</div>
+        @case ('error')
+          <div class="resumen-error">
+            <span class="icon icon-error"></span>
+            Ocurrió un error al cargar el resumen. <button type="button" (click)="cargarResumen()">Reintentar</button>
+          </div>
+        @case ('ready')
+          <div class="resumen-cards">
+            <a class="resumen-card" routerLink="/colaboradores">
+              <span class="icon-bg">
+                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-people"/></svg>
+              </span>
+              <span class="resumen-card-content">
+                <span class="resumen-card-title">Colaboradores activos</span>
+                <span class="resumen-card-value">{{ state.data.colaboradoresActivos }}</span>
+                <span class="resumen-card-desc">@if (state.data.colaboradoresActivos === 0)
+                  Sin colaboradores activos registrados
+                @else
+                  Colaboradores actualmente activos
+                @end</span>
+              </span>
+            </a>
+            <a class="resumen-card" routerLink="/solicitudes">
+              <span class="icon-bg">
+                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-request"/></svg>
+              </span>
+              <span class="resumen-card-content">
+                <span class="resumen-card-title">Solicitudes pendientes</span>
+                <span class="resumen-card-value">{{ state.data.solicitudesPendientes }}</span>
+                <span class="resumen-card-desc">@if (state.data.solicitudesPendientes === 0)
+                  Sin solicitudes para revisar
+                @else
+                  Solicitudes en espera de revisión
+                @end</span>
+              </span>
+            </a>
+            <a class="resumen-card" routerLink="/colaboradores">
+              <span class="icon-bg">
+                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-calendar"/></svg>
+              </span>
+              <span class="resumen-card-content">
+                <span class="resumen-card-title">Próximos eventos</span>
+                <span class="resumen-card-value">{{ state.data.proximosEventos }}</span>
+                <span class="resumen-card-desc">Cumpleaños y beneficios por vencer</span>
+              </span>
+            </a>
+          </div>
+        @case ('empty')
+          <div class="resumen-vacio">No hay datos registrados aún.</div>
+      @end
+    @end
+  </section>
+  <section class="accesos-section" aria-labelledby="accesos-titulo">
+    <h2 id="accesos-titulo">Accesos rápidos</h2>
+    <p class="accesos-intro">Ingresá directamente al módulo que necesitás.</p>
+    <div class="accesos-cards">
+      @for (acceso of accesos; track acceso.nombre)
+        <a class="acceso-card" [routerLink]="acceso.link">
+          <span class="icon-bg">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8"><use [attr.href]="'#' + acceso.iconId"/></svg>
+          </span>
+          <span>
+            <span class="acceso-card-title">{{ acceso.nombre }}</span>
+            <span class="acceso-card-desc">{{ acceso.descripcion }}</span>
+          </span>
+          <span class="card-arrow">
+            <svg width="16" height="16" fill="none" stroke="#7C3CC2" stroke-width="1.8"><use href="#mk-arrow"/></svg>
+          </span>
+        </a>
+      @end
+    </div>
+  </section>
+  <svg width="0" height="0" style="position:absolute;">
+    <symbol id="mk-people" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2zm14-15a3 3 0 0 1 0 6m1 4a5 5 0 0 1 3 5"/></symbol>
+    <symbol id="mk-request" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8m-8 4h4"/></symbol>
+    <symbol id="mk-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18m-13 5h3"/></symbol>
+    <symbol id="mk-money" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M5 9h1m12 6h1"/></symbol>
+    <symbol id="mk-message" viewBox="0 0 24 24"><path d="M3 5h18v13H8l-5 3zM7 10h10m-10 4h7"/></symbol>
+    <symbol id="mk-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="mk-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+  </svg>
+</main>
