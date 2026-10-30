@@ -1,0 +1,103 @@
+<app-page-header title="Inicio" description="Panel de inicio y acceso rápido a los módulos." />
+
+@let state = dashboardState();
+@switch(state.status) {
+  @case ('loading') {
+    <app-loading-state message="Cargando panel de inicio…" />
+  }
+  @case ('error') {
+    <app-error-alert [message]="state.message" retryLabel="Reintentar" (retry)="dashboardState.refresh()" />
+  }
+  @default {
+    @let data = state.status === 'ready' ? state.data : null;
+    <section class="main-dashboard__section">
+      <span class="main-dashboard__subtitle">Panel de inicio</span>
+      <h1 class="main-dashboard__title">Inicio</h1>
+      <p class="main-dashboard__message">
+        {{ data?.welcomeMessage || 'Bienvenido al sistema de Recursos Humanos de TECHFORB. Consultá la actividad general y accedé a los módulos desde un solo lugar.' }}
+      </p>
+    </section>
+
+    <section class="main-dashboard__section" aria-labelledby="dashboard-resumen">
+      <div class="main-dashboard__section-header">
+        <h2 id="dashboard-resumen">Resumen general</h2>
+      </div>
+      <div class="main-dashboard__cards">
+        <a class="main-dashboard__card"
+          [routerLink]="'/empleados'"
+          aria-label="Administrar colaboradores"
+        >
+          <span class="main-dashboard__card-icon">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2zm14-15a3 3 0 0 1 0 6m1 4a5 5 0 0 1 3 5"/></svg>
+          </span>
+          <span class="main-dashboard__card-content">
+            <span class="main-dashboard__card-label">Colaboradores activos</span>
+            <strong class="main-dashboard__card-value">{{ data?.activeEmployees ?? 0 }}</strong>
+            <span class="main-dashboard__card-desc">{{ (data?.activeEmployees ?? 0) === 0 ? emptyLabels.activeEmployees : ' ' }}</span>
+          </span>
+        </a>
+        <a class="main-dashboard__card"
+          [routerLink]="'/solicitudes'"
+          aria-label="Revisar solicitudes"
+        >
+          <span class="main-dashboard__card-icon">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8m-8 4h4"/></svg>
+          </span>
+          <span class="main-dashboard__card-content">
+            <span class="main-dashboard__card-label">Solicitudes pendientes</span>
+            <strong class="main-dashboard__card-value">{{ data?.pendingRequests ?? 0 }}</strong>
+            <span class="main-dashboard__card-desc">{{ (data?.pendingRequests ?? 0) === 0 ? emptyLabels.pendingRequests : ' ' }}</span>
+          </span>
+        </a>
+        <a class="main-dashboard__card"
+          [routerLink]="'/empleados'"
+          aria-label="Ver próximos eventos"
+        >
+          <span class="main-dashboard__card-icon">
+            <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18m-13 5h3"/></svg>
+          </span>
+          <span class="main-dashboard__card-content">
+            <span class="main-dashboard__card-label">Próximos eventos</span>
+            <strong class="main-dashboard__card-value">{{ data?.upcomingEvents ?? 0 }}</strong>
+            <span class="main-dashboard__card-desc">{{ (data?.upcomingEvents ?? 0) === 0 ? emptyLabels.upcomingEvents : ' ' }}</span>
+          </span>
+        </a>
+      </div>
+    </section>
+
+    <section class="main-dashboard__section" aria-labelledby="dashboard-accesses">
+      <div class="main-dashboard__section-header">
+        <h2 id="dashboard-accesses">Accesos rápidos</h2>
+        <p class="main-dashboard__section-desc">
+          {{ data?.quickAccessesMessage || 'Ingresá directamente al módulo que necesitás.' }}
+        </p>
+      </div>
+      <div class="main-dashboard__module-cards">
+        @if (data?.modules?.length) {
+          @for (mod of data.modules; track mod.moduleKey) {
+            <a class="main-dashboard__module-card" [routerLink]="getModulePath(mod.moduleKey)">
+              <span class="main-dashboard__module-card-icon">
+                @switch (mod.moduleKey) {
+                  @case ('employees')   { <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2zm14-15a3 3 0 0 1 0 6m1 4a5 5 0 0 1 3 5"/></svg> }
+                  @case ('payroll')     { <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M5 9h1m12 6h1"/></svg> }
+                  @case ('requests')    { <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8m-8 4h4"/></svg> }
+                  @case ('notices')     { <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 5h18v13H8l-5 3zM7 10h10m-10 4h7"/></svg> }
+                  @case ('extra-hours') { <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg> }
+                }
+              </span>
+              <span class="main-dashboard__module-card-content">
+                <strong>{{ mod.title }}</strong>
+                <span>{{ mod.description }}</span>
+              </span>
+              <span class="main-dashboard__module-card-arrow">
+                <svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" aria-hidden="true">
+                  <path d="M5 12h14m-6-6 6 6-6 6" />
+                </svg>
+              </span>
+            </a>
+          }
+        }
+      </div>
+    </section>
+  }
+}

@@ -1,0 +1,47 @@
+.location-indicator {
+  color: var(--text-secondary);
+  font-size: 12px;
+  margin-bottom: 7px;
+}
+
+.employees-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  padding-bottom: var(--space-xs);
+}
+
+.all-records {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.employees-table__count {
+  display: inline-flex;
+  align-items: center;
+  min-width: 23px;
+  height: 23px;
+  padding: 0 6px;
+  margin-left: 5px;
+  border-radius: 999px;
+  background: var(--active-item);
+  color: var(--primary);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.employees-list__legajo {
+  color: var(--text-secondary);
+  white-space: nowrap;
+  font-family: ui-monospace, Consolas, monospace;
+}
+
+.employees-list__name {
+  font-weight: 600;
+}
+
+.employees-list__actions {
+  white-space: nowrap;
+}
