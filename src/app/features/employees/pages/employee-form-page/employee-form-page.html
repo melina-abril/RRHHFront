@@ -1,0 +1,53 @@
+<app-page-header [title]="employeeId() ? 'Editar colaborador' : 'Alta de colaborador'" description="Completa los datos personales y laborales."></app-page-header>
+
+@switch (loading()) {
+  @case(true) {
+    <app-loading-state message="Cargando datos…"></app-loading-state>
+  }
+  @case(false) {
+    <form class="card employee-form" [formGroup]="form" (ngSubmit)="submit()" autocomplete="off" novalidate>
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="name">Nombre</label>
+          <input id="name" formControlName="name" [attr.aria-invalid]="showError('name')" aria-describedby="name-error" autocomplete="off" />
+          @if (showError('name')) {
+            <span id="name-error" class="form-field__error">El nombre es obligatorio.</span>
+          }
+        </div>
+        <div class="form-field">
+          <label for="category">Categoría</label>
+          <select id="category" formControlName="category" [attr.aria-invalid]="showError('category')" aria-describedby="category-error">
+            <option [value]="null">Selecciona…</option>
+            @for (option of categoryOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+          @if (showError('category')) {
+            <span id="category-error" class="form-field__error">Selecciona una categoría.</span>
+          }
+        </div>
+        <div class="form-field">
+          <label for="client">Cliente</label>
+          <input id="client" formControlName="client" [attr.aria-invalid]="showError('client')" aria-describedby="client-error" autocomplete="off" />
+          @if (showError('client')) {
+            <span id="client-error" class="form-field__error">El cliente es obligatorio.</span>
+          }
+        </div>
+        <div class="form-field">
+          <label for="project">Proyecto</label>
+          <input id="project" formControlName="project" [attr.aria-invalid]="showError('project')" aria-describedby="project-error" autocomplete="off" />
+          @if (showError('project')) {
+            <span id="project-error" class="form-field__error">El proyecto es obligatorio.</span>
+          }
+        </div>
+      </div>
+      @if (error()) {
+        <app-error-alert [message]="error()"></app-error-alert>
+      }
+      <div class="form-actions">
+        <button class="button" type="submit" [disabled]="saving()">{{ saving() ? 'Guardando…' : 'Guardar' }}</button>
+        <a [routerLink]="['/employees']" class="button button--secondary" type="button">Cancelar</a>
+      </div>
+    </form>
+  }
+}

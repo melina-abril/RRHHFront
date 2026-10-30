@@ -1,86 +1,123 @@
 import { BadgeTone } from '../../../shared/components/status-badge';
 import { Page } from '../../../shared/models/page';
 
-// Enums exactamente como en el backend
 export type EmployeeCategory = 'PERMANENT' | 'INTERN';
-export const EMPLOYEE_CATEGORY_OPTIONS: readonly { value: EmployeeCategory; label: string }[] = [
-  { value: 'PERMANENT', label: 'Permanente' },
-  { value: 'INTERN', label: 'Pasante' },
-];
-export const EMPLOYEE_CATEGORY: Record<EmployeeCategory, { label: string; tone: BadgeTone }> = {
-  PERMANENT: { label: 'Permanente', tone: 'info' },
-  INTERN: { label: 'Pasante', tone: 'success' },
-};
+export type EmployeeWorkMode = 'ON_SITE' | 'REMOTE' | 'HYBRID';
+export type EmployeeDedication = 'FULL_TIME' | 'PART_TIME';
+export type EmployeeState = 'ACTIVE' | 'INACTIVE';
 
-export type EmployeeStatus = 'ACTIVE' | 'INACTIVE';
-export const EMPLOYEE_STATUS_OPTIONS: readonly { value: EmployeeStatus; label: string }[] = [
-  { value: 'ACTIVE', label: 'Activo' },
-  { value: 'INACTIVE', label: 'Inactivo' },
-];
-export const EMPLOYEE_STATUS: Record<EmployeeStatus, { label: string; tone: BadgeTone }> = {
-  ACTIVE: { label: 'Activo', tone: 'success' },
-  INACTIVE: { label: 'Inactivo', tone: 'danger' },
-};
-
-// List item: conforme EmployeeListResponse del backend (GET /api/employees)
-export interface EmployeeList {
+export interface Employee {
   id: string;
   legajo: string;
   firstName: string;
   lastName: string;
-  email: string;
-  category: EmployeeCategory;
-  status: EmployeeStatus;
-  countryCode: string;
+  documentType: string;
+  documentNumber: string;
+  country: string;
+  birthDate: string;
+  personalEmail: string;
+  phoneNumber: string;
+  address: string;
   city: string;
-  entryDate: string;
-  position: string;
-  clients: string[];
-  projects: string[];
+  zipCode: string;
+  category: EmployeeCategory;
+  workMode: EmployeeWorkMode;
+  dedication: EmployeeDedication;
+  role: string;
+  joinDate: string;
+  state: EmployeeState;
+  client: string | null;
+  project: string | null;
+  createdAt: string;
   updatedAt: string;
 }
 
-// Paginado
 export interface EmployeeFilters {
   search: string;
   legajo: string;
   category: EmployeeCategory | null;
-  client: string;
-  project: string;
-  status: EmployeeStatus | null;
+  client: string | null;
+  project: string | null;
+  state: EmployeeState | null;
   page: number;
   size: number;
 }
 
-// Ficha individual: conforme EmployeeDetailsResponse (GET /api/employees/{id})
-export interface EmployeeDetails {
-  id: string;
-  legajo: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  category: EmployeeCategory;
-  status: EmployeeStatus;
-  countryCode: string;
-  city: string;
-  entryDate: string;
-  position: string;
-  clients: string[];
-  projects: string[];
-  backgroundNotes: string[];
-  updatedAt: string;
-}
-
-// Body del alta: CreateEmployeeRequest
 export interface CreateEmployeeRequest {
   firstName: string;
   lastName: string;
-  email: string;
-  category: EmployeeCategory;
-  countryCode: string;
+  documentType: string;
+  documentNumber: string;
+  country: string;
+  birthDate: string;
+  personalEmail: string;
+  phoneNumber: string;
+  address: string;
   city: string;
-  entryDate: string;
-  position: string;
-  clients: string[];
-  projects: string[];
+  zipCode: string;
+  category: EmployeeCategory;
+  workMode: EmployeeWorkMode;
+  dedication: EmployeeDedication;
+  role: string;
+  joinDate: string;
+  client: string | null;
+  project: string | null;
 }
+
+export interface UpdateEmployeeRequest {
+  firstName: string;
+  lastName: string;
+  documentType: string;
+  documentNumber: string;
+  country: string;
+  birthDate: string;
+  personalEmail: string;
+  phoneNumber: string;
+  address: string;
+  city: string;
+  zipCode: string;
+  category: EmployeeCategory;
+  workMode: EmployeeWorkMode;
+  dedication: EmployeeDedication;
+  role: string;
+  joinDate: string;
+  client: string | null;
+  project: string | null;
+}
+
+export const EMPLOYEE_CATEGORY: Record<EmployeeCategory, { label: string; tone: BadgeTone }> = {
+  PERMANENT: { label: 'Permanente', tone: 'success' },
+  INTERN: { label: 'Pasante', tone: 'info' }
+};
+
+export const EMPLOYEE_CATEGORY_OPTIONS: readonly { value: EmployeeCategory; label: string }[] = (
+  Object.keys(EMPLOYEE_CATEGORY) as EmployeeCategory[]
+).map((value) => ({ value, label: EMPLOYEE_CATEGORY[value].label }));
+
+export const EMPLOYEE_WORK_MODE: Record<EmployeeWorkMode, { label: string; tone: BadgeTone }> = {
+  ON_SITE: { label: 'Presencial', tone: 'info' },
+  REMOTE: { label: 'Remota', tone: 'info' },
+  HYBRID: { label: 'Híbrida', tone: 'info' }
+};
+
+export const EMPLOYEE_WORK_MODE_OPTIONS: readonly { value: EmployeeWorkMode; label: string }[] = (
+  Object.keys(EMPLOYEE_WORK_MODE) as EmployeeWorkMode[]
+).map((value) => ({ value, label: EMPLOYEE_WORK_MODE[value].label }));
+
+export const EMPLOYEE_DEDICATION: Record<EmployeeDedication, { label: string; tone: BadgeTone }> = {
+  FULL_TIME: { label: 'Full time', tone: 'neutral' },
+  PART_TIME: { label: 'Part time', tone: 'neutral' }
+};
+
+export const EMPLOYEE_DEDICATION_OPTIONS: readonly { value: EmployeeDedication; label: string }[] = (
+  Object.keys(EMPLOYEE_DEDICATION) as EmployeeDedication[]
+).map((value) => ({ value, label: EMPLOYEE_DEDICATION[value].label }));
+
+export const EMPLOYEE_STATE: Record<EmployeeState, { label: string; tone: BadgeTone }> = {
+  ACTIVE: { label: 'Activo', tone: 'success' },
+  INACTIVE: { label: 'Inactivo', tone: 'danger' }
+};
+
+export const EMPLOYEE_STATE_OPTIONS: readonly { value: EmployeeState; label: string }[] = (
+  Object.keys(EMPLOYEE_STATE) as EmployeeState[]
+).map((value) => ({ value, label: EMPLOYEE_STATE[value].label }));

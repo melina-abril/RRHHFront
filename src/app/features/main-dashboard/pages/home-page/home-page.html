@@ -1,0 +1,110 @@
+<div class="home-page">
+
+  <section class="home-page__intro">
+    <span class="home-page__subtitle">Panel de inicio</span>
+    <h1>Inicio</h1>
+    <p class="home-page__welcome">Bienvenido al sistema de Recursos Humanos de TECHFORB. Consultá la actividad general y accedé a los módulos desde un solo lugar.</p>
+  </section>
+
+  <section class="home-page__summary" aria-labelledby="summary-title">
+    <div class="home-page__summary-header">
+      <h2 id="summary-title">Resumen general</h2>
+    </div>
+    <div class="home-page__indicators">
+      <a class="indicator-card" routerLink="/empleados">
+        <span class="indicator-card__icon indicator-card__icon--people">
+          <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><use href="#mk-people" /></svg>
+        </span>
+        <div class="indicator-card__content">
+          <span class="indicator-card__label">Colaboradores activos</span>
+          <strong class="indicator-card__value">0</strong>
+          <span class="indicator-card__desc">Sin colaboradores activos registrados</span>
+        </div>
+        <svg class="indicator-card__arrow" width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" aria-hidden="true"><use href="#mk-arrow" /></svg>
+      </a>
+      <a class="indicator-card" routerLink="/solicitudes">
+        <span class="indicator-card__icon indicator-card__icon--requests">
+          <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><use href="#mk-request" /></svg>
+        </span>
+        <div class="indicator-card__content">
+          <span class="indicator-card__label">Solicitudes pendientes</span>
+          <strong class="indicator-card__value">0</strong>
+          <span class="indicator-card__desc">Sin solicitudes para revisar</span>
+        </div>
+        <svg class="indicator-card__arrow" width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" aria-hidden="true"><use href="#mk-arrow" /></svg>
+      </a>
+      <a class="indicator-card" routerLink="/empleados">
+        <span class="indicator-card__icon indicator-card__icon--calendar">
+          <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><use href="#mk-calendar" /></svg>
+        </span>
+        <div class="indicator-card__content">
+          <span class="indicator-card__label">Próximos eventos</span>
+          <strong class="indicator-card__value">0</strong>
+          <span class="indicator-card__desc">Cumpleaños y beneficios por vencer</span>
+        </div>
+        <svg class="indicator-card__arrow" width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" aria-hidden="true"><use href="#mk-arrow" /></svg>
+      </a>
+    </div>
+  </section>
+
+  <section class="home-page__quick-access" aria-labelledby="quick-access-title">
+    <div>
+      <h2 id="quick-access-title">Accesos rápidos</h2>
+      <p class="home-page__access-desc">Ingresá directamente al módulo que necesitás.</p>
+    </div>
+    <div class="home-page__modules">
+      <a class="module-card" routerLink="/empleados">
+        <span class="module-card__icon module-card__icon--people">
+          <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-people" /></svg>
+        </span>
+        <div class="module-card__text">
+          <strong>Gestión de Empleados</strong>
+          <span>Legajos, perfiles y asignaciones</span>
+        </div>
+        <svg class="module-card__arrow" width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8"><use href="#mk-arrow" /></svg>
+      </a>
+      <a class="module-card" routerLink="/sueldos-y-bonos">
+        <span class="module-card__icon module-card__icon--money">
+          <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-money" /></svg>
+        </span>
+        <div class="module-card__text">
+          <strong>Sueldos y Bonos</strong>
+          <span>Remuneraciones y beneficios</span>
+        </div>
+        <svg class="module-card__arrow" width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8"><use href="#mk-arrow" /></svg>
+      </a>
+      <a class="module-card" routerLink="/solicitudes">
+        <span class="module-card__icon module-card__icon--requests">
+          <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-request" /></svg>
+        </span>
+        <div class="module-card__text">
+          <strong>Solicitudes</strong>
+          <span>Revisión y seguimiento de pedidos</span>
+        </div>
+        <svg class="module-card__arrow" width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8"><use href="#mk-arrow" /></svg>
+      </a>
+      <a class="module-card" routerLink="/comunicados">
+        <span class="module-card__icon module-card__icon--message">
+          <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-message" /></svg>
+        </span>
+        <div class="module-card__text">
+          <strong>Comunicados</strong>
+          <span>Mensajes y registro de envíos</span>
+        </div>
+        <svg class="module-card__arrow" width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8"><use href="#mk-arrow" /></svg>
+      </a>
+      <a class="module-card" routerLink="/horas-extras">
+        <span class="module-card__icon module-card__icon--clock">
+          <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#mk-clock" /></svg>
+        </span>
+        <div class="module-card__text">
+          <strong>Horas Extras</strong>
+          <span>Autorizaciones y compensaciones</span>
+        </div>
+        <svg class="module-card__arrow" width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8"><use href="#mk-arrow" /></svg>
+      </a>
+    </div>
+  </section>
+
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none"><symbol id="mk-people" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2zm14-15a3 3 0 0 1 0 6m1 4a5 5 0 0 1 3 5"/></symbol><symbol id="mk-money" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M5 9h1m12 6h1"/></symbol><symbol id="mk-request" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8m-8 4h4"/></symbol><symbol id="mk-message" viewBox="0 0 24 24"><path d="M3 5h18v13H8l-5 3zM7 10h10m-10 4h7"/></symbol><symbol id="mk-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol><symbol id="mk-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18m-13 5h3"/></symbol><symbol id="mk-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol></svg>
+</div>
