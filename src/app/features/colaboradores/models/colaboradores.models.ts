@@ -1,5 +1,3 @@
-import type { Page } from '../../../shared/models/page';
-
 export type EstadoColaborador = 'ACTIVO' | 'EGRESADO';
 
 export interface FiltroColaboradores {
@@ -24,8 +22,8 @@ export interface MovResumen {
   cliente: string;
   proyecto: string;
   rol: string;
-  inicio: string; // ISO date
-  fin: string | null;
+  inicio: string; // ISO Date
+  fin: string | null; // ISO Date | null
 }
 
 export interface ColaboradorFicha {
@@ -36,14 +34,14 @@ export interface ColaboradorFicha {
   documentoTipo: string;
   documentoNumero: string;
   paisResidencia: string;
-  fechaNacimiento: string;
+  fechaNacimiento: string; // ISO Date
   correoPersonal: string;
-  fechaIngreso: string;
+  fechaIngreso: string; // ISO Date
   categoria: string;
   dedicacion: string;
   modalidadTrabajo: string;
   rolLaboral: string;
-  emailCorporativo?: string | null;
+  emailCorporativo?: string;
   estado: EstadoColaborador;
   asignaciones: MovResumen[];
   beneficios: string[];
@@ -60,14 +58,14 @@ export interface CrearColaboradorRequest {
   documentoTipo: string;
   documentoNumero: string;
   paisResidencia: string;
-  fechaNacimiento: string;
+  fechaNacimiento: string; // ISO Date
   correoPersonal: string;
-  fechaIngreso: string;
+  fechaIngreso: string; // ISO Date
   categoria: string;
   dedicacion: string;
   modalidadTrabajo: string;
   rolLaboral: string;
-  emailCorporativo?: string | null;
+  emailCorporativo?: string;
 }
 
 export interface EditarColaboradorRequest {
@@ -82,5 +80,5 @@ export interface EditarColaboradorRequest {
   dedicacion: string;
   modalidadTrabajo: string;
   rolLaboral: string;
-  emailCorporativo?: string | null;
+  emailCorporativo?: string;
 }

@@ -1,0 +1,93 @@
+.colaborador-detail-page {
+  max-width: 790px;
+  margin: 0 auto;
+  padding: 2.2rem 1.5rem;
+  background: var(--surface, #fff);
+  border-radius: 8px;
+  box-shadow: 0 1px 8px 0 rgba(24,32,44,0.07);
+}
+
+.detail-header {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.detail-header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0.7rem 0 0;
+  color: var(--text-primary, #25272e);
+}
+.legajo, .estado {
+  font-size: 1.01rem;
+  color: var(--text-secondary, #757f98);
+  margin-left: 0.5rem;
+}
+
+.detail-section {
+  margin-bottom: 1.4rem;
+}
+.detail-section h2 {
+  font-size: 1.16rem;
+  font-weight: 600;
+  color: var(--brand-accent, #2186e7);
+  margin-bottom: 0.5rem;
+}
+.detail-section table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.detail-section th {
+  text-align: left;
+  color: var(--text-secondary, #6b7280);
+  width: 190px;
+  font-weight: 500;
+  padding: 0.36rem 0.6rem 0.36rem 0;
+}
+.detail-section td {
+  padding: 0.36rem 0.2rem;
+}
+
+.detail-section.acciones {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2.2rem;
+}
+
+.btn {
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+  color: var(--brand-accent, #2186e7);
+  padding: 0.37rem 1.2rem;
+  font-weight: 500;
+  border-radius: 4px;
+  transition: background 0.18s;
+}
+.btn:active {
+  background: #f1f5fb;
+}
+.btn-primary {
+  background: var(--brand-accent, #2186e7);
+  color: #fff;
+}
+
+.loading-state {
+  color: var(--text-secondary, #6b7280);
+  font-size: 1.1rem;
+  text-align: center;
+  padding: 2.5rem 0;
+}
+
+.error-alert {
+  background: var(--error, #ee3c3c);
+  color: #fff;
+  padding: 1.1rem;
+  border-radius: 4px;
+  margin: 1.5rem 0;
+  text-align: center;
+}

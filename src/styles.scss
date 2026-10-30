@@ -1,4 +1,4 @@
-/* brand-palette:start — managed by the form, do not edit by hand */
+/* ===== Variables de marca y paleta ===== */
 :root {
   --primary: #4B1F7E;
   --accent: #7C3CC2;
@@ -12,23 +12,12 @@
   --success: #268258;
   --warning: #B26A17;
   --error: #C03B52;
-}
-/* brand-palette:end */
-
-:root {
   --brand-main: #4B1F7E;
   --brand-accent: #7C3CC2;
   --brand-light: #EDE4F6;
-  --brand-gradient: linear-gradient(135deg, #4B1F7E 0%, #7C3CC2 100%);
+  --brand-gradient: linear-gradient(135deg,#4B1F7E 0%,#7C3CC2 100%);
   --page-bg: #F8F7FB;
-  --surface: #FFFFFF;
   --surface-soft: #F3EFF8;
-  --border: #E5DFEA;
-  --text-primary: #25212B;
-  --text-secondary: #6B6574;
-  --success: #268258;
-  --warning: #B26A17;
-  --error: #C03B52;
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
@@ -42,19 +31,24 @@ body {
   color: var(--text-primary);
   font-size: 14px;
   line-height: 1.5;
+  margin: 0;
+  min-height: 100vh;
 }
 
 h1, h2, h3 {
   color: var(--text-primary);
   font-weight: 650;
   letter-spacing: -0.025em;
+  margin-top: 0;
 }
+
 h1 { font-size: 26px; }
 h2 { font-size: 20px; }
 h3 { font-size: 16px; }
 
-/* Menú lateral */
-.sidebar, .app-sidebar {
+/* ===== Side navigation ===== */
+.sidebar,
+.app-sidebar {
   background: var(--brand-main);
   color: #FFFFFF;
 }
@@ -62,31 +56,41 @@ h3 { font-size: 16px; }
   color: #F1E9FA;
   border-radius: var(--radius-sm);
   transition: background 0.2s ease;
+  padding: 10px 16px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
 }
 .sidebar a:hover, .app-sidebar a:hover {
   background: rgba(255,255,255,0.12);
 }
 .sidebar a.active, .app-sidebar a.active {
   background: rgba(255,255,255,0.18);
-  color: #FFFFFF;
+  color: #FFF;
   font-weight: 600;
 }
 
-/* Tarjetas y paneles */
-.card, .dashboard-card, .panel {
+/* ===== Cards and panels ===== */
+.card,
+.dashboard-card,
+.panel {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
+  padding: 21px 28px;
+  margin-bottom: 22px;
 }
 .dashboard-card {
   transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
 }
 .dashboard-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-hover);
 }
-/* Botones */
+
+/* ===== Buttons ===== */
 .btn-primary {
   background: var(--brand-main);
   color: #FFF;
@@ -107,7 +111,8 @@ h3 { font-size: 16px; }
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
 }
-/* Formularios */
+
+/* ===== Forms ===== */
 input, select, textarea {
   background: #FFF;
   border: 1px solid var(--border);
@@ -116,15 +121,15 @@ input, select, textarea {
   padding: 10px 12px;
 }
 input:focus, select:focus, textarea:focus {
-  outline: 2px solid rgba(124, 60, 194, 0.22);
-  outline-offset: 1px;
+  outline: 2px solid rgba(124,60,194,0.22);
   border-color: var(--brand-accent);
 }
 label {
   font-weight: 550;
   color: var(--text-primary);
 }
-/* Tablas administrativas */
+
+/* ===== Tables ===== */
 table {
   width: 100%;
   border-collapse: separate;
@@ -146,7 +151,8 @@ th, td {
 tbody tr:hover {
   background: #FAF8FD;
 }
-/* Etiquetas de estado */
+
+/* ===== Status badges ===== */
 .badge, .status-badge {
   display: inline-flex;
   align-items: center;
@@ -167,29 +173,38 @@ tbody tr:hover {
   background: #FCE8EC;
   color: #B32F48;
 }
-/* Pestañas */
+
+/* ===== Tabs ===== */
 .tab.active, .tabs .active {
   color: var(--brand-main);
   border-bottom: 2px solid var(--brand-accent);
   font-weight: 600;
 }
-/* Pantalla de inicio de sesión */
+
+/* ===== Accessibility ===== */
+button:focus-visible, a:focus-visible {
+  outline: 2px solid var(--brand-accent);
+  outline-offset: 3px;
+}
+
+/* ===== Login page adjustments ===== */
 .login-page {
   background: linear-gradient(135deg, #F8F7FB 0%, #EEE5F7 100%);
+  min-height: 100vh;
 }
+
 .login-card {
   background: #FFF;
   border-radius: 20px;
   box-shadow: 0 16px 48px rgba(43, 24, 66, 0.12);
 }
-/* Accesibilidad y movimientos */
-button:focus-visible, a:focus-visible {
-  outline: 2px solid var(--brand-accent);
-  outline-offset: 3px;
-}
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    transition: none!important;
-    animation: none!important;
+
+/* ===== Responsive layouts ===== */
+@media (max-width: 900px) {
+  .card, .dashboard-card, .panel {
+    padding: 13px 8px;
   }
+}
+@media (max-width: 600px) {
+  .app-header, .sidebar, .app-sidebar { font-size: 13px; }
 }

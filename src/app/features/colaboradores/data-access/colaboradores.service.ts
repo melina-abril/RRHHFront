@@ -1,91 +1,84 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { mockResponse } from '../../../core/http/mock-response';
 import { apiUrl } from '../../../core/http/api-url';
-import type {
+import { mockResponse } from '../../../core/http/mock-response';
+import { Page } from '../../../shared/models/page';
+import {
   ColaboradorResumen,
-  ColaboradorFicha,
   FiltroColaboradores,
+  ColaboradorFicha,
   CrearColaboradorRequest,
   EditarColaboradorRequest
 } from '../models/colaboradores.models';
-import type { Page } from '../../../shared/models/page';
-import { COLABORADORES_MOCK_PAGE, COLABORADOR_FICHA_MOCK } from './colaboradores.mock';
+import { Observable, of } from 'rxjs';
+import { colaboradoresPageMock, colaboradorFichaMock } from './colaboradores.mock';
 
 @Injectable({ providedIn: 'root' })
 export class ColaboradoresService {
   private readonly http = inject(HttpClient);
 
-  listColaboradores(filtro: FiltroColaboradores = {}, page = 0, size = 20) {
+  listColaboradores(filtro: FiltroColaboradores & { page?: number; size?: number }): Observable<Page<ColaboradorResumen>> {
     if (environment.useMock) {
-      return mockResponse<Page<ColaboradorResumen>>(COLABORADORES_MOCK_PAGE);
+      return mockResponse(colaboradoresPageMock);
     }
-    // Mapea los filtros como query params
     const params: Record<string, string> = {};
     if (filtro.busqueda) params['busqueda'] = filtro.busqueda;
     if (filtro.categoria) params['categoria'] = filtro.categoria;
     if (filtro.cliente) params['cliente'] = filtro.cliente;
     if (filtro.proyecto) params['proyecto'] = filtro.proyecto;
-    if (filtro.estado)   params['estado'] = filtro.estado;
-    params['page'] = String(page);
-    params['size'] = String(size);
+    if (filtro.estado) params['estado'] = filtro.estado;
+    if (filtro.page) params['page'] = String(filtro.page);
+    if (filtro.size) params['size'] = String(filtro.size);
     return this.http.get<Page<ColaboradorResumen>>(apiUrl('/api/colaboradores'), { params });
   }
 
-  getColaborador(id: number) {
+  getColaborador(id: number): Observable<ColaboradorFicha> {
     if (environment.useMock) {
-      // Devuelve el mock por id si existe
-      const found = COLABORADORES_MOCK_PAGE.items.find(c => c.id === id);
-      if (found) {
-        return mockResponse<ColaboradorFicha>({ ...COLABORADOR_FICHA_MOCK, id: found.id, nombre: found.nombreCompleto.split(' ')[0], apellido: found.nombreCompleto.split(' ').slice(1).join(' '), legajo: found.legajo, categoria: found.categoria });
-      } else {
-        // Simula error 404
-        return mockResponse<never>(undefined as never);
-      }
+      return mockResponse(colaboradorFichaMock);
     }
     return this.http.get<ColaboradorFicha>(apiUrl(`/api/colaboradores/${id}`));
   }
 
-  altaColaborador(req: CrearColaboradorRequest) {
+  altaColaborador(req: CrearColaboradorRequest): Observable<ColaboradorFicha> {
     if (environment.useMock) {
-      // Devuelve ficha mock con los datos enviados
-      const id = 100 + Math.floor(Math.random() * 1000);
-      return mockResponse<ColaboradorFicha>({
-        ...COLABORADOR_FICHA_MOCK,
+      // Simula legajo generado y estado inicial
+      const nuevo: ColaboradorFicha = {
+        ...colaboradorFichaMock,
         ...req,
-        id,
-        nombre: req.nombre,
-        apellido: req.apellido,
-        legajo: `TFB-${id.toString().padStart(4, '0')}`,
+        id: Math.floor(1000 + Math.random() * 9000),
+        legajo: `TFB-${String(Math.floor(1000 + Math.random() * 8999)).padStart(4, '0')}`,
         estado: 'ACTIVO',
-        categoria: req.categoria
-      });
+      };
+      return mockResponse(nuevo);
     }
     return this.http.post<ColaboradorFicha>(apiUrl('/api/colaboradores'), req);
   }
 
-  editarColaborador(id: number, req: EditarColaboradorRequest) {
+  editarColaborador(id: number, req: EditarColaboradorRequest): Observable<ColaboradorFicha> {
     if (environment.useMock) {
-      // Devuelve ficha mock actualizada
-      return mockResponse<ColaboradorFicha>({ ...COLABORADOR_FICHA_MOCK, ...req, id });
+      // Simula edición
+      return mockResponse({ ...colaboradorFichaMock, ...req, id });
     }
     return this.http.put<ColaboradorFicha>(apiUrl(`/api/colaboradores/${id}`), req);
   }
 
-  egresoColaborador(id: number, motivo?: string) {
+  egresoColaborador(id: number, motivo?: string): Observable<void> {
     if (environment.useMock) {
-      // Simula 204
-      return mockResponse<null>(null);
+      return mockResponse(undefined);
     }
-    return this.http.post<void>(apiUrl(`/api/colaboradores/${id}/egreso`), {}, { params: motivo ? { motivo } : undefined });
+    return this.http.post<void>(apiUrl(`/api/colaboradores/${id}/egreso`), {}, {
+      params: motivo ? { motivo } : {}
+    });
   }
 
-  reingresoColaborador(id: number, motivo?: string) {
+  reingresoColaborador(id: number, motivo?: string): Observable<ColaboradorFicha> {
     if (environment.useMock) {
-      // Devuelve ficha ACTIVO
-      return mockResponse<ColaboradorFicha>({ ...COLABORADOR_FICHA_MOCK, id, estado: 'ACTIVO' });
+      // Simula nuevo período con mismo legajo
+      return mockResponse({ ...colaboradorFichaMock, id });
     }
-    return this.http.post<ColaboradorFicha>(apiUrl(`/api/colaboradores/${id}/reingreso`), {}, { params: motivo ? { motivo } : undefined });
+    return this.http.post<ColaboradorFicha>(apiUrl(`/api/colaboradores/${id}/reingreso`), {}, {
+      params: motivo ? { motivo } : {}
+    });
   }
 }
