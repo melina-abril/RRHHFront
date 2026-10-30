@@ -1,17 +1,21 @@
-.login-page {
+@import '../../../styles.scss';
+
+.login-bg {
   min-height: 100vh;
+  min-width: 100vw;
   display: flex;
-  align-items: stretch;
+  align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, var(--background) 0%, #EEE5F7 100%);
   font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  font-size: 14px;
+  color: var(--text-primary);
 }
 
-.login-card-grid {
+.login-card {
   width: 100%;
   max-width: 920px;
   min-height: 560px;
-  margin: auto;
   display: grid;
   grid-template-columns: 43% 57%;
   background: var(--surface);
@@ -21,55 +25,64 @@
   overflow: hidden;
 }
 
-.login-card-aside {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-  color: #fff;
-  padding: 40px;
+.login-card-banner {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: 48px;
-  min-height: 560px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  color: #fff;
+  box-sizing: border-box;
+  padding: 40px;
 }
-.brand-header {
+
+.brand-id {
   display: flex;
   align-items: center;
   gap: 12px;
 }
+
 .brand-logo {
   width: 40px;
   height: 40px;
+  min-width: 40px;
+  min-height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 12px;
-  background: rgba(255,255,255,.18);
+  background: rgba(255,255,255,0.18);
 }
+
 .brand-title {
   font-size: 19px;
   font-weight: 700;
   letter-spacing: -0.025em;
 }
-.brand-subtitle {
+
+.brand-title-light {
   font-weight: 400;
   opacity: 0.8;
 }
-.aside-content {
+
+.brand-info {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
-.login-icon-box {
+
+.brand-avatar {
   width: 48px;
   height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(255,255,255,.25);
+  border: 1px solid rgba(255,255,255,0.25);
   border-radius: 16px;
-  background: rgba(255,255,255,.11);
+  background: rgba(255,255,255,0.11);
 }
-.aside-title {
+
+.brand-heading {
   margin: 0;
   color: #fff;
   font-size: 26px;
@@ -77,22 +90,25 @@
   letter-spacing: -0.025em;
   line-height: 1.25;
 }
-.aside-description {
+
+.brand-desc {
   margin: 0;
-  color: var(--brand-light);
+  max-width: 290px;
+  color: #EDE4F6;
   font-size: 14px;
   line-height: 1.65;
-  max-width: 290px;
 }
-.aside-caption {
+
+.access-exclusive {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--brand-light);
+  color: #EDE4F6;
   font-size: 12px;
 }
 
-.login-card-main {
+.login-form-section {
+  box-sizing: border-box;
   padding: 64px 56px;
   display: flex;
   flex-direction: column;
@@ -101,27 +117,29 @@
   background: var(--surface);
 }
 
-.login-header {
+.login-form-header {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
+
 .welcome {
   color: var(--primary);
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: .09em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
 }
-.login-title {
+
+.login-form-header h1 {
   margin: 0;
   color: var(--text-primary);
   font-size: 26px;
   font-weight: 650;
   letter-spacing: -0.025em;
-  line-height: 1.25;
 }
-.login-subtitle {
+
+.login-form-header p {
   margin: 0;
   color: var(--text-secondary);
   font-size: 14px;
@@ -132,15 +150,18 @@
   flex-direction: column;
   gap: 20px;
 }
-.form-field {
+
+.form-group {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
+
 label {
   font-weight: 550;
   color: var(--text-primary);
 }
+
 input {
   width: 100%;
   height: 44px;
@@ -151,25 +172,22 @@ input {
   border-radius: 8px;
   color: var(--text-primary);
   font: inherit;
-}
-input:focus {
-  outline: 2px solid rgba(124, 60, 194, 0.22);
-  border-color: var(--accent);
-  outline-offset: 1px;
-}
-input.invalid {
-  border-color: var(--error);
-}
-.required {
-  color: var(--error);
-}
-.field-error {
-  color: var(--error);
-  font-size: 13px;
-  margin-top: -2px;
+  transition: box-shadow 0.2s, border 0.2s;
 }
 
-.error-alert {
+input.invalid {
+  border: 1px solid var(--error);
+  background: #FCE8EC;
+}
+
+.form-error {
+  color: var(--error);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.login-error-alert {
+  box-sizing: border-box;
   padding: 12px;
   display: flex;
   align-items: flex-start;
@@ -181,41 +199,35 @@ input.invalid {
   font-size: 13px;
 }
 
-.btn-primary {
+.login-error-msg {
+  font-weight: 400;
+  color: #B32F48;
+}
+
+.btn-primary.login-btn {
   width: 100%;
   min-height: 44px;
+  padding: 11px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: var(--primary);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font: inherit;
-  font-weight: 600;
-  padding: 11px 18px;
-  cursor: pointer;
+  font-size: 15px;
   transition: background 0.2s, transform 0.2s;
 }
-.btn-primary:disabled {
+
+.btn-primary.login-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
-.spinner {
-  width: 22px;
-  height: 22px;
-  border: 3px solid var(--accent);
-  border-top-color: transparent;
-  border-radius: 50%;
-  display: inline-block;
-  animation: spin 0.7s linear infinite;
-}
-@keyframes spin {
-  100% { transform: rotate(360deg); }
-}
 
-.login-info-box {
+.rh-exclusive-hint {
   box-sizing: border-box;
   padding: 14px 16px;
   display: flex;
@@ -225,21 +237,24 @@ input.invalid {
   border-radius: 12px;
   color: var(--text-secondary);
   font-size: 12px;
-  margin-top: 8px;
 }
-.login-info-box svg {
-  flex: none;
-  color: var(--accent);
+
+.required {
+  color: var(--error);
 }
 
 @media (max-width: 900px) {
-  .login-card-grid {
-    grid-template-columns: 1fr;
-    min-height: 100vh;
+  .login-card {
+    grid-template-columns: 100%;
+    min-height: unset;
+    box-shadow: 0 6px 32px rgba(43, 24, 66, 0.13);
   }
-  .login-card-aside { display: none; }
-  .login-card-main {
-    padding: 56px 20px;
+  .login-card-banner {
+    display: none;
+  }
+  .login-form-section {
+    padding: 40px 16px;
+    gap: 28px;
     min-width: 0;
   }
 }

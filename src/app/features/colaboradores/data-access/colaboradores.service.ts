@@ -1,11 +1,8 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { inject } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { mockResponse } from '../../../core/http/mock-response';
 import { apiUrl } from '../../../core/http/api-url';
-import type { Page } from '../../../shared/models/page';
-import type { LoadState } from '../../../shared/models/load-state';
 import type {
   ColaboradorResumen,
   ColaboradorFicha,
@@ -13,118 +10,82 @@ import type {
   CrearColaboradorRequest,
   EditarColaboradorRequest
 } from '../models/colaboradores.models';
-import { COLABORADORES_MOCK_PAGE, COLABORADORES_MOCK_FICHAS } from './colaboradores.mock';
-import { toSignal } from 'rxjs-interop';
-import { lastValueFrom, throwError } from 'rxjs';
+import type { Page } from '../../../shared/models/page';
+import { COLABORADORES_MOCK_PAGE, COLABORADOR_FICHA_MOCK } from './colaboradores.mock';
 
 @Injectable({ providedIn: 'root' })
 export class ColaboradoresService {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
-  async listColaboradores(
-    filtro: FiltroColaboradores = {},
-    page = 0,
-    size = 20
-  ): Promise<Page<ColaboradorResumen>> {
+  listColaboradores(filtro: FiltroColaboradores = {}, page = 0, size = 20) {
     if (environment.useMock) {
-      // Simula búsqueda y filtros mínimamente
-      let items = COLABORADORES_MOCK_PAGE.items;
-      if (filtro.busqueda) {
-        const q = filtro.busqueda.toLowerCase();
-        items = items.filter(
-          c => c.nombreCompleto.toLowerCase().includes(q) || c.legajo.toLowerCase().includes(q)
-        );
-      }
-      if (filtro.categoria) {
-        items = items.filter(c => c.categoria === filtro.categoria);
-      }
-      if (filtro.cliente) {
-        items = items.filter(c => c.cliente?.toLowerCase().includes(filtro.cliente!.toLowerCase()));
-      }
-      if (filtro.proyecto) {
-        items = items.filter(c => c.proyecto?.toLowerCase().includes(filtro.proyecto!.toLowerCase()));
-      }
-      if (filtro.estado) {
-        items = items.filter(c => c.estado === filtro.estado);
-      }
-      const start = page * size;
-      const pagedItems = items.slice(start, start + size);
-      return await mockResponse({
-        ...COLABORADORES_MOCK_PAGE,
-        items: pagedItems,
-        page,
-        size,
-        total: items.length
-      }).toPromise();
+      return mockResponse<Page<ColaboradorResumen>>(COLABORADORES_MOCK_PAGE);
     }
-    const params: any = { page, size };
-    if (filtro.busqueda) params.busqueda = filtro.busqueda;
-    if (filtro.categoria) params.categoria = filtro.categoria;
-    if (filtro.cliente) params.cliente = filtro.cliente;
-    if (filtro.proyecto) params.proyecto = filtro.proyecto;
-    if (filtro.estado) params.estado = filtro.estado;
-    return lastValueFrom(this.http.get<Page<ColaboradorResumen>>(apiUrl('/api/colaboradores'), { params }));
+    // Mapea los filtros como query params
+    const params: Record<string, string> = {};
+    if (filtro.busqueda) params['busqueda'] = filtro.busqueda;
+    if (filtro.categoria) params['categoria'] = filtro.categoria;
+    if (filtro.cliente) params['cliente'] = filtro.cliente;
+    if (filtro.proyecto) params['proyecto'] = filtro.proyecto;
+    if (filtro.estado)   params['estado'] = filtro.estado;
+    params['page'] = String(page);
+    params['size'] = String(size);
+    return this.http.get<Page<ColaboradorResumen>>(apiUrl('/api/colaboradores'), { params });
   }
 
-  async getColaborador(id: number): Promise<ColaboradorFicha> {
+  getColaborador(id: number) {
     if (environment.useMock) {
-      const ficha = COLABORADORES_MOCK_FICHAS[id];
-      if (!ficha) return await Promise.reject({ error: 'No encontrado' });
-      return await mockResponse(ficha).toPromise();
+      // Devuelve el mock por id si existe
+      const found = COLABORADORES_MOCK_PAGE.items.find(c => c.id === id);
+      if (found) {
+        return mockResponse<ColaboradorFicha>({ ...COLABORADOR_FICHA_MOCK, id: found.id, nombre: found.nombreCompleto.split(' ')[0], apellido: found.nombreCompleto.split(' ').slice(1).join(' '), legajo: found.legajo, categoria: found.categoria });
+      } else {
+        // Simula error 404
+        return mockResponse<never>(undefined as never);
+      }
     }
-    return lastValueFrom(this.http.get<ColaboradorFicha>(apiUrl(`/api/colaboradores/${id}`)));
+    return this.http.get<ColaboradorFicha>(apiUrl(`/api/colaboradores/${id}`));
   }
 
-  async altaColaborador(req: CrearColaboradorRequest): Promise<ColaboradorFicha> {
+  altaColaborador(req: CrearColaboradorRequest) {
     if (environment.useMock) {
-      // Devuelve la ficha dummy como si fuese un alta (sin persistencia real)
-      const mockId = 50 + Math.floor(Math.random() * 1000);
-      return await mockResponse({
+      // Devuelve ficha mock con los datos enviados
+      const id = 100 + Math.floor(Math.random() * 1000);
+      return mockResponse<ColaboradorFicha>({
+        ...COLABORADOR_FICHA_MOCK,
         ...req,
-        id: mockId,
-        legajo: 'TFB-' + mockId.toString().padStart(4, '0'),
+        id,
+        nombre: req.nombre,
+        apellido: req.apellido,
+        legajo: `TFB-${id.toString().padStart(4, '0')}`,
         estado: 'ACTIVO',
-        asignaciones: [],
-        beneficios: [],
-        documentos: [],
-        evaluaciones: [],
-        bitacora: [],
-        remuneraciones: [],
-        bonos: []
-      } as ColaboradorFicha).toPromise();
+        categoria: req.categoria
+      });
     }
-    return lastValueFrom(this.http.post<ColaboradorFicha>(apiUrl('/api/colaboradores'), req));
+    return this.http.post<ColaboradorFicha>(apiUrl('/api/colaboradores'), req);
   }
 
-  async editarColaborador(id: number, req: EditarColaboradorRequest): Promise<ColaboradorFicha> {
+  editarColaborador(id: number, req: EditarColaboradorRequest) {
     if (environment.useMock) {
-      // Devuelve mock actualizado
-      const base = COLABORADORES_MOCK_FICHAS[id];
-      if (!base) return await Promise.reject({ error: 'No encontrado' });
-      return await mockResponse({ ...base, ...req } as ColaboradorFicha).toPromise();
+      // Devuelve ficha mock actualizada
+      return mockResponse<ColaboradorFicha>({ ...COLABORADOR_FICHA_MOCK, ...req, id });
     }
-    return lastValueFrom(this.http.put<ColaboradorFicha>(apiUrl(`/api/colaboradores/${id}`), req));
+    return this.http.put<ColaboradorFicha>(apiUrl(`/api/colaboradores/${id}`), req);
   }
 
-  async egresoColaborador(id: number, motivo?: string): Promise<void> {
+  egresoColaborador(id: number, motivo?: string) {
     if (environment.useMock) {
-      // Simula egreso
-      if (!(id in COLABORADORES_MOCK_FICHAS)) return await Promise.reject({ error: 'No encontrado' });
-      return await mockResponse(undefined).toPromise();
+      // Simula 204
+      return mockResponse<null>(null);
     }
-    return lastValueFrom(this.http.post<void>(apiUrl(`/api/colaboradores/${id}/egreso`), null, { params: motivo ? { motivo } : {} }));
+    return this.http.post<void>(apiUrl(`/api/colaboradores/${id}/egreso`), {}, { params: motivo ? { motivo } : undefined });
   }
 
-  async reingresoColaborador(id: number, motivo?: string): Promise<ColaboradorFicha> {
+  reingresoColaborador(id: number, motivo?: string) {
     if (environment.useMock) {
-      const ficha = COLABORADORES_MOCK_FICHAS[id];
-      if (!ficha) return await Promise.reject({ error: 'No encontrado' });
-      return await mockResponse({
-        ...ficha,
-        estado: 'ACTIVO',
-        bitacora: [...(ficha.bitacora ?? []), `Reingreso: ${new Date().toISOString().slice(0,10)}`]
-      }).toPromise();
+      // Devuelve ficha ACTIVO
+      return mockResponse<ColaboradorFicha>({ ...COLABORADOR_FICHA_MOCK, id, estado: 'ACTIVO' });
     }
-    return lastValueFrom(this.http.post<ColaboradorFicha>(apiUrl(`/api/colaboradores/${id}/reingreso`), null, { params: motivo ? { motivo } : {} }));
+    return this.http.post<ColaboradorFicha>(apiUrl(`/api/colaboradores/${id}/reingreso`), {}, { params: motivo ? { motivo } : undefined });
   }
 }

@@ -1,45 +1,51 @@
-import { LowerCasePipe, DatePipe } from '@angular/common';
-import { Component, signal, effect } from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ColaboradoresService } from '../../data-access/colaboradores.service';
-import type { ColaboradorFicha } from '../../models/colaboradores.models';
-import { LoadState } from '../../../../shared/models/load-state';
+import { ColaboradorFicha } from '../../models/colaboradores.models';
 
 @Component({
   selector: 'app-colaborador-detail-page',
   standalone: true,
   templateUrl: './colaborador-detail-page.html',
   styleUrl: './colaborador-detail-page.scss',
-  imports: [LowerCasePipe, DatePipe, ] // agregar pipes, routerLink, etc. en base
+  imports: [CommonModule]
 })
 export class ColaboradorDetailPage {
-  private service = new ColaboradoresService();
-  fichaState = signal<LoadState<ColaboradorFicha>>({ status: 'loading' });
-  ficha = signal<ColaboradorFicha | undefined>(undefined);
-  initials = '';
+  private readonly servicio = new ColaboradoresService();
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  public readonly cargando = signal<boolean>(true);
+  public readonly error = signal<string | null>(null);
+  public readonly ficha = signal<ColaboradorFicha | null>(null);
 
-  ngOnInit() {
-    this.cargarFicha();
+  constructor() {
+    const idParam = this.route.snapshot.paramMap.get('id');
+    if (idParam) {
+      const id = Number(idParam);
+      this.cargando.set(true);
+      this.servicio.getColaborador(id).subscribe({
+        next: (ficha) => {
+          this.ficha.set(ficha);
+          this.cargando.set(false);
+        },
+        error: (err) => {
+          this.error.set(typeof err === 'string' ? err : 'No se pudo cargar la ficha.');
+          this.cargando.set(false);
+        }
+      });
+    } else {
+      this.error.set('Colaborador inexistente.');
+      this.cargando.set(false);
+    }
   }
 
-  cargarFicha() {
-    // @todo: obtener id por ActivatedRoute y buscar
-    const mockId = 1;
-    this.service.getColaborador(mockId).then(f => {
-      this.ficha.set(f);
-      this.initials = this.getInitials(f.nombre, f.apellido);
-    }).catch(() => {
-      this.ficha.set(undefined);
-    });
+  volverAlListado(): void {
+    this.router.navigate(['/colaboradores']);
   }
-
-  getInitials(n: string, a: string) {
-    return ((n?.[0] || '') + (a?.[0] || '')).toUpperCase();
-  }
-
-  volverAlListado() {
-    // @todo: router.navigate(['/colaboradores']);
-  }
-  editarColaborador() {
-    // @todo: router.navigate(['editar'], { relativeTo: ... });
+  editar(): void {
+    if (this.ficha()) {
+      this.router.navigate(['/colaboradores', this.ficha()!.id, 'editar']);
+    }
   }
 }

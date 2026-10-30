@@ -1,111 +1,75 @@
-import { RouterLink } from '@angular/router';
 import { Component, signal, computed } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ColaboradoresService } from '../../data-access/colaboradores.service';
-import type { ColaboradorResumen, FiltroColaboradores } from '../../models/colaboradores.models';
+import { ColaboradorResumen, FiltroColaboradores } from '../../models/colaboradores.models';
 import { LoadState } from '../../../../shared/models/load-state';
-import { effect } from '@angular/core';
+import { Page } from '../../../../shared/models/page';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-colaboradores-list-page',
   standalone: true,
   templateUrl: './colaboradores-list-page.html',
   styleUrl: './colaboradores-list-page.scss',
-  imports: [RouterLink, ] // agregar componentes compartidos en base
+  imports: [CommonModule, RouterLink]
 })
 export class ColaboradoresListPage {
-  private service = new ColaboradoresService();
-
-  filtro = signal<FiltroColaboradores>({});
-  state = signal<LoadState<ColaboradorResumen[]>>({ status: 'loading' });
-
-  busqueda = signal<string>('');
-  categoria = signal<string>('');
-  cliente = signal<string>('');
-  proyecto = signal<string>('');
-  estado = signal<string>('');
-  showFilters = true;
-
-  columns = [
-    { field: 'legajo', title: 'Legajo' },
-    { field: 'nombreCompleto', title: 'Nombre y Apellido' },
-    { field: 'categoria', title: 'Categoría' },
-    { field: 'cliente', title: 'Cliente' },
-    { field: 'proyecto', title: 'Proyecto' },
-    { field: 'rolLaboral', title: 'Rol' }, // Not present in resumen, keep for pattern
-    { field: 'fechaIngreso', title: 'Fecha de ingreso' }, // Not present in resumen
-    { field: 'estado', title: 'Estado' },
-    { field: 'acciones', title: 'Acciones', actions: true }
-  ];
-
-  trackById = (i: number, c: ColaboradorResumen) => c.id;
-
-  colaboradores = computed(() => {
-    const s = this.state();
-    return s.status === 'ready' ? s.data : [];
+  private readonly servicio = new ColaboradoresService();
+  public readonly filtros = signal<FiltroColaboradores>({
+    busqueda: '',
+    categoria: undefined,
+    cliente: undefined,
+    proyecto: undefined,
+    estado: undefined
   });
 
-  activosCount = computed(() => {
-    return this.colaboradores().filter(c => c.estado === 'ACTIVO').length;
-  });
+  public readonly pagina = signal<number>(1);
+  public readonly cantidadPorPagina = 20;
 
-  totalCount = computed(() => {
-    return this.colaboradores().length;
-  });
+  public readonly colaboradoresState = signal<LoadState<Page<ColaboradorResumen>>>({ status: 'loading' });
 
-  sinFiltros = computed(() => {
-    return !this.busqueda() && !this.categoria() && !this.cliente() && !this.proyecto() && !this.estado();
-  });
+  constructor(private readonly router: Router) {
+    this.cargarColaboradores();
+  }
 
-  constructor() {
-    effect(() => {
-      this.cargarColaboradores();
+  cargarColaboradores(): void {
+    this.colaboradoresState.set({ status: 'loading' });
+    this.servicio.listColaboradores({ ...this.filtros(), page: this.pagina(), size: this.cantidadPorPagina }).subscribe({
+      next: (page) => {
+        if (page.total === 0) {
+          this.colaboradoresState.set({ status: 'empty' });
+        } else {
+          this.colaboradoresState.set({ status: 'ready', data: page });
+        }
+      },
+      error: (err) => {
+        this.colaboradoresState.set({ status: 'error', error: (typeof err === 'string' ? err : 'Ha ocurrido un error al cargar los colaboradores.') });
+      }
     });
   }
 
-  async cargarColaboradores() {
-    this.state.set({ status: 'loading' });
-    try {
-      const result = await this.service.listColaboradores({
-        busqueda: this.busqueda(),
-        categoria: this.categoria(),
-        cliente: this.cliente(),
-        proyecto: this.proyecto(),
-        estado: this.estado()
-      });
-      const datos = result.items || [];
-      if (datos.length === 0) {
-        this.state.set({ status: 'empty' });
-      } else {
-        this.state.set({ status: 'ready', data: datos });
-      }
-    } catch (e: any) {
-      this.state.set({ status: 'error', error: e?.error || 'Error al cargar colaboradores' });
-    }
-  }
-
-  aplicarFiltros(filtro: FiltroColaboradores) {
-    this.busqueda.set(filtro.busqueda || '');
-    this.categoria.set(filtro.categoria || '');
-    this.cliente.set(filtro.cliente || '');
-    this.proyecto.set(filtro.proyecto || '');
-    this.estado.set(filtro.estado || '');
+  onBuscar(busqueda: string): void {
+    this.filtros.update(valor => ({ ...valor, busqueda }));
+    this.pagina.set(1);
     this.cargarColaboradores();
   }
 
-  limpiarFiltros() {
-    this.busqueda.set('');
-    this.categoria.set('');
-    this.cliente.set('');
-    this.proyecto.set('');
-    this.estado.set('');
+  onFiltrar(filtro: Partial<FiltroColaboradores>): void {
+    this.filtros.update(valor => ({ ...valor, ...filtro }));
+    this.pagina.set(1);
     this.cargarColaboradores();
   }
 
-  abrirFicha(colaborador: ColaboradorResumen) {
-    // @todo: navegar a ficha usando router
+  onPagina(page: number): void {
+    this.pagina.set(page);
+    this.cargarColaboradores();
   }
 
-  editarColaborador(colaborador: ColaboradorResumen) {
-    // @todo: navegar a edición usando router
+  verDetalle(id: number): void {
+    this.router.navigate(['/colaboradores', id]);
+  }
+
+  editar(id: number): void {
+    this.router.navigate(['/colaboradores', id, 'editar']);
   }
 }
