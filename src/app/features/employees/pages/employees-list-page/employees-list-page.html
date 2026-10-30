@@ -1,0 +1,83 @@
+<div class="location-indicator">Colaboradores / Listado</div>
+<app-page-header
+  title="Gestión de Empleados"
+  description="Listado y administración de empleados registrados."
+>
+  <a class="button" routerLink="new">Nuevo colaborador</a>
+</app-page-header>
+
+<app-employee-filters-bar [value]="filters()" (applied)="applyFilters($event)" />
+
+@let employeeState = state();
+@switch (employeeState.status) {
+  @case ('loading') {
+    <app-loading-state message="Cargando colaboradores…" />
+  }
+  @case ('error') {
+    <app-error-alert [message]="employeeState.message" retryLabel="Reintentar" (retry)="reload()" />
+  }
+  @case ('empty') {
+    <app-empty-state message="No hay colaboradores que coincidan con el filtro." />
+  }
+  @case ('ready') {
+    <section class="card">
+      <div class="employees-list-header">
+        <h2>Listado de colaboradores <span class="employees-table__count">{{ employeeState.data.totalItems }}</span></h2>
+        @if (showAllRecords()) {
+          <span class="all-records">Todos los registros</span>
+        }
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <caption class="visually-hidden">Colaboradores</caption>
+          <thead>
+            <tr>
+              <th>Legajo</th>
+              <th>Nombre y Apellido</th>
+              <th>Categoría</th>
+              <th>Cliente</th>
+              <th>Proyecto</th>
+              <th>Rol</th>
+              <th>Fecha de ingreso</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of employeeState.data.items; track item.id) {
+              <tr>
+                <td class="employees-list__legajo">{{ item.legajo }}</td>
+                <td class="employees-list__name">{{ item.firstName }} {{ item.lastName }}</td>
+                <td><app-status-badge [label]="categoryInfo[item.category].label" [tone]="categoryInfo[item.category].tone" /></td>
+                <td>{{ item.clients.join(', ') || '—' }}</td>
+                <td>{{ item.projects.join(', ') || '—' }}</td>
+                <td>{{ item.position || '—' }}</td>
+                <td>{{ item.entryDate | date: 'dd/MM/yyyy' }}</td>
+                <td><app-status-badge [label]="statusInfo[item.status].label" [tone]="statusInfo[item.status].tone" /></td>
+                <td class="employees-list__actions">
+                  <a [routerLink]="item.id">Ver ficha</a>
+                  <!-- Más acciones: editar, egreso o reingreso -->
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <nav class="pagination" aria-label="Paginado">
+        <button
+          type="button"
+          class="button button--secondary"
+          [disabled]="employeeState.data.page === 0"
+          (click)="goToPage(employeeState.data.page - 1)"
+        >Anterior</button>
+        <span>Página {{ employeeState.data.page + 1 }} de {{ employeeState.data.totalPages }} · {{ employeeState.data.totalItems }} colaboradores</span>
+        <button
+          type="button"
+          class="button button--secondary"
+          [disabled]="employeeState.data.page + 1 >= employeeState.data.totalPages"
+          (click)="goToPage(employeeState.data.page + 1)"
+        >Siguiente</button>
+      </nav>
+    </section>
+  }
+}

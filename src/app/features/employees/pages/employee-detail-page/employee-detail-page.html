@@ -1,0 +1,67 @@
+<div class="location-indicator">Gestión de Empleados <span class="divider">/</span> Ficha individual</div>
+@let state = detailState();
+@switch (state.status) {
+  @case ('loading') {
+    <app-loading-state message="Cargando la ficha del colaborador…" />
+  }
+  @case ('error') {
+    <app-error-alert [message]="state.message" />
+  }
+  @case ('ready') {
+    @let emp = state.data;
+    <div class="employee-detail-card card">
+      <div class="employee-detail-card__top">
+        <div class="employee-avatar">{{ emp.firstName.charAt(0) }}{{ emp.lastName.charAt(0) }}</div>
+        <div class="employee-main-data">
+          <div class="employee-detail-main-line">
+            <h1 class="employee-name">{{ emp.firstName }} {{ emp.lastName }}</h1>
+            <app-status-badge [label]="categoryInfo[emp.category].label" [tone]="categoryInfo[emp.category].tone" />
+            <app-status-badge [label]="statusInfo[emp.status].label" [tone]="statusInfo[emp.status].tone" />
+          </div>
+          <div class="legajo-label">
+            Legajo <b>{{ emp.legajo }}</b> <span class="not-editable">· No modificable</span>
+          </div>
+          <div class="employee-position">{{ emp.position }}</div>
+          <div class="employee-assignments">
+            <span *ngIf="emp.clients.length">{{ emp.clients.join(', ') }}</span>
+            <span *ngIf="emp.projects.length"> · {{ emp.projects.join(', ') }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="personal-info-section">
+        <h2>Datos personales</h2>
+        <p class="section-desc">Información de identificación y contacto de {{ emp.firstName }} {{ emp.lastName }}.</p>
+        <div class="personal-info-groups">
+          <section class="personal-group">
+            <h3>Identificación</h3>
+            <div class="group-row"><span>Nombre</span><span>{{ emp.firstName }}</span></div>
+            <div class="group-row"><span>Apellido</span><span>{{ emp.lastName }}</span></div>
+            <div class="group-row"><span>País de residencia</span><span>{{ emp.countryCode }}</span></div>
+            <div class="group-row"><span>Número de legajo</span><span>{{ emp.legajo }} <span class="not-editable">· No modificable</span></span></div>
+          </section>
+          <section class="personal-group">
+            <h3>Contacto y domicilio</h3>
+            <div class="group-row"><span>Correo electrónico personal</span><span>{{ emp.email }}</span></div>
+            <div class="group-row"><span>Ciudad</span><span>{{ emp.city }}</span></div>
+          </section>
+        </div>
+      </div>
+      <div class="background-section">
+        <h3>Antecedentes</h3>
+        @if (emp.backgroundNotes.length > 0) {
+          <ul>
+            @for (note of emp.backgroundNotes; track note) {
+              <li>{{ note }}</li>
+            }
+          </ul>
+        } @else {
+          <div class="no-background">No hay antecedentes registrados.</div>
+        }
+        <div class="update-info"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7C3CC2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg> Última actualización: {{ emp.updatedAt | date: 'dd/MM/yyyy' }}</div>
+      </div>
+    </div>
+  }
+  @case ('empty') {
+    <app-error-alert message="No se encontró el colaborador." />
+  }
+}
