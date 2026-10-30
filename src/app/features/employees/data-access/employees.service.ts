@@ -4,37 +4,62 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { apiUrl } from '../../../core/http/api-url';
 import { Page } from '../../../shared/models/page';
-import { EmployeeDetails, EmployeeFilters, EmployeeList, CreateEmployeeRequest } from '../models/employees.models';
-import { createEmployeeMock, getEmployeeDetailsMock, listEmployeesMock } from './employees.mock';
+import { Employee, EmployeeFilters, CreateEmployeeRequest, UpdateEmployeeRequest } from '../models/employees.models';
+import {
+  createEmployeeMock,
+  getEmployeeMock,
+  listEmployeesMock,
+  updateEmployeeMock,
+  leaveEmployeeMock,
+  rejoinEmployeeMock
+} from './employees.mock';
 
 @Injectable({ providedIn: 'root' })
 export class EmployeesService {
   private readonly http = inject(HttpClient);
 
-  /** GET /api/employees?search=&legajo=&category=&client=&project=&status=&page=&size= */
-  list(filters: EmployeeFilters): Observable<Page<EmployeeList>> {
+  /** GET /api/employees */
+  list(filters: EmployeeFilters): Observable<Page<Employee>> {
     if (environment.useMock) return listEmployeesMock(filters);
     let params = new HttpParams()
+      .set('search', filters.search)
+      .set('legajo', filters.legajo)
       .set('page', filters.page)
       .set('size', filters.size);
-    if (filters.search.trim()) params = params.set('search', filters.search.trim());
-    if (filters.legajo.trim()) params = params.set('legajo', filters.legajo.trim());
     if (filters.category) params = params.set('category', filters.category);
-    if (filters.client.trim()) params = params.set('client', filters.client.trim());
-    if (filters.project.trim()) params = params.set('project', filters.project.trim());
-    if (filters.status) params = params.set('status', filters.status);
-    return this.http.get<Page<EmployeeList>>(apiUrl('/employees'), { params });
+    if (filters.client) params = params.set('client', filters.client);
+    if (filters.project) params = params.set('project', filters.project);
+    if (filters.state) params = params.set('state', filters.state);
+    return this.http.get<Page<Employee>>(apiUrl('/api/employees'), { params });
   }
 
   /** GET /api/employees/{id} */
-  get(id: string): Observable<EmployeeDetails> {
-    if (environment.useMock) return getEmployeeDetailsMock(id);
-    return this.http.get<EmployeeDetails>(apiUrl(`/employees/${encodeURIComponent(id)}`));
+  get(id: string): Observable<Employee> {
+    if (environment.useMock) return getEmployeeMock(id);
+    return this.http.get<Employee>(apiUrl(`/api/employees/${encodeURIComponent(id)}`));
   }
 
   /** POST /api/employees */
-  create(request: CreateEmployeeRequest): Observable<EmployeeDetails> {
+  create(request: CreateEmployeeRequest): Observable<Employee> {
     if (environment.useMock) return createEmployeeMock(request);
-    return this.http.post<EmployeeDetails>(apiUrl('/employees'), request);
+    return this.http.post<Employee>(apiUrl('/api/employees'), request);
+  }
+
+  /** PUT /api/employees/{id} */
+  update(id: string, request: UpdateEmployeeRequest): Observable<Employee> {
+    if (environment.useMock) return updateEmployeeMock(id, request);
+    return this.http.put<Employee>(apiUrl(`/api/employees/${encodeURIComponent(id)}`), request);
+  }
+
+  /** POST /api/employees/{id}/leave */
+  leave(id: string): Observable<void> {
+    if (environment.useMock) return leaveEmployeeMock(id);
+    return this.http.post<void>(apiUrl(`/api/employees/${encodeURIComponent(id)}/leave`), {});
+  }
+
+  /** POST /api/employees/{id}/rejoin */
+  rejoin(id: string): Observable<Employee> {
+    if (environment.useMock) return rejoinEmployeeMock(id);
+    return this.http.post<Employee>(apiUrl(`/api/employees/${encodeURIComponent(id)}/rejoin`), {});
   }
 }

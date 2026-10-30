@@ -1,126 +1,25 @@
-.location-indicator {
-  color: var(--text-secondary);
-  font-size: 13px;
-  margin-bottom: 14px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.divider {
-  color: #b5aabb;
-  margin: 0 6px;
-}
 .employee-detail-card {
-  padding: 28px 32px;
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
-}
-.employee-detail-card__top {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-}
-.employee-avatar {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background: var(--active-item);
-  color: var(--primary);
+  max-width: 36rem;
+  margin: var(--space-lg) auto 0;
+  padding: var(--space-xl) var(--space-lg);
   display: grid;
-  place-items: center;
-  font-size: 24px;
-  font-weight: 650;
-  letter-spacing: -0.025em;
+  gap: var(--space-md);
 }
-.employee-main-data {
-  flex: 1 1 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.employee-detail-main-line {
-  display: flex;
+dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--space-sm) var(--space-lg);
   align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
 }
-.employee-name {
+dt {
+  font-weight: 600;
+  color: var(--color-text-muted);
+  grid-column: 1;
+}
+dd {
+  grid-column: 2;
   margin: 0;
-  font-size: 26px;
-  font-weight: 650;
-  letter-spacing: -0.025em;
-  color: var(--text-primary);
 }
-.legajo-label {
-  color: var(--text-secondary);
-  font-size: 15px;
-}
-.not-editable {
-  color: #6B6574;
-  font-size: 12px;
-  font-weight: 400;
-}
-.employee-position {
-  color: var(--text-secondary);
-}
-.personal-info-section {
-  margin-top: 28px;
-}
-.section-desc {
-  color: var(--text-secondary);
-  font-size: 13px;
-  margin: 5px 0 18px 0;
-}
-.personal-info-groups {
-  display: flex;
-  gap: 18px;
-  flex-wrap: wrap;
-}
-.personal-group {
-  background: var(--soft-background);
-  border-radius: 12px;
-  padding: 18px 16px;
-  flex: 1 1 330px;
-  min-width: 270px;
-  max-width: 400px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.personal-group h3 {
-  margin: 0 0 14px;
-  color: var(--brand-accent);
-  font-size: 16px;
-  font-weight: 650;
-}
-.group-row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 16px;
-  border-bottom: 1px solid var(--border);
-  font-size: 13px;
-  padding: 5px 0;
-}
-.background-section {
-  margin-top: 28px;
-  padding-bottom: 10px;
-}
-.background-section h3 {
-  font-size: 16px;
-  font-weight: 650;
-  margin-bottom: 10px;
-}
-.update-info {
-  color: var(--brand-accent);
-  font-size: 12px;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  margin-top: 13px;
-}
-.no-background {
-  color: var(--text-secondary);
-  font-style: italic;
+.form-actions {
+  justify-content: flex-end;
 }

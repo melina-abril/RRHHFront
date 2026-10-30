@@ -1,37 +1,58 @@
-# Gestión de RR.HH.
+# Gestión de RR.HH. — Aplicación Angular
 
-Aplicación web interna para centralizar los procesos administrativos de Recursos Humanos de TECHFORB.
+Esta aplicación centraliza y organiza los procesos de Recursos Humanos de TECHFORB, con acceso exclusivo para el área de RR.HH.
 
-## ¿Cómo levantar la aplicación?
+## Levantar la aplicación
 
-1. Instala las dependencias:
-   ```
+1. Instala dependencias:
+
+   ```bash
    npm install
    ```
 
-2. Ejecuta en modo demo (mock, sin backend):
-   ```
+2. Para desarrollo o demo (sin backend):
+
+   ```bash
    npm start
+   # (Reinicia la app para cambios)
    ```
-   - Accede con cualquier correo y la contraseña: **Demo1234!**
+   - Acceso: cualquier correo; contraseña Demo1234!
+   - Permite simular distintos roles.
 
-3. Para usar el backend real (backend Spring Boot corriendo en http://localhost:8080):
-   ```
+3. Para usar con backend local (por el proxy):
+
+   ```bash
    npm run start:backend
+   # Levanta la app y reenvía /api al backend Java Spring Boot en http://localhost:8080
    ```
-   - El proxy manda las APIs /api al backend.
+   - La app real lee los módulos y la sesión desde el backend.
 
-4. Para build de producción:
-   ```
+4. Build de producción:
+
+   ```bash
    npm run build
    ```
 
-
 ## Módulos incluidos
 
-- **Pantalla principal**: Acceso centralizado a los módulos, indicadores y atajos.
-- **Gestión de empleados**: Alta, listado, detalle y filtros de colaboradores.
+- **Inicio**: Acceso rápido a los módulos, indicadores de colaboradores, solicitudes pendientes y próximos eventos.
+- **Empleados**: Listado, ficha y gestión integral de los colaboradores. Altas, egresos, reingresos y edición.
 
-> El inicio de sesión y la sesión de usuario ya están resueltos por el core. La navegación y permisos se resuelven por roles de backend (ADMIN_RRHH).
+> Los módulos de solicitudes, comunicados y horas extras serán incorporados en próximas etapas.
 
-El resto de los módulos y funcionalidades se sumarán en versiones siguientes.
+## Estructura principal
+
+- Layout y sesión: ya resueltos en archivos core/fijos.
+- Cada módulo está en `src/app/features/nombre-modulo`.
+- Variables de color y estilos: `src/theme.scss` (basado en la identidad TECHFORB).
+
+## Comandos principales
+
+- `npm install` — Instala dependencias
+- `npm start` — Dev sería, mocks (sin backend)
+- `npm run start:backend` — Con backend real en http://localhost:8080 (vía proxy)
+- `npm run build` — Build de producción (reemplaza variables de entorno)
+
+---
+
+© TECHFORB — Gestión de RR.HH.

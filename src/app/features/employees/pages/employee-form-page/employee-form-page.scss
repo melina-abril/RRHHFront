@@ -1,0 +1,15 @@
+.employee-form {
+  max-width: 36rem;
+  margin: var(--space-lg) auto 0;
+  padding: var(--space-xl) var(--space-lg);
+  display: grid;
+  gap: var(--space-lg);
+}
+.form-grid {
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md) var(--space-lg);
+}
+.form-actions {
+  justify-content: flex-end;
+  gap: var(--space-md);
+}

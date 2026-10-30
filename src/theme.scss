@@ -1,14 +1,13 @@
 /*
-  TECHFORB RH — Sistema de Recursos Humanos
-  Estilo: moderno, elegante, minimalista y profesional.
-  Paleta y estructura según la guía de marca del sistema.
+  Variables de color y estilo — generadas a partir de brandStyle
+  Colores y configuración visual para el tema RR.HH. Techforb
+  ----------------------------------------------------------
 */
 :root {
   --color-primary: #4B1F7E;
   --color-accent: #7C3CC2;
   --color-background: #F8F7FB;
   --color-surface: #FFFFFF;
-  --color-surface-soft: #F3EFF8;
   --color-surface-muted: #F3EFF8;
   --color-active-item: #EDE4F6;
   --color-border: #E5DFEA;
@@ -17,33 +16,30 @@
   --color-success: #268258;
   --color-warning: #B26A17;
   --color-error: #C03B52;
-  --color-info: #4B1F7E;
-  --color-info-surface: #EDE4F6;
-  --color-danger: #C03B52;
-  --color-danger-surface: #FCE8EC;
+  --color-info: var(--color-accent);
+
+  --color-on-primary: #FFFFFF;
+  --color-info-surface: #F3EFF8;
   --color-success-surface: #E6F5EC;
   --color-warning-surface: #FFF3DD;
-  --color-on-primary: #FFFFFF;
+  --color-danger-surface: #FCE8EC;
   --color-focus: #7C3CC2;
 
-  /* Espaciado */
-  --space-xs: 0.4rem;
-  --space-sm: 0.7rem;
-  --space-md: 1.2rem;
-  --space-lg: 2.0rem;
-
-  /* Radio de borde */
   --radius: 12px;
   --radius-sm: 8px;
-  --radius-md: 12px;
   --radius-lg: 16px;
 
-  /* Sombra */
-  --shadow-card: 0 3px 16px rgba(43, 24, 66, 0.045);
-  --shadow-hover: 0 8px 24px rgba(43, 24, 66, 0.09);
+  --space-xs: 0.3rem;
+  --space-sm: 0.65rem;
+  --space-md: 1rem;
+  --space-lg: 2.2rem;
 
-  /* Tipografía */
-  --font-family: "Inter", "Segoe UI", Arial, sans-serif;
-  --font-weight-normal: 400;
+  --shadow-card: 0 3px 16px rgba(43,24,66,0.045);
+  --shadow-hover: 0 8px 24px rgba(43,24,66,0.09);
+
+  --font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  --font-size-sm: 0.95rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.3rem;
   --font-weight-bold: 650;
 }
