@@ -1,0 +1,54 @@
+<main class="colaborador-form-page">
+  <h1>{{ esEdicion() ? 'Editar colaborador' : 'Alta de colaborador' }}</h1>
+
+  <form [formGroup]="formulario" (ngSubmit)="guardar()" autocomplete="off" novalidate>
+    <section class="form-section">
+      <label>
+        Nombre
+        <input formControlName="nombre" type="text" maxlength="60" autocomplete="off" [class.invalid]="formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched">
+      </label>
+      <div class="error" *ngIf="formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched">Requerido (máx 60 caracteres).</div>
+      
+      <label>
+        Apellido
+        <input formControlName="apellido" type="text" maxlength="60" autocomplete="off" [class.invalid]="formulario.get('apellido')?.invalid && formulario.get('apellido')?.touched">
+      </label>
+      <div class="error" *ngIf="formulario.get('apellido')?.invalid && formulario.get('apellido')?.touched">Requerido (máx 60 caracteres).</div>
+    </section>
+    
+    <section class="form-section">
+      <label>
+        Correo electrónico
+        <input formControlName="email" type="email" maxlength="80" autocomplete="off" [class.invalid]="formulario.get('email')?.invalid && formulario.get('email')?.touched">
+      </label>
+      <div class="error" *ngIf="formulario.get('email')?.invalid && formulario.get('email')?.touched">Correo inválido.</div>
+    </section>
+    
+    <section class="form-section">
+      <label>
+        Categoría
+        <input formControlName="categoria" type="text" maxlength="40" autocomplete="off" [class.invalid]="formulario.get('categoria')?.invalid && formulario.get('categoria')?.touched">
+      </label>
+      <div class="error" *ngIf="formulario.get('categoria')?.invalid && formulario.get('categoria')?.touched">Selecciona una categoría válida.</div>
+
+      <label>
+        Cliente
+        <input formControlName="cliente" type="text" maxlength="40" autocomplete="off">
+      </label>
+      <label>
+        Proyecto
+        <input formControlName="proyecto" type="text" maxlength="40" autocomplete="off">
+      </label>
+    </section>
+
+    <div class="form-actions">
+      <button type="submit" [disabled]="cargando()">{{ esEdicion() ? 'Guardar cambios' : 'Crear colaborador' }}</button>
+      <button type="button" class="secondary" (click)="cancelar()" [disabled]="cargando()">Cancelar</button>
+    </div>
+
+    <div class="estado">
+      <div *ngIf="cargando()" class="loading">Guardando…</div>
+      <div *ngIf="error()" class="error">{{ error() }}</div>
+    </div>
+  </form>
+</main>

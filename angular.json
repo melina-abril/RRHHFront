@@ -1,5 +1,5 @@
 {
-  "$schema": "https://json.schemastore.org/angular.json",
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "projects": {
     "rrhh-front": {
@@ -27,7 +27,12 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "outputHashing": "all"
+              "outputPath": "dist/rrhh-front"
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true
             }
           },
           "defaultConfiguration": "production"
@@ -37,7 +42,13 @@
           "options": {
             "buildTarget": "rrhh-front:build:development",
             "proxyConfig": "proxy.conf.json"
-          }
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "rrhh-front:build:production"
+            }
+          },
+          "defaultConfiguration": "development"
         }
       }
     }

@@ -1,49 +1,53 @@
-# Sistema de Gestión de RR.HH (TECHFORB)
+# Gestión de RR.HH – Frontend
 
-Aplicación web interna de Recursos Humanos para TECHFORB, implementada en Angular 21 con arquitectura modular, sin zone.js y componentes standalone.
+Aplicación web interna para administrar colaboradores, legajos, solicitudes, bonos y procesos de Recursos Humanos. Pensada para equipos de RR.HH. de TECHFORB (primera etapa) y expandible a SaaS B2B.
 
-## Levantar la aplicación
+## Arranque rápido
 
-```sh
-npm install
-npm start
-```
+1. Instala dependencias:
+   ```
+   npm install
+   ```
+2. Ejecuta en modo desarrollo (se conecta por proxy al backend local Java + Spring):
+   ```
+   npm start
+   ```
+   Accede en http://localhost:4200
 
-- Desarrollo: UI completa, conecta al backend Java Spring Boot en http://localhost:8080 vía proxy (todas las requests a `/api` son enviadas al backend; las URLs se construyen con `apiUrl(path)`).
-- Producción: `ng build` genera el build y se conecta al backend de ejemplo (`https://api-rrhh.techforb.com`).
-- El modo mock (sin backend) puede activarse poniendo `useMock: true` en `src/environments/environment.ts`. En este modo los datos son locales y no se requiere backend ni proxy.
+3. **Configuraciones de entorno:**
+   - En desarrollo, consulta al backend en http://localhost:8080 (configurado en proxy.conf.json, NO modifiques apiBaseUrl: el proxy manda /api a backend).
+   - Para modo "mock" (sin backend):
+     - Cambia `useMock` a `true` en `src/environments/environment.ts`. Todos los datos serán ficticios, pero la app funciona igual.
+   - En producción, el build (ng build) usa el backend de ejemplo `https://api-rrhh.techforb.com`.
 
-## Estructura de carpetas
+## Estructura de carpetas principal
 
-- `src/app/core/auth/` — Inicio/cierre de sesión, guard y pantalla de login (protegido todo salvo `/login` y formulario público).
-- `src/app/core/layout/` — Encabezado, navegación superior y layout principal de la app.
-- `src/app/features/` — Un módulo por funcionalidad. Ejemplo: `colaboradores/` para gestión de empleados con listado, alta, edición y ficha.
-- `src/app/shared/` — Componentes, pipes y modelos reutilizables, para tablas, filtros, estados de carga, etc.
+- **src/app/core/**: Autenticación, layout y HTTP común
+- **src/app/features/**: Un módulo por funcionalidad (ej. inicio, colaboradores)
+- **src/app/shared/**: Componentes visuales y modelos compartidos
+- **src/app/environments/**: Configuración por entorno
+- **src/styles.scss**: Variables de marca y estilos base
 
-## Variables de entorno y configuración
+## Scripts principales
 
-- `src/environments/environment.ts`
-  - `apiBaseUrl`: (string) Prefijo de URL de la API. En desarrollo es vacío (`''`) porque el proxy lo resuelve.
-  - `useMock`: (boolean) Para usar datos mock sin backend.
-- Proxy de desarrollo en `proxy.conf.json` (desarrollo, no producción):
-  - Todos los requests a `/api` van a `http://localhost:8080`.
+- `npm start` — Corre en desarrollo en localhost:4200
+- `npm run build` — Compila para producción en dist/
 
-## Comandos útiles
+## Aclaraciones
 
-- `npm install` — Instala dependencias
-- `npm start` — Levanta el servidor de desarrollo (`ng serve`)
-- `npm run build` — Build de producción
+- **El package.json es fijo:** No agregues ni quites dependencias. Solo Angular 21 y RxJS.
+- **Para compilar en prod:** angular.json reemplaza `environment.ts` por `environment.prod.ts` automáticamente.
+- **backend:** No modifiques proxy.conf.json. El backend debe estar en http://localhost:8080, exportando la API con los paths de contrato (`/api/auth/login`, `/api/colaboradores`, ...).
+- **Login/mock:** El acceso de ejemplo es cualquier email @techforb.com + clave, mientras useMock esté en true.
+- **Frontend:** NO tiene acceso directo a base de datos ni scripts server, solo consume el backend vía HTTP.
 
-## Convenciones
+## Estructura de módulos y navegación actual
 
-- Angular 21, standalone, sin zone.js, rutas como loadChildren/lazy loading, tipado estricto.
-- Estado/reactividad con signals, imports relativos.
-- Todos los componentes y páginas usan las variables y reglas de estilo en `src/styles.scss`. No usar Angular Material, Bootstrap, ni UI externas.
+- **Inicio** (pantalla principal, panel, KPIs)
+- **Colaboradores** (listado, alta, ficha, edición)
 
-## Módulos implementados
+Las funcionalidades "Sueldos y Bonos", "Solicitudes", "Comunicados" y "Horas Extras" estarán disponibles en futuras versiones.
 
-- **Inicio:** Tablero principal con indicadores e ingreso a otros módulos.
-- **Colaboradores:** Gestión de empleados (listado, alta, ficha, edición, egreso, reingreso).
-- *(El menú muestra solo los módulos ya desarrollados. Próximos módulos: Sueldos y Bonos, Solicitudes, Comunicados, Horas Extras.)*
+---
 
-Para más detalles, ver los archivos en cada carpeta.
+Para dudas o problemas, revisar los comentarios en cada archivo principal, los estados de carga y error, y la capa de autenticación (core/auth/).
