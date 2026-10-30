@@ -1,0 +1,145 @@
+<div class="colab-form-location">Gestión de Empleados / Alta de colaborador</div>
+<header class="colab-form-header">
+  <div>
+    <h1>Nuevo colaborador</h1>
+    <p class="desc">Completá los datos para registrar a la persona y crear su ficha individual.</p>
+  </div>
+  <div class="form-note">Los campos marcados con <span class="asterisco">*</span> son obligatorios</div>
+</header>
+<form class="colab-form-main" (ngSubmit)="guardarColaborador()" [formGroup]="form" novalidate>
+  <section class="colab-section">
+    <div class="colab-section-header">
+      <span class="icon icon-person"></span>
+      <div>
+        <h2>Datos personales</h2>
+        <p class="section-desc">Información de identificación y contacto.</p>
+      </div>
+    </div>
+    <div class="colab-grid">
+      <!-- Nombre -->
+      <label for="nombre">Nombre <span class="asterisco">*</span></label>
+      <input formControlName="nombre" id="nombre" required type="text" placeholder="Ingresá el nombre" />
+      <!-- Apellido -->
+      <label for="apellido">Apellido <span class="asterisco">*</span></label>
+      <input formControlName="apellido" id="apellido" required type="text" placeholder="Ingresá el apellido" />
+      <!-- Fecha nacimiento -->
+      <label for="fechaNacimiento">Fecha de nacimiento <span class="asterisco">*</span></label>
+      <input formControlName="fechaNacimiento" id="fechaNacimiento" required type="date" />
+      <!-- País residencia -->
+      <label for="paisResidencia">País de residencia <span class="asterisco">*</span></label>
+      <select formControlName="paisResidencia" id="paisResidencia" required>
+        <option value="">Seleccioná un país</option>
+        <option>Argentina</option><option>México</option><option>Uruguay</option><option>Chile</option><option>Colombia</option><option>Brasil</option><option>Perú</option><option>Otro país de Latinoamérica</option>
+      </select>
+      <!-- Documento tipo -->
+      <label for="documentoTipo">Documento de identidad</label>
+      <input formControlName="documentoTipo" id="documentoTipo" type="text" placeholder="Tipo de documento" />
+      <!-- Documento número -->
+      <label for="documentoNumero">Número de documento</label>
+      <input formControlName="documentoNumero" id="documentoNumero" type="text" placeholder="Número de documento" />
+      <!-- Correo personal -->
+      <label for="correoPersonal">Correo personal <span class="asterisco">*</span></label>
+      <input formControlName="correoPersonal" id="correoPersonal" required type="email" placeholder="nombre@correo.com" />
+    </div>
+  </section>
+
+  <section class="colab-section">
+    <div class="colab-section-header">
+      <span class="icon icon-laboral"></span>
+      <div>
+        <h2>Datos laborales</h2>
+        <p class="section-desc">Condiciones de ingreso y posición dentro de TECHFORB.</p>
+      </div>
+    </div>
+    <div class="colab-grid">
+      <!-- Fecha ingreso -->
+      <label for="fechaIngreso">Fecha de ingreso <span class="asterisco">*</span></label>
+      <input formControlName="fechaIngreso" id="fechaIngreso" required type="date" />
+      <!-- Categoría -->
+      <label for="categoria">Categoría interna <span class="asterisco">*</span></label>
+      <select formControlName="categoria" id="categoria" required>
+        <option value="">Seleccioná una categoría</option>
+        <option>Pasante</option>
+        <option>Permanente</option>
+      </select>
+      <!-- Dedicación -->
+      <label for="dedicacion">Dedicación <span class="asterisco">*</span></label>
+      <select formControlName="dedicacion" id="dedicacion" required>
+        <option value="">Seleccioná una dedicación</option>
+        <option>Full time</option>
+        <option>Part time</option>
+      </select>
+      <!-- Modalidad trabajo -->
+      <label for="modalidadTrabajo">Modalidad de trabajo <span class="asterisco">*</span></label>
+      <select formControlName="modalidadTrabajo" id="modalidadTrabajo" required>
+        <option value="">Seleccioná una modalidad</option>
+        <option>Remota</option>
+        <option>Híbrida</option>
+        <option>Presencial</option>
+      </select>
+      <!-- Rol laboral -->
+      <label for="rolLaboral">Rol laboral <span class="asterisco">*</span></label>
+      <input formControlName="rolLaboral" id="rolLaboral" required type="text" placeholder="Ingresá el rol laboral" />
+    </div>
+    <div class="info-boxes">
+      <div class="info-box">
+        <span class="icon-card"></span>
+        <div>
+          <div class="ib-title">Legajo automático</div>
+          <div class="ib-desc">Se generará al guardar; no se puede editar.</div>
+        </div>
+      </div>
+      <div class="info-box">
+        <span class="icon-status"></span>
+        <div>
+          <div class="ib-title">Estado inicial: <span class="badge-status badge-status--activo">Activo</span></div>
+          <div class="ib-desc">Se aplicará al registrar al colaborador.</div>
+        </div>
+      </div>
+    </div>
+    <div class="mg-hint">
+      <span class="icon-info"></span>
+      <span>¿Ya trabajó en TECHFORB? Utilizá el proceso de reingreso para conservar su legajo original.</span>
+    </div>
+  </section>
+
+  <div class="colab-card-grid">
+    <section class="colab-section">
+      <div class="colab-section-header">
+        <span class="icon icon-corp"></span>
+        <div>
+          <h2>Datos corporativos</h2>
+          <p class="section-desc">Opcionales; podés completarlos después.</p>
+        </div>
+      </div>
+      <div class="colab-grid-single">
+        <label for="emailCorporativo">Correo TECHFORB</label>
+        <input formControlName="emailCorporativo" id="emailCorporativo" type="email" placeholder="nombre@techforb.com" />
+      </div>
+      <p class="card-hint">El alta del colaborador no crea una cuenta de acceso.</p>
+    </section>
+    <section class="colab-section">
+      <div class="colab-section-header">
+        <span class="icon icon-assign"></span>
+        <div>
+          <h2>Asignación inicial</h2>
+          <p class="section-desc">Opcional; también podés agregarla después.</p>
+        </div>
+      </div>
+      <div class="colab-grid">
+        <label for="cliente">Cliente</label>
+        <input formControlName="cliente" id="cliente" type="text" />
+        <label for="proyecto">Proyecto</label>
+        <input formControlName="proyecto" id="proyecto" type="text" />
+        <label for="rolProyecto">Rol dentro del proyecto</label>
+        <input formControlName="rolProyecto" id="rolProyecto" type="text" />
+        <label for="inicioProyecto">Fecha de inicio</label>
+        <input formControlName="inicioProyecto" id="inicioProyecto" type="date" />
+      </div>
+    </section>
+  </div>
+  <footer class="form-actions">
+    <button type="button" class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
+    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Guardar colaborador</button>
+  </footer>
+</form>
