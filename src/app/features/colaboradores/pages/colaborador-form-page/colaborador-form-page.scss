@@ -1,0 +1,84 @@
+.colab-form-location {
+  color: var(--text-secondary);
+  font-size: 13px;
+  margin-bottom: 13px;
+  margin-top: 7px;
+}
+.colab-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+.colab-form-header h1 {
+  color: var(--text-primary); font-size: 26px; font-weight: 650; letter-spacing: -0.025em; margin: 0;
+}
+.desc {
+  margin: 6px 0 0; color: var(--text-secondary); font-size: 13px;
+}
+.form-note {
+  color: var(--text-secondary); font-size: 13px; white-space: nowrap;
+}
+.asterisco {
+  color: var(--error); font-weight: 700;
+}
+.colab-form-main {
+  display: flex; flex-direction: column; gap: 24px;
+}
+.colab-section {
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+.colab-section-header {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 15px;
+}
+.icon-person, .icon-laboral, .icon-corp, .icon-assign {
+  width: 36px; height: 36px; border-radius: 8px; background: var(--soft-background); color: var(--accent); display: grid; place-items: center;
+}
+.section-desc {
+  color: var(--text-secondary); font-size: 13px;
+}
+.colab-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px 24px;
+}
+.colab-grid label {
+  font-weight: 550;
+}
+.colab-card-grid {
+  display: grid; grid-template-columns: repeat(2,1fr); gap: 24px; align-items: start;
+}
+.colab-grid-single { display: flex; flex-direction: column; gap: 20px; }
+.card-hint {
+  margin: 20px 0 0; padding: 12px 16px; background: var(--soft-background); border-radius: 8px; color: var(--text-secondary); font-size: 13px;
+}
+.info-boxes {
+  display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; margin-top: 24px;
+}
+.info-box {
+  display: flex; align-items: center; gap: 12px; padding: 16px; background: var(--soft-background); border: 1px solid var(--border); border-radius: 12px;
+}
+.icon-card, .icon-status, .icon-info {
+  width: 20px; height: 20px; color: var(--accent); display: grid; place-items: center;
+}
+.ib-title {
+  font-weight: 600;
+}
+.ib-desc {
+  color: var(--text-secondary); font-size: 13px;
+}
+.mg-hint {
+  display: flex; align-items: flex-start; gap: 10px; margin-top: 16px; padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; color: var(--text-secondary); font-size: 13px;
+}
+.form-actions {
+  display: flex; align-items: center; justify-content: flex-end; gap: 12px; padding: 8px 0 0;
+}
+.btn.btn-secondary {
+  min-width: 116px; min-height: 44px; padding: 11px 18px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--soft-background); color: var(--primary); font-weight: 600;
+}
+.btn.btn-primary {
+  min-width: 198px; min-height: 44px; padding: 11px 18px; border: 1px solid var(--primary); border-radius: var(--radius-sm); background: var(--primary); color: #fff; font-weight: 600;
+}

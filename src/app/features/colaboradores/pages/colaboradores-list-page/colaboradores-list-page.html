@@ -1,0 +1,41 @@
+<section class="colaboradores-location">Colaboradores / Listado</section>
+<header class="colaboradores-header">
+  <div class="colaboradores-header-start">
+    <h1 class="colaboradores-title">Gestión de Empleados</h1>
+    <div class="colaboradores-indicators">
+      <span><strong class="success">{{ activosCount }}</strong> colaboradores activos</span>
+      <span class="dot"></span>
+      <span><strong>{{ totalCount }}</strong> colaboradores registrados</span>
+    </div>
+  </div>
+  <a routerLink="nuevo" class="btn btn-primary">+ Nuevo colaborador</a>
+</header>
+<aside *ngIf="showFilters" class="colaboradores-filters">
+  <app-filter-bar
+    [busqueda]="busqueda"
+    [categoria]="categoria"
+    [cliente]="cliente"
+    [proyecto]="proyecto"
+    [estado]="estado"
+    (filtroChange)="aplicarFiltros($event)"
+    (limpiar)="limpiarFiltros()">
+  </app-filter-bar>
+</aside>
+<section class="colaboradores-list-section">
+  <div class="colaboradores-table-header">
+    <h2>Listado de colaboradores <span class="table-count">{{ colaboradores?.length || 0 }}</span></h2>
+    @if (sinFiltros && !busqueda) { <span class="legend-all">Todos los registros</span> }
+  </div>
+  @switch(state.status)
+    @case('loading') { <app-loading-state message="Cargando colaboradores..." /> }
+    @case('error') { <app-error-alert [error]="state.error" /> }
+    @case('empty') { <app-empty-state message="No hay colaboradores para mostrar." /> }
+    @case('ready') {
+      @if (colaboradores.length > 0) {
+        <app-data-table [columns]="columns" [data]="colaboradores" [trackBy]="trackById" (view)="abrirFicha($event)" (edit)="editarColaborador($event)">
+        </app-data-table>
+      } else {
+        <app-empty-state message="No se encontraron colaboradores con los criterios seleccionados." />
+      }
+    }
+</section>
