@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { combineLatest, switchMap } from 'rxjs';
-import { ApiProblemError, errorMessage } from '../../../../core/http/api-error';
+import { of, switchMap } from 'rxjs';
+import { ApiProblemError } from '../../../../core/http/api-error';
 import { EmptyState } from '../../../../shared/components/empty-state';
 import { ErrorAlert } from '../../../../shared/components/error-alert';
 import { LoadingState } from '../../../../shared/components/loading-state';
@@ -36,9 +36,23 @@ export class CatalogPage {
   protected readonly clientsState = toSignal(toObservable(this.reloadCount).pipe(switchMap(() => toLoadState(this.service.listClients({ page: 0, size: 100 })))), { initialValue: { status: 'loading' } as LoadState<Page<ClientDto>> });
   protected readonly filteredClients = computed(() => this.clientsState().status === 'ready' ? (this.clientsState() as { status: 'ready'; data: Page<ClientDto> }).data.items.filter(c => c.name.toLowerCase().includes(this.search().toLowerCase())) : []);
   protected readonly selectedClient = computed(() => this.filteredClients().find(c => c.id === this.selectedClientId()) ?? null);
-  protected readonly countriesState = toSignal(toObservable(this.request).pipe(switchMap(({ clientId }) => clientId ? toLoadState(this.service.listClientCountries(clientId, { page: 0, size: 100 })) : toLoadState(this.service.listClients({ page: 0, size: 1 }).pipe(switchMap(() => this.service.listClientCountries('', { page: 0, size: 1 }))))), { initialValue: { status: 'loading' } as LoadState<Page<ClientCountryDto>> });
+  protected readonly countriesState = toSignal(
+    toObservable(this.request).pipe(
+      switchMap(({ clientId }) => clientId
+        ? toLoadState(this.service.listClientCountries(clientId, { page: 0, size: 100 }))
+        : of<LoadState<Page<ClientCountryDto>>>({ status: 'empty' })),
+    ),
+    { initialValue: { status: 'loading' } as LoadState<Page<ClientCountryDto>> },
+  );
   protected readonly projectsState = toSignal(toObservable(this.request).pipe(switchMap(({ clientId }) => clientId ? toLoadState(this.service.listProjects({ clientId, page: 0, size: 100 })) : toLoadState(this.service.listProjects({ clientId: '', page: 0, size: 1 })))), { initialValue: { status: 'loading' } as LoadState<Page<ProjectDto>> });
-  protected readonly contactsState = toSignal(toObservable(this.request).pipe(switchMap(({ projectId }) => projectId ? toLoadState(this.service.listProjectContacts(projectId, { page: 0, size: 100 })) : toLoadState(this.service.listProjects({ page: 0, size: 1 }).pipe(switchMap(() => this.service.listProjectContacts('', { page: 0, size: 1 }))))), { initialValue: { status: 'loading' } as LoadState<Page<ProjectContactDto>> });
+  protected readonly contactsState = toSignal(
+    toObservable(this.request).pipe(
+      switchMap(({ projectId }) => projectId
+        ? toLoadState(this.service.listProjectContacts(projectId, { page: 0, size: 100 }))
+        : of<LoadState<Page<ProjectContactDto>>>({ status: 'empty' })),
+    ),
+    { initialValue: { status: 'loading' } as LoadState<Page<ProjectContactDto>> },
+  );
   protected selectClient(id: string): void { this.selectedClientId.set(id); this.selectedProjectId.set(null); this.action.set(null); }
   protected selectProject(id: string): void { this.selectedProjectId.set(id); }
   protected reload(): void { this.reloadCount.update(n => n + 1); }
