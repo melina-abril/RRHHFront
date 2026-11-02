@@ -7,4 +7,3 @@ out-tsc/
 !.vscode/extensions.json
 *.log
 .DS_Store
-.firebase/

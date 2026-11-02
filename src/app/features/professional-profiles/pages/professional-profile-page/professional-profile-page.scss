@@ -1,0 +1,131 @@
+.profile-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-md);
+  color: var(--text-primary);
+}
+
+.profile-header {
+  display: grid;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.profile-breadcrumb {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+.profile-breadcrumb span {
+  padding: 0 var(--space-sm);
+  color: var(--text-secondary);
+}
+
+.profile-breadcrumb strong {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.profile-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+.profile-heading h1 {
+  margin: 0;
+  font-size: 1.625rem;
+  letter-spacing: -0.025em;
+}
+
+.profile-tabs {
+  display: flex;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--border);
+}
+
+.profile-tabs button {
+  padding: var(--space-sm) 0;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-weight: 550;
+}
+
+.profile-tabs .profile-tabs__active {
+  border-bottom-color: var(--accent);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.profile-grid {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+}
+
+.profile-grid > .profile-card {
+  flex: 1 1 35rem;
+}
+
+.profile-side {
+  flex: 1 1 22rem;
+  display: grid;
+  gap: var(--space-lg);
+  min-width: 0;
+}
+
+.profile-card {
+  min-width: 0;
+  padding: var(--space-lg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.profile-card h2 {
+  margin: 0;
+  color: var(--primary);
+  font-size: 1.25rem;
+}
+
+.experience-note {
+  display: grid;
+  gap: var(--space-xs);
+  margin-top: var(--space-md);
+  padding: var(--space-md);
+  border-radius: 12px;
+  background: var(--soft-background);
+}
+
+.experience-note span {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+.certification-note {
+  margin: var(--space-md) calc(-1 * var(--space-lg)) calc(-1 * var(--space-lg));
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: 0 0 16px 16px;
+  background: var(--background);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+@media (max-width: 600px) {
+  .profile-page {
+    padding: 0;
+  }
+
+  .profile-tabs {
+    gap: var(--space-md);
+  }
+}

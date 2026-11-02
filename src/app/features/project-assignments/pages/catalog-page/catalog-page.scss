@@ -1,0 +1,24 @@
+.tabs { display: flex; gap: var(--space-md); overflow-x: auto; border-bottom: 1px solid var(--color-border); margin-bottom: var(--space-lg); }
+.tabs a { padding: var(--space-sm) var(--space-md); white-space: nowrap; text-decoration: none; color: var(--color-text-muted); }
+.tabs .tabs__active { color: var(--color-primary); border-bottom: 2px solid var(--color-primary); font-weight: 600; }
+.catalog { display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--space-lg); }
+.catalog__clients { flex: 1 1 17rem; display: grid; gap: var(--space-md); }
+.catalog__clients header small, .section-head small, .detail-head small { color: var(--color-text-muted); }
+.catalog__clients h2, .catalog__detail h2, .catalog__detail h3 { margin: 0; color: var(--color-primary); }
+.catalog__detail { flex: 2 1 34rem; min-width: 0; padding: 0; overflow: hidden; }
+.client-list { display: grid; gap: var(--space-xs); }
+.client-item { display: grid; gap: var(--space-xs); text-align: left; padding: var(--space-sm); border: 1px solid transparent; border-radius: var(--radius); background: var(--color-surface); color: var(--color-text); cursor: pointer; }
+.client-item small { color: var(--color-text-muted); }
+.client-item--selected { background: var(--active-item); border-color: var(--color-primary); }
+.detail-head { display: flex; align-items: center; gap: var(--space-md); padding: var(--space-lg); background: var(--soft-background); }
+.monogram { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: var(--radius); background: var(--active-item); color: var(--color-primary); font-weight: 700; }
+.detail-content { display: grid; gap: var(--space-lg); padding: var(--space-lg); }
+.section-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-sm); margin-bottom: var(--space-md); }
+.chips { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
+.chip { padding: var(--space-xs) var(--space-sm); border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-background); }
+.text-button { background: none; border: 0; color: var(--color-primary); cursor: pointer; font-weight: 600; }
+.hint { padding: var(--space-sm); background: var(--color-background); color: var(--color-text-muted); border-radius: var(--radius); }
+.notice { color: var(--color-success); }
+.editor { margin-top: var(--space-lg); }
+.editor h2 { margin-top: 0; }
+.editor .form-actions { grid-column: 1 / -1; }
