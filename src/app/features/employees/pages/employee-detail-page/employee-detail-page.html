@@ -1,0 +1,70 @@
+<header class="employee-detail__breadcrumbs">
+  <span>Gestión de Empleados</span>
+  <span class="employee-detail__divider">/</span>
+  <span class="employee-detail__strong">Ficha individual</span>
+  <button type="button" class="button button--secondary employee-detail__back" routerLink=".." aria-label="Volver al listado">← Volver al listado</button>
+</header>
+
+@let state = employeeState();
+@switch (state.status) {
+  @case ('loading') {
+    <app-loading-state message="Cargando colaborador…" />
+  }
+  @case ('error') {
+    <app-error-alert [message]="state.message" />
+  }
+  @case ('ready') {
+    @let employee = state.data;
+    <section class="employee-detail__header card">
+      <div class="employee-detail__avatar">{{ employee.firstName[0] + employee.lastName[0] }}</div>
+      <div class="employee-detail__main">
+        <div class="employee-detail__title-area">
+          <h1 class="employee-detail__title">{{ employee.firstName }} {{ employee.lastName }}</h1>
+          <app-status-badge [label]="employee.category === 'PERMANENTE' ? 'Permanente' : 'Pasante'" tone="info" />
+          <app-status-badge [label]="statusInfo[employee.status].label" [tone]="statusInfo[employee.status].tone" />
+        </div>
+        <div class="employee-detail__meta">Legajo <span>{{ employee.legajo }}</span> <span class="employee-detail__note">· No modificable</span> · {{ employee.position }}</div>
+        <div class="employee-detail__assign">
+          <span *ngIf="employee.client">{{ employee.client }}</span>
+          <span *ngIf="employee.client"> <span class="employee-detail__note">·</span> </span>
+          <span *ngIf="employee.project">{{ employee.project }}</span>
+        </div>
+      </div>
+      <a class="button employee-detail__edit" href="#editar">Editar información</a>
+    </section>
+    <nav class="employee-detail__tabs" role="tablist" aria-label="Secciones de la ficha">
+      @for (tab of tabs; track tab.key) {
+        <button type="button" role="tab" [attr.aria-selected]="showTab() === tab.key" class="employee-detail__tab" (click)="show(tab.key)">{{ tab.label }}</button>
+      }
+    </nav>
+    <main role="tabpanel" class="employee-detail__section employee-detail__section--personal" *ngIf="showTab() === 'personal'">
+      <div class="employee-detail__section-header"><h2>Datos personales</h2><p>Información de identificación y contacto de {{ employee.firstName }} {{ employee.lastName }}.</p></div>
+      <div class="employee-detail__personal-sections">
+        <section>
+          <div class="employee-detail__section-title">Identificación</div>
+          <div class="employee-detail__section-list">
+            <div><span class="employee-detail__field-label">Documento de identidad</span><span>{{ employee.documentType }} {{ employee.documentNumber }}</span></div>
+            <div><span class="employee-detail__field-label">Fecha de nacimiento</span><span>{{ employee.birthDate | date: 'dd/MM/yyyy' }}</span></div>
+            <div><span class="employee-detail__field-label">Nacionalidad</span><span>{{ employee.nationality }}</span></div>
+            <div><span class="employee-detail__field-label">País de residencia</span><span>{{ employee.residenceCountry }}</span></div>
+            <div><span class="employee-detail__field-label">Número de legajo</span><span>{{ employee.legajo }} <span class="employee-detail__note">· No modificable</span></span></div>
+          </div>
+        </section>
+        <section>
+          <div class="employee-detail__section-title">Contacto y domicilio</div>
+          <div class="employee-detail__section-list">
+            <div><span class="employee-detail__field-label">Correo electrónico personal</span><span><a href="mailto:{{ employee.email }}">{{ employee.email }}</a></span></div>
+            <div><span class="employee-detail__field-label">Teléfono</span><span>{{ employee.phone }}</span></div>
+            <div><span class="employee-detail__field-label">Domicilio</span><span>{{ employee.address }}</span></div>
+            <div><span class="employee-detail__field-label">Contacto de emergencia</span><span>{{ employee.emergencyContact }}</span></div>
+            <div><span class="employee-detail__field-label">Tel. de emergencia</span><span>{{ employee.emergencyPhone }}</span></div>
+          </div>
+        </section>
+      </div>
+      <div class="employee-detail__update-info"><svg width="14" height="14" style="margin-right:4px;vertical-align:middle;fill:none;stroke:#7C3CC2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>Última actualización: {{ employee.updatedAt | date: 'dd/MM/yyyy' }}</div>
+    </main>
+  }
+  @case ('empty') {
+    <app-error-alert message="No se encontró el colaborador." />
+  }
+}
