@@ -1,0 +1,127 @@
+<form class="employee-form card" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+  <header class="employee-form__header">
+    <div class="employee-form__breadcrumb">Gestión de Empleados / Alta de colaborador</div>
+    <div class="employee-form__heading">
+      <h1>Nuevo colaborador</h1>
+      <p>Completá los datos para registrar a la persona y crear su ficha individual.</p>
+    </div>
+    <div class="employee-form__required">Los campos marcados con <span class="employee-form__asterisk">*</span> son obligatorios</div>
+  </header>
+
+  <section class="employee-form-section">
+    <div class="employee-form-section__heading">
+      <h2>Datos personales</h2>
+      <p>Información de identificación y contacto.</p>
+    </div>
+    <div class="employee-form-grid">
+      <div class="form-field">
+        <label for="firstName">Nombre <span class="employee-form__asterisk">*</span></label>
+        <input id="firstName" type="text" formControlName="firstName" autocomplete="given-name" [attr.aria-invalid]="errorFor('firstName') ? 'true' : null" aria-describedby="firstName-error" />
+        @if (errorFor('firstName')) {
+          <span id="firstName-error" class="form-field__error">{{ errorFor('firstName') }}</span>
+        }
+      </div>
+      <div class="form-field">
+        <label for="lastName">Apellido <span class="employee-form__asterisk">*</span></label>
+        <input id="lastName" type="text" formControlName="lastName" autocomplete="family-name" [attr.aria-invalid]="errorFor('lastName') ? 'true' : null" aria-describedby="lastName-error" />
+        @if (errorFor('lastName')) {
+          <span id="lastName-error" class="form-field__error">{{ errorFor('lastName') }}</span>
+        }
+      </div>
+      <div class="form-field">
+        <label for="birthDate">Fecha de nacimiento <span class="employee-form__asterisk">*</span></label>
+        <input id="birthDate" type="date" formControlName="birthDate" [attr.aria-invalid]="errorFor('birthDate') ? 'true' : null" aria-describedby="birthDate-error" />
+        @if (errorFor('birthDate')) {
+          <span id="birthDate-error" class="form-field__error">{{ errorFor('birthDate') }}</span>
+        }
+      </div>
+      <div class="form-field">
+        <label for="documentType">Tipo de documento <span class="employee-form__asterisk">*</span></label>
+        <input id="documentType" type="text" formControlName="documentType" [attr.aria-invalid]="errorFor('documentType') ? 'true' : null" aria-describedby="documentType-error" />
+        @if (errorFor('documentType')) {
+          <span id="documentType-error" class="form-field__error">{{ errorFor('documentType') }}</span>
+        }
+      </div>
+      <div class="form-field">
+        <label for="documentNumber">Número de documento <span class="employee-form__asterisk">*</span></label>
+        <input id="documentNumber" type="text" formControlName="documentNumber" [attr.aria-invalid]="errorFor('documentNumber') ? 'true' : null" aria-describedby="documentNumber-error" />
+        @if (errorFor('documentNumber')) {
+          <span id="documentNumber-error" class="form-field__error">{{ errorFor('documentNumber') }}</span>
+        }
+      </div>
+      <div class="form-field">
+        <label for="email">Correo personal <span class="employee-form__asterisk">*</span></label>
+        <input id="email" type="email" formControlName="email" autocomplete="email" [attr.aria-invalid]="errorFor('email') ? 'true' : null" aria-describedby="email-error" />
+        @if (errorFor('email')) {
+          <span id="email-error" class="form-field__error">{{ errorFor('email') }}</span>
+        }
+      </div>
+      <div class="form-field">
+        <label for="phone">Teléfono</label>
+        <input id="phone" type="tel" formControlName="phone" autocomplete="tel" />
+      </div>
+    </div>
+    <div class="employee-form-section__info-box">
+      Información de identificación y contacto
+    </div>
+  </section>
+
+  <section class="employee-form-section">
+    <div class="employee-form-section__heading">
+      <h2>Datos laborales</h2>
+      <p>Condiciones de ingreso y posición dentro de TECHFORB.</p>
+    </div>
+    <div class="employee-form-grid">
+      <div class="form-field">
+        <label for="hireDate">Fecha de ingreso <span class="employee-form__asterisk">*</span></label>
+        <input id="hireDate" type="date" formControlName="hireDate" [attr.aria-invalid]="errorFor('hireDate') ? 'true' : null" aria-describedby="hireDate-error" />
+        @if (errorFor('hireDate')) {
+          <span id="hireDate-error" class="form-field__error">{{ errorFor('hireDate') }}</span>
+        }
+      </div>
+      <div class="form-field">
+        <label for="departmentId">Categoría interna <span class="employee-form__asterisk">*</span></label>
+        <input id="departmentId" type="text" formControlName="departmentId" [attr.aria-invalid]="errorFor('departmentId') ? 'true' : null" aria-describedby="departmentId-error" />
+        @if (errorFor('departmentId')) {
+          <span id="departmentId-error" class="form-field__error">{{ errorFor('departmentId') }}</span>
+        }
+      </div>
+      <div class="form-field">
+        <label for="positionId">Puesto <span class="employee-form__asterisk">*</span></label>
+        <input id="positionId" type="text" formControlName="positionId" [attr.aria-invalid]="errorFor('positionId') ? 'true' : null" aria-describedby="positionId-error" />
+        @if (errorFor('positionId')) {
+          <span id="positionId-error" class="form-field__error">{{ errorFor('positionId') }}</span>
+        }
+      </div>
+      <div class="form-field">
+        <label for="managerId">Líder o referente</label>
+        <input id="managerId" type="text" formControlName="managerId" />
+      </div>
+    </div>
+    <div class="employee-form-section__info-cards">
+      <div class="employee-form-section__card">
+        <div class="card-title">Legajo automático</div>
+        <div class="card-desc">Se generará al guardar; no se puede editar.</div>
+      </div>
+      <div class="employee-form-section__card">
+        <div class="card-title">Estado inicial: <span class="card-badge">Activo</span></div>
+        <div class="card-desc">Se aplicará al registrar al colaborador.</div>
+      </div>
+    </div>
+    <div class="employee-form-section__info-alert">
+      <span class="icon-info" aria-hidden="true"></span>
+      ¿Ya trabajó en TECHFORB? Utilizá el proceso de reingreso para conservar su legajo original.
+    </div>
+  </section>
+
+  <!-- Los datos corporativos y asignación inicial se mostrarían en una segunda versión -->
+
+  @if (submitError(); as message) {
+    <app-error-alert class="employee-form__error" [message]="message" />
+  }
+
+  <footer class="form-actions">
+    <a routerLink=".." class="button button--secondary">Cancelar</a>
+    <button type="submit" class="button" [disabled]="saving()">{{ saving() ? 'Guardando…' : (isEdit() ? 'Guardar cambios' : 'Guardar colaborador') }}</button>
+  </footer>
+</form>
