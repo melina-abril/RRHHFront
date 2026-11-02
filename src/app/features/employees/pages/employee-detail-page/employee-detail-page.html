@@ -1,0 +1,43 @@
+<div class="employee-detail__location-bar">Gestión de Empleados / Ficha individual</div>
+<button class="button button--secondary employee-detail__back" routerLink="..">Volver al listado</button>
+@let state = employeeState();
+@switch (state.status) {
+  @case ('loading') {
+    <app-loading-state message="Cargando ficha de colaborador…" />
+  }
+  @case ('error') {
+    <app-error-alert [message]="state.message" />
+  }
+  @case ('empty') {
+    <app-empty-state message="No se encontró el colaborador." />
+  }
+  @case ('ready') {
+    @let employee = state.data;
+    <app-page-header [title]="employee.fullName" [description]="'Legajo ' + employee.employeeNumber + ' · ' + (statusInfo[employee.status].label)"></app-page-header>
+    <div class="employee-detail-section card">
+      <div class="employee-detail-section__heading">
+        <h2>Datos personales</h2>
+        <p class="employee-detail-section__desc">Información de identificación y contacto de {{ employee.fullName }}.</p>
+      </div>
+      <div class="employee-detail-groups">
+        <section class="employee-detail-group">
+          <h3>Identificación</h3>
+          <ul>
+            <li><span>Número de legajo:</span> {{ employee.employeeNumber }} <span class="employee-detail__note">No modificable</span></li>
+            <li><span>Tipo de documento:</span> {{ employee.documentType }}</li>
+            <li><span>Número de documento:</span> {{ employee.documentNumber }}</li>
+            <li><span>Fecha de nacimiento:</span> {{ employee.birthDate | date: 'dd/MM/yyyy' }}</li>
+          </ul>
+        </section>
+        <section class="employee-detail-group">
+          <h3>Contacto y domicilio</h3>
+          <ul>
+            <li><span>Correo personal:</span> {{ employee.email }}</li>
+            <li><span>Teléfono:</span> {{ employee.phone }}</li>
+          </ul>
+        </section>
+      </div>
+      <div class="employee-detail-section__footer">Última actualización: {{ employee.updatedAt | date: 'dd/MM/yyyy' }}</div>
+    </div>
+  }
+}
