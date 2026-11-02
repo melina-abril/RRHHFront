@@ -1,92 +1,86 @@
-<app-page-header
-  title="Inicio"
-  description="Bienvenido al sistema de Recursos Humanos de TECHFORB. Consultá la actividad general y accedé a los módulos desde un solo lugar."
-/>
+<section class="dashboard-welcome">
+  <span class="dashboard-label">Panel de inicio</span>
+  <h1>Inicio</h1>
+  <p class="dashboard-description">Bienvenido al sistema de Recursos Humanos de TECHFORB. Consultá la actividad general y accedé a los módulos desde un solo lugar.</p>
+</section>
 
-<section class="dashboard-summary" aria-labelledby="resumen-label">
-  <h2 id="resumen-label" class="dashboard-section-title">Resumen general</h2>
-  <div class="dashboard-summary__cards">
-    <a class="dashboard-card" routerLink="/empleados">
-      <span class="dashboard-card__icon dashboard-card__icon--violet"> <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" focusable="false" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2zm14-15a3 3 0 0 1 0 6m1 4a5 5 0 0 1 3 5"/></svg> </span>
-      <div class="dashboard-card__content">
-        <span class="dashboard-card__label">Colaboradores activos</span>
-        <strong class="dashboard-card__value">0</strong>
-        <span class="dashboard-card__hint">Sin colaboradores activos registrados</span>
-      </div>
-      <span class="dashboard-card__arrow">
-        <svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" focusable="false" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+<section aria-labelledby="general-summary" class="dashboard-summary">
+  <div class="dashboard-section-header">
+    <h2 id="general-summary">Resumen general</h2>
+  </div>
+  <div class="dashboard-summary-cards">
+    <a class="dashboard-summary-card" routerLink="/employees">
+      <span class="dashboard-summary-card__icon dashboard-summary-card__icon--people" aria-hidden="true"></span>
+      <span class="dashboard-summary-card__content">
+        <span class="dashboard-summary-card__label">Colaboradores activos</span>
+        <strong class="dashboard-summary-card__value">0</strong>
+        <span class="dashboard-summary-card__desc">Sin colaboradores activos registrados</span>
       </span>
     </a>
-    <a class="dashboard-card" routerLink="/solicitudes">
-      <span class="dashboard-card__icon dashboard-card__icon--violet"> <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" focusable="false" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8m-8 4h4"/></svg> </span>
-      <div class="dashboard-card__content">
-        <span class="dashboard-card__label">Solicitudes pendientes</span>
-        <strong class="dashboard-card__value">0</strong>
-        <span class="dashboard-card__hint">Sin solicitudes para revisar</span>
-      </div>
-      <span class="dashboard-card__arrow">
-        <svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" focusable="false" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+    <a class="dashboard-summary-card" routerLink="/solicitudes">
+      <span class="dashboard-summary-card__icon dashboard-summary-card__icon--requests" aria-hidden="true"></span>
+      <span class="dashboard-summary-card__content">
+        <span class="dashboard-summary-card__label">Solicitudes pendientes</span>
+        <strong class="dashboard-summary-card__value">0</strong>
+        <span class="dashboard-summary-card__desc">Sin solicitudes para revisar</span>
       </span>
     </a>
-    <a class="dashboard-card" routerLink="/empleados">
-      <span class="dashboard-card__icon dashboard-card__icon--violet"> <svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" focusable="false" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18m-13 5h3"/></svg> </span>
-      <div class="dashboard-card__content">
-        <span class="dashboard-card__label">Próximos eventos</span>
-        <strong class="dashboard-card__value">0</strong>
-        <span class="dashboard-card__hint">Cumpleaños y beneficios por vencer</span>
-      </div>
-      <span class="dashboard-card__arrow">
-        <svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" focusable="false" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+    <a class="dashboard-summary-card" routerLink="/employees">
+      <span class="dashboard-summary-card__icon dashboard-summary-card__icon--calendar" aria-hidden="true"></span>
+      <span class="dashboard-summary-card__content">
+        <span class="dashboard-summary-card__label">Próximos eventos</span>
+        <strong class="dashboard-summary-card__value">0</strong>
+        <span class="dashboard-summary-card__desc">Cumpleaños y beneficios por vencer</span>
       </span>
     </a>
   </div>
 </section>
 
-<section class="dashboard-quick-access" aria-labelledby="accesos-label">
-  <div class="dashboard-quick-access__header">
-    <h2 id="accesos-label" class="dashboard-section-title">Accesos rápidos</h2>
-    <p class="dashboard-quick-access__desc">Ingresá directamente al módulo que necesitás.</p>
+<section aria-labelledby="dashboard-quick-links" class="dashboard-quick-links">
+  <div class="dashboard-section-header">
+    <h2 id="dashboard-quick-links">Accesos rápidos</h2>
+    <p class="dashboard-quick-links__desc">Ingresá directamente al módulo que necesitás.</p>
   </div>
-  <div class="dashboard-quick-access__cards">
-    <a class="dashboard-card" routerLink="/empleados">
-      <span class="dashboard-card__icon dashboard-card__icon--violet"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" focusable="false" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2zm14-15a3 3 0 0 1 0 6m1 4a5 5 0 0 1 3 5"/></svg></span>
-      <span class="dashboard-card__main">
-        <strong class="dashboard-card__title">Gestión de Empleados</strong>
-        <span class="dashboard-card__subtitle">Legajos, perfiles y asignaciones</span>
+  <div class="dashboard-quick-links-cards">
+    <a class="dashboard-quick-link-card" routerLink="/employees">
+      <span class="dashboard-quick-link-card__icon dashboard-quick-link-card__icon--people" aria-hidden="true"></span>
+      <span class="dashboard-quick-link-card__content">
+        <strong class="dashboard-quick-link-card__title">Gestión de Empleados</strong>
+        <span class="dashboard-quick-link-card__desc">Legajos, perfiles y asignaciones</span>
       </span>
-      <span class="dashboard-card__arrow"><svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" focusable="false" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+      <span class="dashboard-quick-link-card__arrow" aria-hidden="true"></span>
     </a>
-    <a class="dashboard-card" routerLink="/sueldos-y-bonos">
-      <span class="dashboard-card__icon dashboard-card__icon--violet"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" focusable="false" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M5 9h1m12 6h1"/></svg></span>
-      <span class="dashboard-card__main">
-        <strong class="dashboard-card__title">Sueldos y Bonos</strong>
-        <span class="dashboard-card__subtitle">Remuneraciones y beneficios</span>
+    <a class="dashboard-quick-link-card" routerLink="/sueldos-y-bonos">
+      <span class="dashboard-quick-link-card__icon dashboard-quick-link-card__icon--money" aria-hidden="true"></span>
+      <span class="dashboard-quick-link-card__content">
+        <strong class="dashboard-quick-link-card__title">Sueldos y Bonos</strong>
+        <span class="dashboard-quick-link-card__desc">Remuneraciones y beneficios</span>
       </span>
-      <span class="dashboard-card__arrow"><svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" focusable="false" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+      <span class="dashboard-quick-link-card__arrow" aria-hidden="true"></span>
     </a>
-    <a class="dashboard-card" routerLink="/solicitudes">
-      <span class="dashboard-card__icon dashboard-card__icon--violet"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" focusable="false" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8m-8 4h4"/></svg></span>
-      <span class="dashboard-card__main">
-        <strong class="dashboard-card__title">Solicitudes</strong>
-        <span class="dashboard-card__subtitle">Revisión y seguimiento de pedidos</span>
+    <a class="dashboard-quick-link-card" routerLink="/solicitudes">
+      <span class="dashboard-quick-link-card__icon dashboard-quick-link-card__icon--requests" aria-hidden="true"></span>
+      <span class="dashboard-quick-link-card__content">
+        <strong class="dashboard-quick-link-card__title">Solicitudes</strong>
+        <span class="dashboard-quick-link-card__desc">Revisión y seguimiento de pedidos</span>
       </span>
-      <span class="dashboard-card__arrow"><svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" focusable="false" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+      <span class="dashboard-quick-link-card__arrow" aria-hidden="true"></span>
     </a>
-    <a class="dashboard-card" routerLink="/comunicados">
-      <span class="dashboard-card__icon dashboard-card__icon--violet"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" focusable="false" aria-hidden="true"><path d="M3 5h18v13H8l-5 3zM7 10h10m-10 4h7"/></svg></span>
-      <span class="dashboard-card__main">
-        <strong class="dashboard-card__title">Comunicados</strong>
-        <span class="dashboard-card__subtitle">Mensajes y registro de envíos</span>
+    <a class="dashboard-quick-link-card" routerLink="/comunicados">
+      <span class="dashboard-quick-link-card__icon dashboard-quick-link-card__icon--message" aria-hidden="true"></span>
+      <span class="dashboard-quick-link-card__content">
+        <strong class="dashboard-quick-link-card__title">Comunicados</strong>
+        <span class="dashboard-quick-link-card__desc">Mensajes y registro de envíos</span>
       </span>
-      <span class="dashboard-card__arrow"><svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" focusable="false" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+      <span class="dashboard-quick-link-card__arrow" aria-hidden="true"></span>
     </a>
-    <a class="dashboard-card" routerLink="/horas-extras">
-      <span class="dashboard-card__icon dashboard-card__icon--violet"><svg width="21" height="21" fill="none" stroke="currentColor" stroke-width="1.8" focusable="false" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
-      <span class="dashboard-card__main">
-        <strong class="dashboard-card__title">Horas Extras</strong>
-        <span class="dashboard-card__subtitle">Autorizaciones y compensaciones</span>
+    <a class="dashboard-quick-link-card" routerLink="/horas-extras">
+      <span class="dashboard-quick-link-card__icon dashboard-quick-link-card__icon--clock" aria-hidden="true"></span>
+      <span class="dashboard-quick-link-card__content">
+        <strong class="dashboard-quick-link-card__title">Horas Extras</strong>
+        <span class="dashboard-quick-link-card__desc">Autorizaciones y compensaciones</span>
       </span>
-      <span class="dashboard-card__arrow"><svg width="17" height="17" fill="none" stroke="#7C3CC2" stroke-width="1.8" focusable="false" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span>
+      <span class="dashboard-quick-link-card__arrow" aria-hidden="true"></span>
     </a>
   </div>
 </section>

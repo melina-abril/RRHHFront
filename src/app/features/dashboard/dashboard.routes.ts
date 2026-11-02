@@ -1,10 +1,12 @@
 import { Routes } from '@angular/router';
 
-/** Pantalla principal: única ruta, sin parámetros. */
+/**
+ * Rutas del módulo: solo una página inicial (dashboard-page).
+ */
 export const DASHBOARD_ROUTES: Routes = [
   {
     path: '',
     title: 'Inicio',
-    loadComponent: () => import('./pages/dashboard-page/dashboard-page').then((m) => m.DashboardPage),
-  },
+    loadComponent: () => import('./pages/dashboard-page/dashboard-page').then((m) => m.DashboardPage)
+  }
 ];

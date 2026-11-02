@@ -14,9 +14,6 @@ import {
   updateEmployeeMock
 } from './employees.mock';
 
-/**
- * Un método por servicio del backend: mock si environment.useMock, HTTP a apiUrl si no.
- */
 @Injectable({ providedIn: 'root' })
 export class EmployeesService {
   private readonly http = inject(HttpClient);

@@ -1,0 +1,169 @@
+// Estilos propios de la página de login de TECHFORB RH (no toca el formulario de core/session/login-page).
+.login-root {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--color-background) 0%, #eee5f7 100%);
+  font-family: var(--font-family);
+  font-size: 14px;
+  color: var(--color-text);
+  box-sizing: border-box;
+  padding: 48px 0;
+}
+
+.login-main {
+  width: 370px;
+  min-height: 560px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 48px;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+  color: #fff;
+  border-radius: 20px 0 0 20px;
+}
+
+.login-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.login-brand__icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.18);
+}
+.login-brand__title {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+.login-brand__sub {
+  font-weight: 400;
+  opacity: .8;
+}
+
+.login-desc {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.login-desc__icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 16px;
+  background: rgba(255,255,255,0.11);
+}
+.login-desc h2 {
+  margin: 0;
+  color: #fff;
+  font-size: 26px;
+  font-weight: 650;
+  letter-spacing: -0.025em;
+}
+.login-desc p {
+  margin: 0;
+  max-width: 290px;
+  color: #ede4f6;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.login-exclusive {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ede4f6;
+  font-size: 12px;
+}
+.login-exclusive svg {
+  flex: none;
+}
+
+.login-form {
+  min-width: 370px;
+  max-width: 530px;
+  padding: 64px 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 32px;
+  background: #fff;
+  border-radius: 0 20px 20px 0;
+  box-sizing: border-box;
+}
+
+.login-form__header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.login-form__org {
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.login-form__hint {
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+.login-form__notice {
+  margin-top: 18px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: var(--color-surface-muted);
+  border-radius: 12px;
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+.login-form__notice svg {
+  flex: none;
+  color: var(--color-accent);
+}
+
+@media (max-width: 1100px) {
+  .login-root {
+    padding: 24px 0;
+  }
+  .login-main,
+  .login-form {
+    padding: 36px 12px;
+  }
+}
+@media (max-width: 900px) {
+  .login-root {
+    padding: 0;
+  }
+  .login-main,
+  .login-form {
+    min-width: 260px;
+    padding: 18px 4px;
+  }
+}
+@media (max-width: 650px) {
+  .login-root {
+    flex-direction: column;
+    padding: 0;
+  }
+  .login-main,
+  .login-form {
+    min-width: 0;
+    width: 100%;
+    border-radius: 0;
+    padding: 18px 4vw;
+  }
+}

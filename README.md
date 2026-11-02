@@ -1,71 +1,57 @@
-# Gestión de RR.HH — Frontend Angular
+# Gestión de RR.HH – Frontend
 
-Aplicación web para la gestión interna de Recursos Humanos de TECHFORB.
+## ¿Qué es?
+Aplicación web interna de Recursos Humanos para TECHFORB (MVP). Integra gestión de empleados, sueldos y bonos, solicitudes y el resto de módulos para administración RR.HH.
 
-## Cómo levantar el proyecto
+## Levantar la app en local
 
-1. **Instala las dependencias:**
+1. Instala las dependencias:
 
    ```sh
    npm install
    ```
 
-2. **Modo demostración (sin backend, Mocks):**
-
-   Levanta la aplicación con mocks locales y autenticación de demostración:
+2. Arranca en modo demo (sin backend, con datos de ejemplo y login ficticio):
 
    ```sh
    npm start
    ```
-
-   - Puedes iniciar sesión con cualquier correo y la contraseña:
-
+   - Puedes entrar con cualquier correo y la contraseña de demo:
      **Demo1234!**
 
-   - Los datos y la navegación se muestran con información de ejemplo.
+3. Para integrar con el backend real (emuladores Firebase Functions + Auth):
 
-3. **Contra el backend en emuladores Firebase:**
-
-   Ejecuta el backend siguiendo su README (debe estar corriendo en modo emulador). Luego levanta el frontend apuntando al backend y al emulador de Auth:
-
-   ```sh
-   npm run start:backend
-   ```
-
-   - Inicia sesión con el usuario cargado por el backend (ver su README, suele ser el correo demo con la contraseña **Demo1234!**).
-   - Las APIs consultan el backend. El login accede al emulador de Firebase Auth local.
-
-4. **Ambiente real (Firebase + API real):**
-
-   - Completa la configuración web de Firebase en `src/environments/environment.ts` y, si corresponde, en `src/environments/environment.backend.ts`:
-
-     ```ts
-     firebase: {
-       apiKey: 'TU_API_KEY',
-       authDomain: 'TU_DOMINIO.firebaseapp.com',
-       projectId: 'TU_PROJECT_ID',
-       appId: 'TU_APP_ID',
-     }
+   - Levanta el backend siguiendo el README de su repo con:
+     ```sh
+     npm start
+     npm run seed:emulator
      ```
-   - Asegúrate de que `apiBaseUrl` y `authEmulatorUrl` estén configurados según el entorno de despliegue.
+   - Levanta el frontend con:
+     ```sh
+     npm run start:backend
+     ```
+   - El login conecta contra el emulador de Auth y la API admin de RR.HH.
+   - Usuario:
+     - Correo: admin@techforb.com.ar (o el que figure en el seed del backend)
+     - Contraseña: **Demo1234!**
 
-5. **Build de producción:**
+## Configuración para producción
+- Reemplaza `environment.firebase` en `src/environments/environment.ts` y `.backend.ts` por la configuración web del proyecto real de Firebase (consola de Firebase → Configuración → Tus apps).
+- En producción (`ng build` o `npm run build`) se usa la configuración de `environment.backend.ts`.
 
-   ```sh
-   npm run build
-   ```
+## Lista de módulos
+- **Inicio de sesión:** acceso restringido al admin de RR.HH.
+- **Pantalla principal (Inicio):** entrada a todos los módulos y resumen de situación.
+- **Gestión de Empleados:** colaboradores, fichas individuales, altas y estados históricamente.
 
-   El resultado queda en `dist/`.
+El sistema crecerá con los siguientes módulos:
+- Sueldos y Bonos
+- Solicitudes
+- Comunicados
+- Horas Extras
 
 ---
 
-## Módulos
-
-- **Pantalla principal**: "dashboard". Acceso principal, indicadores e ingreso a los distintos módulos.
-- **Gestión de Empleados**: "employees". Alta, consulta y administración general de colaboradores.
-
-El acceso requiere una cuenta administrativa y estar autenticado. El login y control de sesión ya están implementados.
-
----
-
-> Consulta la documentación en línea y el backend para detalles adicionales de setup o emulación.
+- Estilo propio de TECHFORB (violetas, fondos claros, tipografía Inter).
+- Responsive y accesible según la guía del sistema.
+- El login y la sesión se manejan con Firebase Auth (ID token); no modifiques los archivos de `core/session`.

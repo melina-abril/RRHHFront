@@ -1,23 +1,28 @@
 import { BadgeTone } from '../../../shared/components/status-badge';
 import { Page } from '../../../shared/models/page';
 
-/** Estados posibles del colaborador. */
+/** Estados posibles del colaborador (exactos del backend). */
 export type EmployeeStatus = 'ACTIVE' | 'TERMINATED';
-
 export const EMPLOYEE_STATUS: Record<EmployeeStatus, { label: string; tone: BadgeTone }> = {
   ACTIVE: { label: 'Activo', tone: 'success' },
   TERMINATED: { label: 'Inactivo', tone: 'danger' },
 };
-
 export const EMPLOYEE_STATUS_OPTIONS: readonly { value: EmployeeStatus; label: string }[] = [
   { value: 'ACTIVE', label: 'Activo' },
   { value: 'TERMINATED', label: 'Inactivo' },
 ];
 
-/**
- * Respuesta de un colaborador (GET /employees/:id, lista), campos igual que EmployeeDto del backend.
- * Fechas como string ISO (o null), todos los campos legibles vienen como string.
- */
+/** Filtros del listado (corresponde a EmployeeFilters del backend). */
+export interface EmployeeFilters {
+  search: string;
+  status: EmployeeStatus | null;
+  departmentId: string | null;
+  positionId: string | null;
+  page: number;
+  size: number;
+}
+
+/** Resumen de un colaborador para el listado, según EmployeeDto del backend. */
 export interface Employee {
   id: string;
   employeeNumber: string;
@@ -52,14 +57,4 @@ export interface EmployeeRequest {
   departmentId: string;
   positionId: string;
   managerId: string | null;
-}
-
-/** Filtros del listado (GET /employees). */
-export interface EmployeeFilters {
-  search: string;
-  status: EmployeeStatus | null;
-  departmentId: string | null;
-  positionId: string | null;
-  page: number;
-  size: number;
 }
