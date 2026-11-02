@@ -6,6 +6,9 @@
     "ng": "ng",
     "start": "ng serve",
     "start:backend": "ng serve --configuration backend",
+    "start:real": "ng serve --configuration real",
+    "start:tech-dev": "ng serve --configuration tech-dev",
+    "build:tech-dev": "ng build --configuration tech-dev-hosting",
     "build": "ng build",
     "watch": "ng build --watch --configuration development"
   },

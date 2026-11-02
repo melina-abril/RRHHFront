@@ -43,6 +43,32 @@
               "fileReplacements": [
                 { "replace": "src/environments/environment.ts", "with": "src/environments/environment.backend.ts" }
               ]
+            },
+            "real": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "fileReplacements": [
+                { "replace": "src/environments/environment.ts", "with": "src/environments/environment.real.ts" }
+              ]
+            },
+            "tech-dev": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "fileReplacements": [
+                { "replace": "src/environments/environment.ts", "with": "src/environments/environment.tech-dev.ts" }
+              ]
+            },
+            "tech-dev-hosting": {
+              "budgets": [
+                { "type": "initial", "maximumWarning": "600kB", "maximumError": "1MB" },
+                { "type": "anyComponentStyle", "maximumWarning": "8kB", "maximumError": "16kB" }
+              ],
+              "outputHashing": "all",
+              "fileReplacements": [
+                { "replace": "src/environments/environment.ts", "with": "src/environments/environment.tech-dev.ts" }
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -53,7 +79,9 @@
           "configurations": {
             "production": { "buildTarget": "app:build:production" },
             "development": { "buildTarget": "app:build:development" },
-            "backend": { "buildTarget": "app:build:backend" }
+            "backend": { "buildTarget": "app:build:backend" },
+            "real": { "buildTarget": "app:build:real", "proxyConfig": "proxy.conf.real.json" },
+            "tech-dev": { "buildTarget": "app:build:tech-dev", "proxyConfig": "proxy.conf.tech-dev.json" }
           },
           "defaultConfiguration": "development"
         }
