@@ -1,0 +1,120 @@
+.employee-editing {
+  max-width: 75rem;
+  margin: 0 auto;
+  padding: var(--space-lg);
+  color: var(--text-primary);
+}
+
+.employee-editing__header {
+  margin-bottom: var(--space-lg);
+}
+
+.employee-editing__breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-sm);
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+}
+
+.employee-editing__breadcrumb [aria-current='page'] {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.employee-editing__header h1 {
+  margin: 0 0 var(--space-xs);
+  font-size: 1.625rem;
+  letter-spacing: -0.025em;
+}
+
+.employee-editing__header p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.employee-editing__notice {
+  margin-bottom: var(--space-lg);
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--soft-background);
+}
+
+.employee-editing__notice p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.employee-editing__content {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.employee-editing__required-note {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.8125rem;
+}
+
+.employee-editing__asterisk {
+  color: var(--error);
+  font-weight: 700;
+}
+
+.employee-editing__section {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.employee-editing__section h2 {
+  margin: 0;
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--border);
+  background: var(--soft-background);
+  color: var(--primary);
+  font-size: 1.25rem;
+}
+
+.employee-editing__fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-md) var(--space-lg);
+  padding: var(--space-lg);
+}
+
+.employee-editing__fields p {
+  margin: 0;
+  font-weight: 600;
+}
+
+.employee-editing__history {
+  padding: var(--space-lg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--soft-background);
+}
+
+.employee-editing__history h2 {
+  margin: 0 0 var(--space-xs);
+  font-size: 1rem;
+}
+
+.employee-editing__history p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 600px) {
+  .employee-editing {
+    padding: var(--space-md);
+  }
+
+  .employee-editing__fields {
+    grid-template-columns: 1fr;
+  }
+}

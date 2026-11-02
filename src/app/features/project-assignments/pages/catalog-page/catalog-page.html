@@ -1,0 +1,61 @@
+<app-page-header title="Clientes, proyectos y asignaciones" description="Administración de clientes, países, proyectos y referentes · Solo Recursos Humanos">
+  <a class="button button--secondary" routerLink="/employee-editing">Volver a Gestión de Empleados</a>
+</app-page-header>
+<nav class="tabs" aria-label="Secciones"><a class="tabs__active" routerLink=".">Clientes y proyectos</a><a routerLink="assignments">Asignaciones</a></nav>
+@if (success()) { <p role="status" class="notice">{{ success() }}</p> }
+<div class="catalog">
+  <section class="card catalog__clients" aria-label="Listado de clientes">
+    <header><h2>Clientes</h2><small>{{ filteredClients().length }} clientes registrados</small></header>
+    <label for="client-search">Buscar cliente</label><input id="client-search" type="search" placeholder="Buscar cliente" [value]="search()" (input)="search.set($any($event.target).value)" />
+    <button type="button" class="button" (click)="show('client')">+ Nuevo cliente</button>
+    @let clients = clientsState();
+    @switch (clients.status) {
+      @case ('loading') { <app-loading-state message="Cargando clientes…" /> }
+      @case ('error') { <app-error-alert message="No se pudo cargar la información. Intentá nuevamente" retryLabel="Reintentar" (retry)="reload()" /> }
+      @case ('empty') { <app-empty-state message="No hay clientes registrados." /> }
+      @case ('ready') {
+        <div class="client-list">@for (client of filteredClients(); track client.id) {
+          <button type="button" class="client-item" [class.client-item--selected]="selectedClientId() === client.id" [attr.aria-pressed]="selectedClientId() === client.id" (click)="selectClient(client.id)"><strong>{{ client.name }}</strong><small>{{ client.active ? 'Activo' : 'Inactivo' }}</small></button>
+        } @empty { <app-empty-state message="No hay clientes que coincidan con la búsqueda." /> }</div>
+      }
+    }
+  </section>
+  <section class="card catalog__detail" aria-label="Detalle del cliente seleccionado">
+    @if (selectedClient(); as client) {
+      <header class="detail-head"><div class="monogram" aria-hidden="true">{{ client.name.slice(0, 2).toUpperCase() }}</div><div><small>CLIENTE SELECCIONADO</small><h2>{{ client.name }}</h2></div></header>
+      <div class="detail-content">
+        <section aria-labelledby="countries-title"><div class="section-head"><div><h3 id="countries-title">Países vinculados</h3><small>Países disponibles para proyectos</small></div><button class="button button--secondary" type="button" (click)="show('country')">+ Agregar país</button></div>
+          @let countries = countriesState();
+          @switch (countries.status) {
+            @case ('loading') { <app-loading-state /> }
+            @case ('error') { <app-error-alert message="No se pudo cargar la información. Intentá nuevamente" retryLabel="Reintentar" (retry)="reload()" /> }
+            @case ('empty') { <app-empty-state message="No hay opciones disponibles para esta selección" /> }
+            @case ('ready') { <div class="chips">@for (country of countries.data.items; track country.id) { <span class="chip">{{ country.countryName }}</span> }</div> }
+          }
+        </section>
+        <section aria-labelledby="projects-title"><div class="section-head"><div><h3 id="projects-title">Proyectos</h3><small>Proyectos vinculados a {{ client.name }}</small></div><button class="button" type="button" (click)="show('project')">+ Nuevo proyecto</button></div>
+          @let projects = projectsState();
+          @switch (projects.status) {
+            @case ('loading') { <app-loading-state /> }
+            @case ('error') { <app-error-alert message="No se pudo cargar la información. Intentá nuevamente" retryLabel="Reintentar" (retry)="reload()" /> }
+            @case ('empty') { <app-empty-state message="No hay proyectos registrados." /> }
+            @case ('ready') { <div class="table-wrapper"><table class="data-table"><caption class="visually-hidden">Proyectos del cliente</caption><thead><tr><th scope="col">Proyecto</th><th scope="col">País</th><th scope="col">Referentes</th><th scope="col">Estado</th><th scope="col">Acciones</th></tr></thead><tbody>@for (project of projects.data.items; track project.id) { <tr><td>{{ project.name }}</td><td>@let countries = countriesState(); @if (countries.status === 'ready') { @for (country of countries.data.items; track country.id) { @if (project.clientCountryIds.includes(country.id)) { {{ country.countryName }} } } }</td><td>@if (selectedProjectId() === project.id) { @let contacts = contactsState(); @if (contacts.status === 'ready') { @for (contact of contacts.data.items; track contact.id) { {{ contact.name }}@if (!$last) {, } } } }</td><td><app-status-badge [label]="project.active ? 'Activo' : 'Inactivo'" [tone]="project.active ? 'success' : 'neutral'" /></td><td><button type="button" class="text-button" (click)="selectProject(project.id)">Consultar</button></td></tr> }</tbody></table></div> }
+          }
+          @if (selectedProjectId()) { <div class="section-head"><h3>Referentes del proyecto</h3><button type="button" class="button button--secondary" (click)="show('contact')">+ Agregar referente</button></div> @let contacts = contactsState(); @switch (contacts.status) { @case ('loading') { <app-loading-state /> } @case ('error') { <app-error-alert message="No se pudo cargar la información. Intentá nuevamente" retryLabel="Reintentar" (retry)="reload()" /> } @case ('empty') { <app-empty-state message="No hay referentes registrados." /> } @case ('ready') { <ul>@for (contact of contacts.data.items; track contact.id) { <li>{{ contact.name }} · {{ contact.email }}</li> }</ul> } } }
+          <p class="hint">Los proyectos y referentes con asignaciones históricas permanecen disponibles para consulta aunque estén inactivos.</p>
+        </section>
+      </div>
+    } @else { <app-empty-state message="Selecciona un cliente para consultar sus países y proyectos." /> }
+  </section>
+</div>
+@if (action(); as currentAction) {
+  <section class="card editor" aria-label="Nuevo registro"><h2>@switch (currentAction) { @case ('client') { Nuevo cliente } @case ('country') { Agregar país } @case ('project') { Nuevo proyecto } @case ('contact') { Agregar referente } }</h2>
+    @if (error(); as message) { <app-error-alert [message]="message" /> }
+    @switch (currentAction) {
+      @case ('client') { <form [formGroup]="clientForm" (ngSubmit)="submit()" class="form-grid"><div class="form-field"><label for="new-client">Nombre *</label><input id="new-client" formControlName="name" [attr.aria-invalid]="!!errorFor('name')" [attr.aria-describedby]="errorFor('name') ? 'client-error' : null" />@if (errorFor('name')) { <span id="client-error" class="form-field__error">{{ errorFor('name') }}</span> }</div><div class="form-field"><label for="client-active">Estado</label><select id="client-active" formControlName="active"><option [ngValue]="true">Activo</option><option [ngValue]="false">Inactivo</option></select></div><div class="form-actions"><button type="button" class="button button--secondary" (click)="action.set(null)">Cancelar</button><button class="button" type="submit" [disabled]="busy()">Guardar</button></div></form> }
+      @case ('country') { <form [formGroup]="countryForm" (ngSubmit)="submit()" class="form-grid"><div class="form-field"><label for="country-code">Código de país *</label><input id="country-code" formControlName="countryCode" maxlength="3" [attr.aria-invalid]="!!errorFor('countryCode')" [attr.aria-describedby]="errorFor('countryCode') ? 'country-code-error' : null" />@if (errorFor('countryCode')) { <span id="country-code-error" class="form-field__error">{{ errorFor('countryCode') }}</span> }</div><div class="form-field"><label for="country-name">País *</label><input id="country-name" formControlName="countryName" [attr.aria-invalid]="!!errorFor('countryName')" [attr.aria-describedby]="errorFor('countryName') ? 'country-name-error' : null" />@if (errorFor('countryName')) { <span id="country-name-error" class="form-field__error">{{ errorFor('countryName') }}</span> }</div><div class="form-actions"><button type="button" class="button button--secondary" (click)="action.set(null)">Cancelar</button><button class="button" type="submit" [disabled]="busy()">Guardar</button></div></form> }
+      @case ('project') { <form [formGroup]="projectForm" (ngSubmit)="submit()" class="form-grid"><div class="form-field"><label for="project-name">Proyecto *</label><input id="project-name" formControlName="name" [attr.aria-invalid]="!!errorFor('name')" [attr.aria-describedby]="errorFor('name') ? 'project-name-error' : null" />@if (errorFor('name')) { <span id="project-name-error" class="form-field__error">{{ errorFor('name') }}</span> }</div><div class="form-field"><label for="project-countries">Países de operación *</label><select id="project-countries" multiple (change)="changeCountries($event)" [attr.aria-invalid]="!!errorFor('clientCountryIds')" [attr.aria-describedby]="errorFor('clientCountryIds') ? 'project-countries-error' : null">@let countries = countriesState(); @if (countries.status === 'ready') { @for (country of countries.data.items; track country.id) { <option [value]="country.id">{{ country.countryName }}</option> } }</select>@if (errorFor('clientCountryIds')) { <span id="project-countries-error" class="form-field__error">{{ errorFor('clientCountryIds') }}</span> }</div><div class="form-field"><label for="project-active">Estado</label><select id="project-active" formControlName="active"><option [ngValue]="true">Activo</option><option [ngValue]="false">Inactivo</option></select></div><div class="form-actions"><button type="button" class="button button--secondary" (click)="action.set(null)">Cancelar</button><button class="button" type="submit" [disabled]="busy()">Guardar</button></div></form> }
+      @case ('contact') { <form [formGroup]="contactForm" (ngSubmit)="submit()" class="form-grid"><div class="form-field"><label for="contact-name">Nombre *</label><input id="contact-name" formControlName="name" [attr.aria-invalid]="!!errorFor('name')" [attr.aria-describedby]="errorFor('name') ? 'contact-name-error' : null" />@if (errorFor('name')) { <span id="contact-name-error" class="form-field__error">{{ errorFor('name') }}</span> }</div><div class="form-field"><label for="contact-email">Correo *</label><input id="contact-email" type="email" formControlName="email" [attr.aria-invalid]="!!errorFor('email')" [attr.aria-describedby]="errorFor('email') ? 'contact-email-error' : null" />@if (errorFor('email')) { <span id="contact-email-error" class="form-field__error">{{ errorFor('email') }}</span> }</div><div class="form-field"><label for="contact-active">Estado</label><select id="contact-active" formControlName="active"><option [ngValue]="true">Activo</option><option [ngValue]="false">Inactivo</option></select></div><div class="form-actions"><button type="button" class="button button--secondary" (click)="action.set(null)">Cancelar</button><button class="button" type="submit" [disabled]="busy()">Guardar</button></div></form> }
+    }
+  </section>
+}

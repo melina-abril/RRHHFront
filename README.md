@@ -1,6 +1,6 @@
 # Gestión de RR.HH
 
-Aplicación Angular para la gestión interna de Recursos Humanos de TECHFORB.
+Aplicación Angular para la administración de Recursos Humanos.
 
 ## Desarrollo con datos de demostración
 
@@ -9,17 +9,24 @@ npm install
 npm start
 ```
 
-Abre la dirección que muestra Angular. En modo demostración puedes ingresar con cualquier correo válido y la contraseña `Demo1234!`. No necesitas iniciar Firebase ni el backend.
+Abre la dirección que indique Angular. En modo demostración puedes iniciar sesión con cualquier correo y la contraseña `Demo1234!`. Los datos de los módulos que disponen de mocks se conservan solo durante la sesión del navegador.
 
-## Desarrollo conectado al backend
+## Desarrollo con el backend
 
-En el repositorio del backend, inicia los emuladores con `npm start` y carga los datos de ejemplo con `npm run seed:emulator`. Después, en este repositorio, ejecuta `npm run start:backend`. Esta configuración usa el emulador de Firebase Auth y el proxy `/api` hacia la función del backend. Usa el usuario de ejemplo cargado por el seed y la contraseña `Demo1234!`.
+En el repositorio del backend, inicia los emuladores con `npm start` y carga sus datos con `npm run seed:emulator`. Después, en este repositorio:
 
-Para conectar un proyecto Firebase real, completa `environment.firebase` con la configuración web obtenida en la consola de Firebase y configura el entorno de despliegue para usar la API real y `useMock: false`. La compilación predeterminada conserva el entorno de demostración; no la despliegues como conexión real sin configurar ese reemplazo. Los archivos de configuración y arranque existentes pertenecen a la arquitectura y no se modifican aquí.
+```sh
+npm install
+npm run start:backend
+```
+
+Esta configuración usa Firebase Auth en `127.0.0.1:9099` y envía `/api` al emulador de Functions mediante `proxy.conf.json`. Consulta el seed del backend para conocer el correo del usuario de ejemplo; su contraseña es `Demo1234!`. Si alguno de los módulos todavía no tiene servicios expuestos por el backend, la conexión no añade esos servicios.
+
+Para conectar un proyecto Firebase real, completa `environment.firebase` con la configuración web de Firebase Console, establece la URL de la API y desactiva `useMock` en la configuración del entorno que se vaya a desplegar. No publiques credenciales privadas en el frontend. El archivo de entorno predeterminado de esta arquitectura mantiene los mocks activos, incluso al ejecutar `npm run build`.
 
 ## Módulos
 
-- Pantalla principal (`/dashboard`).
-- Gestión de empleados (`/employees`): listado, ficha y alta de colaboradores.
-
-El inicio y cierre de sesión y la protección de las rutas están implementados en los componentes compartidos de la arquitectura.
+- Edición de colaborador (`employee-editing`).
+- Movimientos laborales (`employment-movements`).
+- Clientes, proyectos y asignaciones (`project-assignments`).
+- Perfil profesional y documentación (`professional-profiles`).
