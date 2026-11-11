@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "layer": "frontend",
+  "kind": "structure",
+  "generatedAt": "2026-11-11T15:59:12.880Z",
+  "system": {
+    "uid": "3gwNp1rgzqO2F7l1sxjV",
+    "name": "Gestión de RR.HH"
+  },
+  "architecture": {
+    "name": "Angular 22 · standalone + signals",
+    "stack": "angular"
+  },
+  "repositoryPath": "https://github.com/melina-abril/RRHHFront",
+  "ports": [],
+  "environment": [],
+  "modules": [],
+  "shared": [],
+  "frontend": {
+    "apiBaseUrls": [
+      {
+        "file": "src/environments/environment.backend.ts",
+        "value": "/api"
+      },
+      {
+        "file": "src/environments/environment.production.ts",
+        "value": "/api"
+      },
+      {
+        "file": "src/environments/environment.ts",
+        "value": "/api"
+      }
+    ],
+    "proxies": [
+      {
+        "file": "proxy.conf.json",
+        "context": "/api",
+        "target": "http://localhost:8080"
+      }
+    ],
+    "useMock": false,
+    "consumedEndpoints": []
+  },
+  "relations": [
+    "Backend: el front arma cada llamada con apiBaseUrl /api (src/environments/environment.backend.ts), /api (src/environments/environment.production.ts), /api (src/environments/environment.ts) + el path del servicio.",
+    "Backend: en desarrollo el front redirige /api → http://localhost:8080: el backend tiene que levantar ahí.",
+    "Backend: el front levanta en el puerto sin puerto detectado: ese origen va en la configuración de CORS del backend.",
+    "Backend: el front consume 0 endpoints (frontend.consumedEndpoints); cualquier cambio de method, path o forma de los DTOs lo rompe.",
+    "useMock está en false: el front llama al backend de verdad."
+  ],
+  "readme": "# Gestión de RR.HH · Frontend\n\nEstructura inicial de la aplicación Angular 22. Por ahora solo incluye la página de inicio y la sesión proporcionada por la arquitectura; todavía no hay módulos funcionales ni enlaces de navegación.\n\n## Desarrollo\n\nRequiere Node.js y npm.\n\n```sh\nnpm install\nnpm start\n```\n\n`npm start` usa la configuración de desarrollo con respuestas mock. Para intentar conectarse al backend local:\n\n```sh\nnpm run start:backend\n```\n\nEl proxy de desarrollo envía `/api` a `http://localhost:8080`. La sesión incluida en el frontend utiliza `/api/auth/login`, `/api/auth/logout` y `/api/auth/me` al conectarse; el backend aprobado aún no declara endpoints, por lo que el inicio de sesión real depende de que se implementen allí.\n\n```sh\nnpm run build\n```\n\nLa compilación de producción siempre desactiva los mocks y usa la API del mismo origen bajo `/api`.\n\n## Integración con las otras capas\n\nEl backend se ejecuta en el puerto 8080 y su prefijo informado es `/api/auth`. La base de datos es Cloud Firestore; su emulador local escucha en `127.0.0.1:8085` y el panel en `127.0.0.1:4005`. El frontend se comunica únicamente con el backend, nunca directamente con Firestore. La configuración del emulador y sus variables de entorno pertenecen a los repositorios de backend y base de datos.\n\n## Módulos\n\nTodavía no hay módulos funcionales registrados.\n"
+}
