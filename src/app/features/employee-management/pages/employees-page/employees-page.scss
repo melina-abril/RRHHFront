@@ -1,0 +1,10 @@
+.employees-search {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+.employees-search .form-field {
+  flex: 1 1 16rem;
+}

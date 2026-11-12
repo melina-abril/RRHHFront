@@ -1,30 +1,36 @@
 # Gestión de RR.HH · Frontend
 
-Aplicación Angular 22. Requiere Node.js compatible con Angular 22 y npm.
+Aplicación Angular 22 para la administración interna de Recursos Humanos de TECHFORB.
 
 ## Desarrollo
+
+Requiere Node.js y npm. Desde la raíz de este proyecto:
 
 ```sh
 npm install
 npm start
 ```
 
-`npm start` levanta la aplicación en `http://localhost:4200` con la configuración de desarrollo y el modo mock. Para conectarla al backend local:
+`npm start` levanta la aplicación en `http://localhost:4200` con datos de demostración, sin requerir el backend. Para usar datos reales, inicia el backend en `http://localhost:8080` y ejecuta:
 
 ```sh
 npm run start:backend
 ```
 
-El proxy envía `/api` a `http://localhost:8080`. El backend debe permitir el origen `http://localhost:4200` mediante `FRONT_URL`. La sesión utiliza `POST /api/auth/login`, `POST /api/auth/logout` y `GET /api/auth/me`; el backend también expone `GET /api/health`. El frontend no accede directamente a Firestore: el backend se conecta a la base, cuyo emulador de desarrollo escucha en `127.0.0.1:8085`.
-
-## Compilación
+Esta configuración desactiva los mocks y envía las solicitudes `/api` al backend mediante `proxy.conf.json`. El backend debe permitir el origen `FRONT_URL=http://localhost:4200`. La sesión utiliza los endpoints `POST /api/auth/login`, `POST /api/auth/logout` y `GET /api/auth/me`, con cookie HttpOnly; para probar el acceso real es necesario aprovisionar una cuenta administradora en el backend. Los colaboradores no tienen acceso al panel.
 
 ```sh
 npm run build
 ```
 
-La compilación utiliza siempre `environment.production.ts`, sin mocks y con la API en el mismo origen bajo `/api`. Al desplegar, configura el servidor para dirigir ese prefijo al backend.
+La compilación de producción siempre desactiva los mocks y utiliza la API bajo `/api` en el mismo origen. Al desplegar, configura el servidor para dirigir ese prefijo al backend. La base Firestore y su emulador, disponible en `127.0.0.1:8085` durante el desarrollo del backend, se administran en el repositorio de la base de datos; este frontend nunca se conecta directamente a Firestore.
 
 ## Módulos
 
-Todavía no se han incorporado módulos funcionales. La aplicación muestra una página de inicio tras acceder con la sesión provista por la arquitectura.
+| Módulo | Ruta | Backend |
+|---|---|---|
+| Inicio de sesión | `/login` | `/api/auth/login`, `/api/auth/logout`, `/api/auth/me` |
+| Pantalla principal | `/dashboard` | `GET /api/dashboard/summary` |
+| Alta y búsqueda de colaboradores | `/employees` | `GET /api/employees`, `GET /api/employees/:id`, `POST /api/employees` |
+
+Las rutas internas requieren sesión y el rol `ADMIN`.

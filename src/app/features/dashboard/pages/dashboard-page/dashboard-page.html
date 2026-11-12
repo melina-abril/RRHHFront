@@ -1,0 +1,117 @@
+<main class="dashboard">
+  <header class="dashboard__intro">
+    <p class="dashboard__breadcrumb">RH smart / Inicio</p>
+    <h1>Inicio</h1>
+    <p>Bienvenido al sistema de Recursos Humanos de TECHFORB. Consulta la actividad general y accede a los módulos desde un solo lugar.</p>
+    @if (firstName()) {
+      <p class="dashboard__greeting">Hola, {{ firstName() }}</p>
+    }
+  </header>
+
+  <section class="dashboard__section" aria-labelledby="summary-title">
+    <h2 id="summary-title">Resumen general</h2>
+    @let summary = summaryState();
+    @switch (summary.status) {
+      @case ('loading') {
+        <app-loading-state message="Cargando indicadores…" />
+      }
+      @case ('error') {
+        <app-error-alert [message]="summary.message" retryLabel="Reintentar" (retry)="reload()" />
+      }
+      @case ('empty') {
+        <p class="dashboard__notice">Todavía no hay indicadores registrados.</p>
+      }
+      @case ('ready') {
+        <div class="dashboard__kpis">
+          <article class="dashboard__kpi">
+            <span class="dashboard__icon" aria-hidden="true">♙</span>
+            <strong>{{ summary.data.activeEmployees }}</strong>
+            <span>Colaboradores activos</span>
+            <small>Con vínculo laboral activo</small>
+          </article>
+          <article class="dashboard__kpi">
+            <span class="dashboard__icon dashboard__icon--warning" aria-hidden="true">▤</span>
+            <strong>{{ summary.data.pendingRequests }}</strong>
+            <span>Solicitudes pendientes</span>
+            <small>A la espera de revisión</small>
+          </article>
+          <article class="dashboard__kpi">
+            <span class="dashboard__icon" aria-hidden="true">▣</span>
+            <strong>{{ summary.data.upcomingEvents }}</strong>
+            <span>Próximos eventos</span>
+            <small>Registrados para este mes</small>
+          </article>
+          <article class="dashboard__kpi">
+            <span class="dashboard__icon" aria-hidden="true">▦</span>
+            <strong>1</strong>
+            <span>Módulos disponibles</span>
+            <small>Accesos habilitados en esta pantalla</small>
+          </article>
+        </div>
+      }
+    }
+  </section>
+
+  <section class="dashboard__section" aria-labelledby="quick-access-title">
+    <div class="dashboard__section-heading">
+      <h2 id="quick-access-title">Accesos rápidos</h2>
+      <p>Ingresa directamente al módulo que necesitas</p>
+    </div>
+    <div class="dashboard__modules">
+      <a class="dashboard__module" routerLink="/employees">
+        <span class="dashboard__icon" aria-hidden="true">♙</span>
+        <strong>Gestión de Empleados</strong>
+        <span>Legajos, perfiles y asignaciones</span>
+        <span class="dashboard__module-action">Entrar al módulo →</span>
+      </a>
+      <article class="dashboard__module">
+        <span class="dashboard__icon" aria-hidden="true">▤</span>
+        <strong>Sueldos y Bonos</strong>
+        <span>Remuneraciones y beneficios</span>
+        <span class="dashboard__module-unavailable">Próximamente</span>
+      </article>
+      <article class="dashboard__module">
+        <span class="dashboard__icon" aria-hidden="true">▣</span>
+        <strong>Solicitudes</strong>
+        <span>Revisión y seguimiento de pedidos</span>
+        <span class="dashboard__module-unavailable">Próximamente</span>
+      </article>
+      <article class="dashboard__module">
+        <span class="dashboard__icon" aria-hidden="true">✉</span>
+        <strong>Comunicados</strong>
+        <span>Mensajes y registro de envíos</span>
+        <span class="dashboard__module-unavailable">Próximamente</span>
+      </article>
+      <article class="dashboard__module">
+        <span class="dashboard__icon" aria-hidden="true">◷</span>
+        <strong>Horas Extras</strong>
+        <span>Autorizaciones y compensaciones</span>
+        <span class="dashboard__module-unavailable">Próximamente</span>
+      </article>
+    </div>
+  </section>
+
+  <div class="dashboard__lower">
+    <section class="dashboard__events" aria-labelledby="events-title">
+      <div class="dashboard__events-heading">
+        <div>
+          <h2 id="events-title">Próximos eventos</h2>
+          <p>Eventos registrados para este mes</p>
+        </div>
+        @if (summary.status === 'ready') {
+          <span class="dashboard__event-count">{{ summary.data.upcomingEvents }} programados</span>
+        }
+      </div>
+      <p class="dashboard__events-empty">El resumen no incluye detalles de eventos. Consulta el indicador de próximos eventos para conocer la cantidad registrada.</p>
+    </section>
+    <aside class="dashboard__aside" aria-label="Información de los indicadores">
+      <h2>Eventos del mes</h2>
+      @if (summary.status === 'ready') {
+        <p>{{ summary.data.upcomingEvents }} programados</p>
+      } @else {
+        <p>Sin información disponible por ahora.</p>
+      }
+      <p class="dashboard__notice">Los indicadores se calculan con los datos registrados. Si no hay registros, verás 0 y un mensaje informativo.</p>
+    </aside>
+  </div>
+</main>
