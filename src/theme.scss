@@ -18,19 +18,16 @@
 :root {
   --font-family: Inter, -apple-system, 'Segoe UI', sans-serif;
   --color-primary: var(--primary);
-  --color-primary-hover: var(--primary);
-  --color-primary-soft: var(--soft-background);
   --color-accent: var(--accent);
   --color-background: var(--background);
   --color-surface: var(--surface);
-  --color-surface-soft: var(--soft-background);
-  --color-active: var(--active-item);
+  --color-soft-background: var(--soft-background);
+  --color-active-item: var(--active-item);
   --color-border: var(--border);
-  --color-text: var(--text-primary);
-  --color-text-muted: var(--text-secondary);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
   --color-success: var(--success);
   --color-warning: var(--warning);
-  --color-danger: var(--error);
   --color-error: var(--error);
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
@@ -46,11 +43,14 @@
 :root {
   --color-on-primary: #ffffff;
   --color-surface-muted: var(--soft-background);
+  --color-text: var(--text-primary);
+  --color-text-muted: var(--text-secondary);
   --color-focus: var(--accent);
   --color-info: var(--primary);
   --color-info-surface: #edeaf4;
   --color-success-surface: #e4f8ec;
   --color-warning-surface: #fbf2e1;
+  --color-danger: var(--error);
   --color-danger-surface: #fcecef;
   --radius: 0.65rem;
 }

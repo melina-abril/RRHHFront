@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "layer": "frontend",
-  "kind": "features",
-  "generatedAt": "2026-11-12T16:01:49.041Z",
+  "kind": "structure",
+  "generatedAt": "2026-11-11T20:19:29.877Z",
   "system": {
     "uid": "3gwNp1rgzqO2F7l1sxjV",
     "name": "Gestión de RR.HH"
@@ -15,62 +15,11 @@
   "ports": [
     {
       "port": 4200,
-      "file": "README.md"
+      "file": "angular.json"
     }
   ],
   "environment": [],
-  "modules": [
-    {
-      "moduleName": "auth",
-      "title": "Inicio de sesión",
-      "featureKeys": [
-        "bb1c28e3-4842-4b41-a5c3-9738171a3d2e"
-      ],
-      "services": []
-    },
-    {
-      "moduleName": "dashboard",
-      "title": "Pantalla principal",
-      "featureKeys": [
-        "b0a2b1be-b3b7-46e5-9e8c-f3b5d2f47df1"
-      ],
-      "services": [
-        {
-          "method": "GET",
-          "path": "/api/dashboard/summary",
-          "name": "getDashboardSummary",
-          "description": "Devuelve los indicadores disponibles para la pantalla principal."
-        }
-      ]
-    },
-    {
-      "moduleName": "employee-management",
-      "title": "Alta y búsqueda de colaboradores",
-      "featureKeys": [
-        "2e5f236d-e30c-4e4f-9baa-9c536c43b2fe"
-      ],
-      "services": [
-        {
-          "method": "GET",
-          "path": "/api/employees",
-          "name": "listEmployees",
-          "description": "Devuelve el listado paginado de colaboradores con búsqueda opcional por prefijo del nombre normalizado."
-        },
-        {
-          "method": "GET",
-          "path": "/api/employees/:id",
-          "name": "getEmployee",
-          "description": "Devuelve la ficha de un colaborador por su legajo."
-        },
-        {
-          "method": "POST",
-          "path": "/api/employees",
-          "name": "createEmployee",
-          "description": "Valida los datos y duplicados, genera un legajo único y registra al colaborador como activo."
-        }
-      ]
-    }
-  ],
+  "modules": [],
   "shared": [],
   "frontend": {
     "apiBaseUrls": [
@@ -96,34 +45,6 @@
     ],
     "useMock": true,
     "consumedEndpoints": [
-      {
-        "moduleName": "dashboard",
-        "method": "GET",
-        "path": "/api/dashboard/summary",
-        "name": "getDashboardSummary",
-        "description": "Devuelve los indicadores disponibles para la pantalla principal."
-      },
-      {
-        "moduleName": "employee-management",
-        "method": "GET",
-        "path": "/api/employees",
-        "name": "listEmployees",
-        "description": "Devuelve el listado paginado de colaboradores con búsqueda opcional por prefijo del nombre normalizado."
-      },
-      {
-        "moduleName": "employee-management",
-        "method": "GET",
-        "path": "/api/employees/:id",
-        "name": "getEmployee",
-        "description": "Devuelve la ficha de un colaborador por su legajo."
-      },
-      {
-        "moduleName": "employee-management",
-        "method": "POST",
-        "path": "/api/employees",
-        "name": "createEmployee",
-        "description": "Valida los datos y duplicados, genera un legajo único y registra al colaborador como activo."
-      },
       {
         "moduleName": "",
         "method": "GET",
@@ -151,8 +72,8 @@
     "Backend: el front arma cada llamada con apiBaseUrl /api (src/environments/environment.backend.ts), /api (src/environments/environment.production.ts), /api (src/environments/environment.ts) + el path del servicio.",
     "Backend: en desarrollo el front redirige /api → http://localhost:8080: el backend tiene que levantar ahí.",
     "Backend: el front levanta en el puerto 4200: ese origen va en la configuración de CORS del backend.",
-    "Backend: el front consume 7 endpoints (frontend.consumedEndpoints); cualquier cambio de method, path o forma de los DTOs lo rompe.",
+    "Backend: el front consume 3 endpoints (frontend.consumedEndpoints); cualquier cambio de method, path o forma de los DTOs lo rompe.",
     "useMock está en true: el front todavía responde con datos mock."
   ],
-  "readme": "# Gestión de RR.HH · Frontend\n\nAplicación Angular 22 para la administración interna de Recursos Humanos de TECHFORB.\n\n## Desarrollo\n\nRequiere Node.js y npm. Desde la raíz de este proyecto:\n\n```sh\nnpm install\nnpm start\n```\n\n`npm start` levanta la aplicación en `http://localhost:4200` con datos de demostración, sin requerir el backend. Para usar datos reales, inicia el backend en `http://localhost:8080` y ejecuta:\n\n```sh\nnpm run start:backend\n```\n\nEsta configuración desactiva los mocks y envía las solicitudes `/api` al backend mediante `proxy.conf.json`. El backend debe permitir el origen `FRONT_URL=http://localhost:4200`. La sesión utiliza los endpoints `POST /api/auth/login`, `POST /api/auth/logout` y `GET /api/auth/me`, con cookie HttpOnly; para probar el acceso real es necesario aprovisionar una cuenta administradora en el backend. Los colaboradores no tienen acceso al panel.\n\n```sh\nnpm run build\n```\n\nLa compilación de producción siempre desactiva los mocks y utiliza la API bajo `/api` en el mismo origen. Al desplegar, configura el servidor para dirigir ese prefijo al backend. La base Firestore y su emulador, disponible en `127.0.0.1:8085` durante el desarrollo del backend, se administran en el repositorio de la base de datos; este frontend nunca se conecta directamente a Firestore.\n\n## Módulos\n\n| Módulo | Ruta | Backend |\n|---|---|---|\n| Inicio de sesión | `/login` | `/api/auth/login`, `/api/auth/logout`, `/api/auth/me` |\n| Pantalla principal | `/dashboard` | `GET /api/dashboard/summary` |\n| Alta y búsqueda de colaboradores | `/employees` | `GET /api/employees`, `GET /api/employees/:id`, `POST /api/employees` |\n\nLas rutas internas requieren sesión y el rol `ADMIN`.\n"
+  "readme": "# Gestión de RR.HH · Frontend\n\nAplicación Angular 22. Requiere Node.js compatible con Angular 22 y npm.\n\n## Desarrollo\n\n```sh\nnpm install\nnpm start\n```\n\n`npm start` levanta la aplicación en `http://localhost:4200` con la configuración de desarrollo y el modo mock. Para conectarla al backend local:\n\n```sh\nnpm run start:backend\n```\n\nEl proxy envía `/api` a `http://localhost:8080`. El backend debe permitir el origen `http://localhost:4200` mediante `FRONT_URL`. La sesión utiliza `POST /api/auth/login`, `POST /api/auth/logout` y `GET /api/auth/me`; el backend también expone `GET /api/health`. El frontend no accede directamente a Firestore: el backend se conecta a la base, cuyo emulador de desarrollo escucha en `127.0.0.1:8085`.\n\n## Compilación\n\n```sh\nnpm run build\n```\n\nLa compilación utiliza siempre `environment.production.ts`, sin mocks y con la API en el mismo origen bajo `/api`. Al desplegar, configura el servidor para dirigir ese prefijo al backend.\n\n## Módulos\n\nTodavía no se han incorporado módulos funcionales. La aplicación muestra una página de inicio tras acceder con la sesión provista por la arquitectura.\n"
 }
