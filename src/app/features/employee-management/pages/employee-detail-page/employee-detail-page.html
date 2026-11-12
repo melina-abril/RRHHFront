@@ -1,0 +1,44 @@
+<a class="detail-back" routerLink="..">← Volver al listado</a>
+@let state = employeeState();
+@switch (state.status) {
+  @case ('loading') {
+    <app-loading-state message="Cargando la ficha…" />
+  }
+  @case ('error') {
+    <app-error-alert [message]="state.message" retryLabel="Reintentar" (retry)="reload()" />
+  }
+  @case ('empty') {
+    <app-error-alert message="No se encontró el colaborador." />
+  }
+  @case ('ready') {
+    @let employee = state.data;
+    <app-page-header [title]="employee.firstName + ' ' + employee.lastName" [description]="'Legajo ' + employee.employeeNumber" />
+    <section class="card" aria-labelledby="employee-personal-title">
+      <h2 id="employee-personal-title">Datos personales</h2>
+      <dl class="detail-fields">
+        <div><dt>Fecha de nacimiento</dt><dd>{{ employee.birthDate | date: 'dd/MM/yyyy' }}</dd></div>
+        <div><dt>País de residencia</dt><dd>{{ employee.residenceCountry }}</dd></div>
+        <div><dt>Correo personal</dt><dd>{{ employee.personalEmail }}</dd></div>
+      </dl>
+    </section>
+    <section class="card" aria-labelledby="employee-work-title">
+      <h2 id="employee-work-title">Datos laborales</h2>
+      <dl class="detail-fields">
+        <div><dt>Estado</dt><dd><app-status-badge [label]="statuses[employee.status].label" [tone]="statuses[employee.status].tone" /></dd></div>
+        <div><dt>Ingreso</dt><dd>{{ employee.hireDate | date: 'dd/MM/yyyy' }}</dd></div>
+        <div><dt>Categoría interna</dt><dd>{{ categories[employee.category] }}</dd></div>
+        <div><dt>Dedicación</dt><dd>{{ commitments[employee.commitment] }}</dd></div>
+        <div><dt>Modalidad de trabajo</dt><dd>{{ workModes[employee.workMode] }}</dd></div>
+        <div><dt>Rol laboral</dt><dd>{{ employee.jobRole }}</dd></div>
+      </dl>
+    </section>
+    <section class="card" aria-labelledby="employee-assignment-title">
+      <h2 id="employee-assignment-title">Asignación inicial</h2>
+      <dl class="detail-fields">
+        <div><dt>Cliente</dt><dd>{{ employee.clientName || 'Sin asignar' }}</dd></div>
+        <div><dt>Proyecto</dt><dd>{{ employee.projectName || 'Sin asignar' }}</dd></div>
+        <div><dt>Referente</dt><dd>{{ employee.contactName || 'Sin asignar' }}</dd></div>
+      </dl>
+    </section>
+  }
+}

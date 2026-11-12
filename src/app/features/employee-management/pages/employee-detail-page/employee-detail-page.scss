@@ -1,0 +1,28 @@
+.detail-back {
+  display: inline-block;
+  margin-bottom: var(--space-md);
+}
+.card {
+  margin-bottom: var(--space-md);
+}
+.card h2 {
+  margin-top: 0;
+  color: var(--primary);
+  font-size: 1.1rem;
+}
+.detail-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: var(--space-lg);
+  margin: 0;
+}
+.detail-fields dt {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+.detail-fields dd {
+  margin: var(--space-xs) 0 0;
+  overflow-wrap: anywhere;
+  color: var(--text-primary);
+  font-weight: 600;
+}
