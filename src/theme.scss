@@ -18,11 +18,8 @@
 :root {
   --font-family: Inter, -apple-system, 'Segoe UI', sans-serif;
   --color-primary: var(--primary);
-  --color-primary-hover: var(--primary);
-  --color-primary-light: var(--soft-background);
   --color-accent: var(--accent);
   --color-background: var(--background);
-  --color-bg: var(--background);
   --color-surface: var(--surface);
   --color-soft-background: var(--soft-background);
   --color-active-item: var(--active-item);
@@ -35,8 +32,8 @@
   --color-warning: var(--warning);
   --color-error: var(--error);
   --color-danger: var(--error);
-  --space-xs: 0.25rem;
-  --space-sm: 0.5rem;
+  --space-xs: 0.4rem;
+  --space-sm: 0.75rem;
   --space-md: 1rem;
   --space-lg: 1.5rem;
   --space-xl: 2rem;
