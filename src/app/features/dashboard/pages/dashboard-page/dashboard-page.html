@@ -1,0 +1,94 @@
+<main class="dashboard">
+  <header class="dashboard__intro">
+    <p class="dashboard__breadcrumb">RH smart / Inicio</p>
+    <h1>Inicio</h1>
+    <p>Bienvenido al sistema de Recursos Humanos de TECHFORB. Consulta la actividad general y accede a los módulos desde un solo lugar.</p>
+    @if (firstName()) {
+      <p class="dashboard__greeting">Hola, {{ firstName() }}</p>
+    }
+  </header>
+
+  <section class="dashboard__section" aria-labelledby="summary-title">
+    <h2 id="summary-title">Resumen general</h2>
+    @let summary = summaryState();
+    @switch (summary.status) {
+      @case ('loading') {
+        <app-loading-state message="Cargando indicadores…" />
+      }
+      @case ('error') {
+        <app-error-alert [message]="summary.message" retryLabel="Reintentar" (retry)="reload()" />
+      }
+      @case ('empty') {
+        <p class="dashboard__notice">Todavía no hay indicadores disponibles.</p>
+      }
+      @case ('ready') {
+        <div class="dashboard__metrics">
+          <article class="dashboard__metric">
+            <span class="dashboard__metric-icon" aria-hidden="true">♙</span>
+            <strong>{{ summary.data.activeEmployees }}</strong>
+            <span>Colaboradores activos</span>
+            <small>Con vínculo laboral activo</small>
+          </article>
+          <article class="dashboard__metric">
+            <span class="dashboard__metric-icon dashboard__metric-icon--warning" aria-hidden="true">▤</span>
+            <strong>{{ summary.data.pendingRequests }}</strong>
+            <span>Solicitudes pendientes</span>
+            <small>A la espera de revisión</small>
+          </article>
+          <article class="dashboard__metric">
+            <span class="dashboard__metric-icon" aria-hidden="true">▦</span>
+            <strong>{{ summary.data.upcomingEvents }}</strong>
+            <span>Próximos eventos</span>
+            <small>Registrados próximamente</small>
+          </article>
+          <article class="dashboard__metric">
+            <span class="dashboard__metric-icon" aria-hidden="true">▦</span>
+            <strong>1</strong>
+            <span>Módulos disponibles</span>
+            <small>Accesos habilitados en esta pantalla</small>
+          </article>
+        </div>
+      }
+    }
+  </section>
+
+  <section class="dashboard__section" aria-labelledby="access-title">
+    <div class="dashboard__section-heading">
+      <h2 id="access-title">Accesos rápidos</h2>
+      <p>Ingresa directamente al módulo que necesitas</p>
+    </div>
+    <div class="dashboard__access-grid">
+      @for (card of quickAccess; track card.key) {
+        @if (card.path; as path) {
+          <a class="dashboard__access-card" [routerLink]="path">
+            <span class="dashboard__access-icon" aria-hidden="true">↗</span>
+            <strong>{{ card.title }}</strong>
+            <span>{{ card.description }}</span>
+            <span class="dashboard__access-action">Entrar al módulo →</span>
+          </a>
+        } @else {
+          <article class="dashboard__access-card dashboard__access-card--unavailable">
+            <span class="dashboard__access-icon" aria-hidden="true">▦</span>
+            <strong>{{ card.title }}</strong>
+            <span>{{ card.description }}</span>
+            <span class="dashboard__access-action">Aún no disponible</span>
+          </article>
+        }
+      }
+    </div>
+  </section>
+
+  <div class="dashboard__lower">
+    <section class="dashboard__events" aria-labelledby="events-title">
+      <div class="dashboard__events-heading">
+        <h2 id="events-title">Próximos eventos</h2>
+        <p>Actividad registrada para los próximos días</p>
+      </div>
+      <p class="dashboard__events-empty">El resumen no incluye el detalle de los eventos. Consulta el indicador de próximos eventos arriba.</p>
+    </section>
+    <aside class="dashboard__aside" aria-label="Información sobre los indicadores">
+      <h2>Eventos del mes</h2>
+      <p>Los indicadores se calculan con los datos registrados. Si no hay registros, verás 0 y un mensaje informativo.</p>
+    </aside>
+  </div>
+</main>

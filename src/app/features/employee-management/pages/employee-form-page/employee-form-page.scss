@@ -1,0 +1,194 @@
+:host {
+  display: block;
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  font-size: 0.875rem;
+}
+.employee-form__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding-bottom: var(--space-md);
+  margin-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--border);
+}
+.employee-form__top span {
+  color: var(--primary);
+  font-weight: 600;
+}
+.employee-form__top a {
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+.employee-form__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+.employee-form__header h1 {
+  margin: 0 0 var(--space-xs);
+  font-size: 1.75rem;
+  line-height: 1.2;
+}
+.employee-form__header p {
+  margin: var(--space-xs) 0 0;
+  color: var(--text-secondary);
+}
+.employee-form__breadcrumb {
+  font-size: 0.75rem;
+}
+.employee-form__actions {
+  display: flex;
+  flex: none;
+  gap: var(--space-sm);
+}
+.employee-form__notice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  margin-bottom: var(--space-lg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--soft-background);
+  color: var(--text-secondary);
+}
+.employee-form__notice strong {
+  color: var(--primary);
+}
+.employee-form__notice-icon {
+  color: var(--primary);
+  font-size: 1.2rem;
+  line-height: 1;
+}
+.employee-form__layout {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-lg);
+}
+.employee-form__index {
+  position: sticky;
+  top: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-sm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.employee-form__index a {
+  padding: var(--space-sm);
+  border-left: 3px solid transparent;
+  border-radius: var(--radius);
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+.employee-form__index a:hover,
+.employee-form__index a:focus-visible {
+  border-left-color: var(--primary);
+  background: var(--active-item);
+  color: var(--primary);
+}
+.employee-form__index a:first-child {
+  border-left-color: var(--primary);
+  background: var(--soft-background);
+  color: var(--primary);
+  font-weight: 600;
+}
+.employee-form__layout form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  min-width: 0;
+}
+.employee-form__section {
+  scroll-margin-top: var(--space-lg);
+  padding: var(--space-lg);
+}
+.employee-form__section-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+.employee-form__section-heading h2 {
+  margin: 0;
+  color: var(--primary);
+  font-size: 1.125rem;
+}
+.employee-form__section-heading p {
+  margin: var(--space-xs) 0 0;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+.employee-form__icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: var(--radius);
+  background: var(--soft-background);
+  color: var(--primary);
+  font-size: 1.3rem;
+}
+.employee-form__fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-lg);
+}
+.employee-form__fields label span {
+  color: var(--primary);
+}
+.employee-form__fields input,
+.employee-form__fields select {
+  width: 100%;
+  min-height: 2.8rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text-primary);
+}
+.employee-form__fields input:focus-visible,
+.employee-form__fields select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.employee-form__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+  margin-top: var(--space-lg);
+  color: var(--text-secondary);
+}
+.employee-form__facts p {
+  margin: 0;
+}
+.employee-form__facts strong {
+  color: var(--text-primary);
+}
+@media (max-width: 850px) {
+  .employee-form__layout {
+    grid-template-columns: 1fr;
+  }
+  .employee-form__index {
+    position: static;
+  }
+}
+@media (max-width: 600px) {
+  .employee-form__header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .employee-form__actions {
+    flex-wrap: wrap;
+  }
+  .employee-form__fields {
+    grid-template-columns: 1fr;
+  }
+}

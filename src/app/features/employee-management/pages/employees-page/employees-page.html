@@ -1,0 +1,44 @@
+<app-page-header title="Colaboradores" description="Busca colaboradores y consulta sus fichas individuales.">
+  @if (canCreate()) {
+    <a class="button" routerLink="new">Nuevo colaborador</a>
+  }
+</app-page-header>
+
+<div class="card employees-search" role="search">
+  <label for="employee-search">Buscar por nombre</label>
+  <div class="employees-search__controls">
+    <input id="employee-search" type="search" placeholder="Nombre o apellido" [value]="searchText()" (input)="search($any($event.target).value)" />
+    <button type="button" class="button button--secondary" (click)="clearSearch()">Limpiar</button>
+  </div>
+</div>
+
+@let state = employeesState();
+@switch (state.status) {
+  @case ('loading') { <app-loading-state message="Cargando colaboradores…" /> }
+  @case ('error') { <app-error-alert [message]="state.message" retryLabel="Reintentar" (retry)="reload()" /> }
+  @case ('empty') { <app-empty-state message="No se encontraron colaboradores que coincidan con la búsqueda." /> }
+  @case ('ready') {
+    <div class="table-wrapper">
+      <table class="data-table">
+        <caption class="visually-hidden">Listado de colaboradores</caption>
+        <thead><tr><th scope="col">Colaborador</th><th scope="col">Legajo</th><th scope="col">Categoría</th><th scope="col">Puesto</th><th scope="col">Estado</th></tr></thead>
+        <tbody>
+          @for (employee of state.data.items; track employee.id) {
+            <tr>
+              <td><a [routerLink]="employee.id">{{ employee.firstName }} {{ employee.lastName }}</a></td>
+              <td>{{ employee.employeeNumber }}</td>
+              <td>{{ categories[employee.category] }}</td>
+              <td>{{ employee.jobRole }}</td>
+              <td><app-status-badge [label]="statusInfo[employee.status].label" [tone]="statusInfo[employee.status].tone" /></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <nav class="pagination" aria-label="Paginación de colaboradores">
+      <button type="button" class="button button--secondary" [disabled]="state.data.page === 0" (click)="goToPage(state.data.page - 1)">Anterior</button>
+      <span>Página {{ state.data.page + 1 }} de {{ state.data.totalPages }} · {{ state.data.totalItems }} colaboradores</span>
+      <button type="button" class="button button--secondary" [disabled]="state.data.page + 1 >= state.data.totalPages" (click)="goToPage(state.data.page + 1)">Siguiente</button>
+    </nav>
+  }
+}

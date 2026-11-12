@@ -1,0 +1,19 @@
+.employee-detail__back {
+  display: inline-block;
+  margin-bottom: var(--space-md);
+}
+.employee-detail__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: var(--space-lg);
+  margin: 0;
+}
+.employee-detail__grid dt {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+.employee-detail__grid dd {
+  margin: var(--space-xs) 0 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}

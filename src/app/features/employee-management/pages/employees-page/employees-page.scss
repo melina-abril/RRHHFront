@@ -1,0 +1,21 @@
+.employees-search {
+  margin-bottom: var(--space-lg);
+}
+.employees-search label {
+  display: block;
+  margin-bottom: var(--space-sm);
+  font-weight: 600;
+}
+.employees-search__controls {
+  display: flex;
+  gap: var(--space-sm);
+}
+.employees-search__controls input {
+  flex: 1;
+  min-width: 0;
+}
+@media (max-width: 480px) {
+  .employees-search__controls {
+    flex-wrap: wrap;
+  }
+}
