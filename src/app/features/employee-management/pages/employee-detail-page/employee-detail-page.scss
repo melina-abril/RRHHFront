@@ -1,0 +1,34 @@
+.detail-back {
+  display: inline-block;
+  margin-bottom: var(--space-md);
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+  gap: var(--space-lg);
+}
+
+.detail-grid h2 {
+  margin-top: 0;
+  color: var(--color-primary);
+}
+
+.detail-grid dl {
+  margin: 0;
+}
+
+.detail-grid dl div {
+  margin-top: var(--space-md);
+}
+
+.detail-grid dt {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.detail-grid dd {
+  margin: var(--space-xs) 0 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}

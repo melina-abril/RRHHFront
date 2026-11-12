@@ -1,0 +1,76 @@
+<main class="dashboard">
+  <section class="dashboard__welcome" aria-labelledby="dashboard-title">
+    <span class="dashboard__eyebrow">Panel de inicio</span>
+    <h1 id="dashboard-title">Inicio</h1>
+    <p>Bienvenido al sistema de Recursos Humanos de TECHFORB. Consulta la actividad general y accede a los módulos desde un solo lugar.</p>
+  </section>
+
+  <section class="dashboard__section" aria-labelledby="dashboard-summary-title">
+    <h2 id="dashboard-summary-title">Resumen general</h2>
+    @let summary = summaryState();
+    @switch (summary.status) {
+      @case ('loading') {
+        <app-loading-state message="Cargando el resumen…" />
+      }
+      @case ('error') {
+        <app-error-alert [message]="summary.message" retryLabel="Reintentar" (retry)="reload()" />
+      }
+      @case ('empty') {
+        <p class="dashboard__notice">Todavía no hay indicadores disponibles.</p>
+      }
+      @case ('ready') {
+        <div class="dashboard__stats">
+          <a class="dashboard__stat" routerLink="/employee-management">
+            <span class="dashboard__icon" aria-hidden="true">♙</span>
+            <span class="dashboard__stat-label">Colaboradores activos</span>
+            <strong class="dashboard__stat-number">{{ summary.data.activeEmployees }}</strong>
+            <span class="dashboard__stat-detail">{{ summary.data.activeEmployees === 0 ? 'Sin colaboradores activos registrados' : 'Ver colaboradores' }}</span>
+          </a>
+          <div class="dashboard__stat">
+            <span class="dashboard__icon" aria-hidden="true">▤</span>
+            <span class="dashboard__stat-label">Solicitudes pendientes</span>
+            <strong class="dashboard__stat-number">{{ summary.data.pendingRequests }}</strong>
+            <span class="dashboard__stat-detail">{{ summary.data.pendingRequests === 0 ? 'Sin solicitudes para revisar' : 'Solicitudes para revisar' }}</span>
+          </div>
+          <div class="dashboard__stat">
+            <span class="dashboard__icon" aria-hidden="true">▦</span>
+            <span class="dashboard__stat-label">Próximos eventos</span>
+            <strong class="dashboard__stat-number">{{ summary.data.upcomingEvents }}</strong>
+            <span class="dashboard__stat-detail">Cumpleaños y beneficios por vencer</span>
+          </div>
+        </div>
+      }
+    }
+  </section>
+
+  <section class="dashboard__section" aria-labelledby="dashboard-access-title">
+    <div class="dashboard__section-heading">
+      <h2 id="dashboard-access-title">Accesos rápidos</h2>
+      <p>Ingresa directamente al módulo que necesitas.</p>
+    </div>
+    <div class="dashboard__access-grid">
+      @for (item of quickAccess; track item.title) {
+        @if (item.path; as destination) {
+          <a class="dashboard__access-card" [routerLink]="destination">
+            <span class="dashboard__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path [attr.d]="item.iconPath" /></svg>
+            </span>
+            <span class="dashboard__access-content">
+              <span><strong>{{ item.title }}</strong><small>{{ item.description }}</small></span>
+              <span class="dashboard__arrow" aria-hidden="true">→</span>
+            </span>
+          </a>
+        } @else {
+          <div class="dashboard__access-card dashboard__access-card--unavailable">
+            <span class="dashboard__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path [attr.d]="item.iconPath" /></svg>
+            </span>
+            <span class="dashboard__access-content">
+              <span><strong>{{ item.title }}</strong><small>{{ item.description }}</small></span>
+            </span>
+          </div>
+        }
+      }
+    </div>
+  </section>
+</main>
