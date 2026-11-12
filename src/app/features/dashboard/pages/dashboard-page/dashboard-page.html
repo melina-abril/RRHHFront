@@ -1,0 +1,78 @@
+<svg class="dashboard__symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <symbol id="dashboard-people" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20v-2a6 6 0 0 1 12 0v2zm14-15a3 3 0 0 1 0 6m1 4a5 5 0 0 1 3 5"/></symbol>
+  <symbol id="dashboard-money" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M5 9h1m12 6h1"/></symbol>
+  <symbol id="dashboard-request" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8m-8 4h4"/></symbol>
+  <symbol id="dashboard-message" viewBox="0 0 24 24"><path d="M3 5h18v13H8l-5 3zM7 10h10m-10 4h7"/></symbol>
+  <symbol id="dashboard-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="dashboard-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4m10-4v4M3 10h18m-13 5h3"/></symbol>
+  <symbol id="dashboard-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+</svg>
+
+<div class="dashboard">
+  <section class="dashboard__intro" aria-labelledby="dashboard-title">
+    <span class="dashboard__eyebrow">Panel de inicio</span>
+    <h1 id="dashboard-title">Inicio</h1>
+    <p>Bienvenido al sistema de Recursos Humanos de TECHFORB. Consultá la actividad general y accedé a los módulos desde un solo lugar.</p>
+  </section>
+
+  <section class="dashboard__section" aria-labelledby="dashboard-summary-title">
+    <h2 id="dashboard-summary-title">Resumen general</h2>
+    @let state = summaryState();
+    @switch (state.status) {
+      @case ('loading') {
+        <app-loading-state message="Cargando resumen general…" />
+      }
+      @case ('error') {
+        <app-error-alert [message]="state.message" retryLabel="Reintentar" (retry)="reload()" />
+      }
+      @case ('empty') {
+        <p class="dashboard__notice">No hay indicadores disponibles por el momento.</p>
+      }
+      @case ('ready') {
+        <div class="dashboard__grid dashboard__grid--summary">
+          <a class="dashboard__card dashboard__metric" routerLink="/employees">
+            <span class="dashboard__card-top"><span class="dashboard__icon"><svg aria-hidden="true"><use href="#dashboard-people" /></svg></span><svg class="dashboard__arrow" aria-hidden="true"><use href="#dashboard-arrow" /></svg></span>
+            <span class="dashboard__metric-body"><span class="dashboard__muted">Colaboradores activos</span><strong>{{ state.data.activeEmployees }}</strong><span class="dashboard__muted">{{ state.data.activeEmployees === 0 ? 'Sin colaboradores activos registrados' : 'Colaboradores registrados como activos' }}</span></span>
+          </a>
+          <div class="dashboard__card dashboard__metric">
+            <span class="dashboard__card-top"><span class="dashboard__icon"><svg aria-hidden="true"><use href="#dashboard-request" /></svg></span></span>
+            <span class="dashboard__metric-body"><span class="dashboard__muted">Solicitudes pendientes</span><strong>{{ state.data.pendingRequests }}</strong><span class="dashboard__muted">{{ state.data.pendingRequests === 0 ? 'Sin solicitudes para revisar' : 'Solicitudes para revisar' }}</span></span>
+          </div>
+          <div class="dashboard__card dashboard__metric">
+            <span class="dashboard__card-top"><span class="dashboard__icon"><svg aria-hidden="true"><use href="#dashboard-calendar" /></svg></span></span>
+            <span class="dashboard__metric-body"><span class="dashboard__muted">Próximos eventos</span><strong>{{ state.data.upcomingEvents }}</strong><span class="dashboard__muted">Cumpleaños y beneficios por vencer</span></span>
+          </div>
+        </div>
+      }
+    }
+  </section>
+
+  <section class="dashboard__section" aria-labelledby="dashboard-access-title">
+    <div class="dashboard__section-heading">
+      <h2 id="dashboard-access-title">Accesos rápidos</h2>
+      <p>Ingresá directamente al módulo que necesitás.</p>
+    </div>
+    <div class="dashboard__grid dashboard__grid--access">
+      <a class="dashboard__card dashboard__access" routerLink="/employees">
+        <span class="dashboard__icon"><svg aria-hidden="true"><use href="#dashboard-people" /></svg></span>
+        <span class="dashboard__access-bottom"><span><strong>Gestión de Empleados</strong><span class="dashboard__muted">Legajos, perfiles y asignaciones</span></span><svg class="dashboard__arrow" aria-hidden="true"><use href="#dashboard-arrow" /></svg></span>
+      </a>
+      <div class="dashboard__card dashboard__access">
+        <span class="dashboard__icon"><svg aria-hidden="true"><use href="#dashboard-money" /></svg></span>
+        <span class="dashboard__access-bottom"><span><strong>Sueldos y Bonos</strong><span class="dashboard__muted">Remuneraciones y beneficios</span></span></span>
+      </div>
+      <div class="dashboard__card dashboard__access">
+        <span class="dashboard__icon"><svg aria-hidden="true"><use href="#dashboard-request" /></svg></span>
+        <span class="dashboard__access-bottom"><span><strong>Solicitudes</strong><span class="dashboard__muted">Revisión y seguimiento de pedidos</span></span></span>
+      </div>
+      <div class="dashboard__card dashboard__access">
+        <span class="dashboard__icon"><svg aria-hidden="true"><use href="#dashboard-message" /></svg></span>
+        <span class="dashboard__access-bottom"><span><strong>Comunicados</strong><span class="dashboard__muted">Mensajes y registro de envíos</span></span></span>
+      </div>
+      <div class="dashboard__card dashboard__access">
+        <span class="dashboard__icon"><svg aria-hidden="true"><use href="#dashboard-clock" /></svg></span>
+        <span class="dashboard__access-bottom"><span><strong>Horas Extras</strong><span class="dashboard__muted">Autorizaciones y compensaciones</span></span></span>
+      </div>
+    </div>
+  </section>
+</div>

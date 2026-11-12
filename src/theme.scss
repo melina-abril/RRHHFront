@@ -24,6 +24,7 @@
   --color-soft-background: var(--soft-background);
   --color-active-item: var(--active-item);
   --color-border: var(--border);
+  --color-text: var(--text-primary);
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-success: var(--success);
@@ -43,7 +44,6 @@
 :root {
   --color-on-primary: #ffffff;
   --color-surface-muted: var(--soft-background);
-  --color-text: var(--text-primary);
   --color-text-muted: var(--text-secondary);
   --color-focus: var(--accent);
   --color-info: var(--primary);
