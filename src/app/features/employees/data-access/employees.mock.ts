@@ -1,39 +1,55 @@
 import { Observable } from 'rxjs';
-import { mockResponse } from '../../../core/http/mock-response';
+import { mockError, mockResponse } from '../../../core/http/mock-response';
 import { Page, toPage } from '../../../shared/models/page';
-import { EmployeeResponse } from '../models/employees.models';
+import { EmployeeRequest, EmployeeResponse } from '../models/employees.models';
 
-const employees: EmployeeResponse[] = [
+let employees: EmployeeResponse[] = [
   {
-    id: 'emp-1001', employeeNumber: 'TF-001', firstName: 'María', lastName: 'García',
-    birthDate: '1992-05-14', residenceCountry: 'Argentina', personalEmail: 'maria.garcia@example.com',
-    startDate: '2022-03-01', category: 'PERMANENT', dedication: 'FULL_TIME', workMode: 'HYBRID',
-    jobRole: 'Desarrolladora', status: 'ACTIVE', initialClient: 'Cliente Norte',
-    initialProject: 'Portal interno', initialManager: 'Coordinación técnica', createdAt: '2022-03-01T12:00:00Z',
+    id: '1001', employeeNumber: '1001', firstName: 'Lucía', lastName: 'Fernández',
+    birthDate: '1994-05-18', residenceCountry: 'Argentina', personalEmail: 'lucia.fernandez@example.com',
+    startDate: '2026-07-01', category: 'PERMANENT', dedication: 'FULL_TIME', workMode: 'HYBRID',
+    jobRole: 'Analista funcional', status: 'ACTIVE', initialClient: 'Banco Andino',
+    initialProject: 'Banca digital', initialManager: 'Mariana López', createdAt: '2026-07-01T09:00:00Z',
   },
   {
-    id: 'emp-1002', employeeNumber: 'TF-002', firstName: 'Juan', lastName: 'Pérez',
-    birthDate: '1999-09-08', residenceCountry: 'México', personalEmail: 'juan.perez@example.com',
-    startDate: '2025-02-10', category: 'INTERN', dedication: 'PART_TIME', workMode: 'REMOTE',
-    jobRole: 'Analista de datos', status: 'ACTIVE', initialClient: 'Cliente Sur',
-    initialProject: 'Análisis de datos', initialManager: null, createdAt: '2025-02-10T14:30:00Z',
-  },
-  {
-    id: 'emp-1003', employeeNumber: 'TF-003', firstName: 'Lucía', lastName: 'Fernández',
-    birthDate: '1988-11-22', residenceCountry: 'Argentina', personalEmail: 'lucia.fernandez@example.com',
-    startDate: '2021-07-05', category: 'PERMANENT', dedication: 'FULL_TIME', workMode: 'ONSITE',
-    jobRole: 'Diseñadora', status: 'INACTIVE', initialClient: 'Cliente Norte',
-    initialProject: 'Portal interno', initialManager: null, createdAt: '2021-07-05T09:00:00Z',
-  },
-  {
-    id: 'emp-1004', employeeNumber: 'TF-004', firstName: 'Ana', lastName: 'López',
-    birthDate: '1995-01-30', residenceCountry: 'México', personalEmail: 'ana.lopez@example.com',
-    startDate: '2024-06-17', category: 'PERMANENT', dedication: 'FULL_TIME', workMode: 'REMOTE',
-    jobRole: 'Líder de proyecto', status: 'ACTIVE', initialClient: 'Cliente Sur',
-    initialProject: 'Análisis de datos', initialManager: 'Dirección de proyectos', createdAt: '2024-06-17T10:00:00Z',
+    id: '1002', employeeNumber: '1002', firstName: 'Diego', lastName: 'Morales',
+    birthDate: '1998-03-12', residenceCountry: 'México', personalEmail: 'diego.morales@example.com',
+    startDate: '2026-08-15', category: 'INTERN', dedication: 'PART_TIME', workMode: 'REMOTE',
+    jobRole: 'Desarrollador', status: 'ACTIVE', initialClient: null,
+    initialProject: null, initialManager: null, createdAt: '2026-08-15T09:00:00Z',
   },
 ];
 
 export function listEmployeesMock(page: number, size: number): Observable<Page<EmployeeResponse>> {
   return mockResponse(toPage(employees, page, size));
+}
+
+export function getEmployeeMock(id: string): Observable<EmployeeResponse> {
+  const employee = employees.find((item) => item.id === id || item.employeeNumber === id);
+  return employee ? mockResponse(employee) : mockError(404, 'No se encontró el colaborador.');
+}
+
+export function createEmployeeMock(request: EmployeeRequest): Observable<EmployeeResponse> {
+  if (!request.firstName.trim() || !request.lastName.trim() || !request.jobRole.trim()) {
+    return mockError(422, 'Completa los datos obligatorios.');
+  }
+  if (request.birthDate >= request.startDate) {
+    return mockError(422, 'Revisa las fechas.', { startDate: ['La fecha de ingreso debe ser posterior a la fecha de nacimiento.'] });
+  }
+  if (employees.some((employee) => employee.personalEmail.toLowerCase() === request.personalEmail.trim().toLowerCase())) {
+    return mockError(409, 'Ya existe un colaborador con ese correo personal.', {
+      personalEmail: ['El correo personal ya está en uso.'],
+    });
+  }
+  const employeeNumber = String(Math.max(1000, ...employees.map((employee) => Number(employee.employeeNumber))) + 1);
+  const employee: EmployeeResponse = {
+    ...request,
+    personalEmail: request.personalEmail.trim().toLowerCase(),
+    id: employeeNumber,
+    employeeNumber,
+    status: 'ACTIVE',
+    createdAt: new Date().toISOString(),
+  };
+  employees = [employee, ...employees];
+  return mockResponse(employee);
 }

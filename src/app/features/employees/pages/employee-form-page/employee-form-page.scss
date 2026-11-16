@@ -1,0 +1,199 @@
+:host {
+  display: block;
+  color: var(--color-text);
+  font-family: var(--font-family);
+  font-size: 0.875rem;
+}
+
+.employee-form__topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding-bottom: var(--space-md);
+  margin-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.employee-form__topbar a {
+  color: var(--color-text-muted);
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.employee-form__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.employee-form__header h1 {
+  margin: 0 0 var(--space-xs);
+  font-size: 1.75rem;
+  line-height: 1.2;
+}
+
+.employee-form__header p {
+  margin: var(--space-xs) 0 0;
+  color: var(--color-text-muted);
+}
+
+.employee-form__breadcrumb {
+  font-size: 0.8rem;
+}
+
+.employee-form__header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.employee-form__notice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  margin-bottom: var(--space-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface-muted);
+  color: var(--color-text-muted);
+}
+
+.employee-form__notice strong,
+.employee-form__notice-icon {
+  color: var(--color-primary);
+}
+
+.employee-form__notice-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.employee-form__layout {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-lg);
+}
+
+.employee-form__index {
+  position: sticky;
+  top: var(--space-md);
+  display: grid;
+  gap: var(--space-xs);
+  padding: var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+}
+
+.employee-form__index a {
+  padding: var(--space-sm);
+  border-left: 3px solid transparent;
+  border-radius: var(--radius);
+  color: var(--color-text-muted);
+  text-decoration: none;
+}
+
+.employee-form__index a:hover,
+.employee-form__index a:focus-visible {
+  border-left-color: var(--color-primary);
+  background: var(--color-surface-muted);
+  color: var(--color-primary);
+}
+
+.employee-form__sections {
+  display: grid;
+  min-width: 0;
+  gap: var(--space-lg);
+}
+
+.employee-form__card {
+  scroll-margin-top: var(--space-lg);
+  border: 1px solid var(--color-border);
+}
+
+.employee-form__section-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.employee-form__section-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: var(--radius);
+  background: var(--color-surface-muted);
+  color: var(--color-primary);
+}
+
+.employee-form__section-heading h2 {
+  margin: 0;
+  color: var(--color-primary);
+  font-size: 1.125rem;
+}
+
+.employee-form__section-heading p,
+.employee-form__card > p {
+  margin: var(--space-xs) 0 0;
+  color: var(--color-text-muted);
+}
+
+.employee-form__required {
+  color: var(--color-primary);
+}
+
+.employee-form__readonly {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface-muted);
+}
+
+.employee-form__readonly span {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+}
+
+.employee-form__status {
+  margin-top: var(--space-lg);
+}
+
+.employee-form__sections > .employee-form__notice {
+  margin-bottom: 0;
+}
+
+@media (max-width: 850px) {
+  .employee-form__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .employee-form__index {
+    position: static;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .employee-form__index {
+    grid-template-columns: 1fr;
+  }
+
+  .employee-form__header-actions {
+    width: 100%;
+  }
+}
