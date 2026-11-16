@@ -1,43 +1,28 @@
-<app-page-header title="Colaboradores" description="Consulta los colaboradores registrados y abre sus fichas.">
-  <a class="button" routerLink="new">Nuevo colaborador</a>
-</app-page-header>
+<header class="employees-heading">
+  <div><p class="employees-heading__location">Colaboradores / Listado</p><h1>Gestión de Empleados</h1><p>Consulta legajos, datos laborales y asignaciones del equipo en un solo lugar.</p></div>
+  <a class="button" routerLink="new">+ Nuevo colaborador</a>
+</header>
 
-@let state = employeesState();
-@switch (state.status) {
-  @case ('loading') {
-    <app-loading-state message="Cargando colaboradores…" />
-  }
-  @case ('error') {
-    <app-error-alert [message]="state.message" retryLabel="Reintentar" (retry)="reload()" />
-  }
-  @case ('empty') {
-    <app-empty-state message="Todavía no hay colaboradores registrados." />
-  }
-  @case ('ready') {
-    @if (state.data.items.length === 0) {
-      <app-empty-state message="Todavía no hay colaboradores registrados." />
-    } @else {
-      <div class="table-wrapper">
-        <table class="data-table">
-          <caption class="visually-hidden">Listado de colaboradores</caption>
-          <thead><tr><th scope="col">Colaborador</th><th scope="col">Legajo</th><th scope="col">Puesto</th><th scope="col">Estado</th></tr></thead>
-          <tbody>
-            @for (employee of state.data.items; track employee.id) {
-              <tr>
-                <td><a [routerLink]="employee.id">{{ employee.firstName }} {{ employee.lastName }}</a></td>
-                <td>{{ employee.employeeNumber }}</td>
-                <td>{{ employee.jobRole }}</td>
-                <td><app-status-badge [label]="statusInfo[employee.status].label" [tone]="statusInfo[employee.status].tone" /></td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-      <nav class="pagination" aria-label="Páginas de colaboradores">
-        <button type="button" class="button button--secondary" [disabled]="state.data.page === 0" (click)="goToPage(state.data.page - 1)">Anterior</button>
-        <span>Página {{ state.data.page + 1 }} de {{ state.data.totalPages }} · {{ state.data.totalItems }} colaboradores</span>
-        <button type="button" class="button button--secondary" [disabled]="state.data.page + 1 >= state.data.totalPages" (click)="goToPage(state.data.page + 1)">Siguiente</button>
-      </nav>
+<app-employee-filters-bar [value]="filters()" (applied)="applyFilters($event)" />
+
+<section class="employees-results" aria-labelledby="employees-results-title">
+  <div class="employees-results__heading"><div class="employees-results__title"><h2 id="employees-results-title">Colaboradores</h2>@if (allRecords()) { <span class="employees-results__tag">Todos los registros</span> }</div></div>
+  @let state = employeesState();
+  @switch (state.status) {
+    @case ('loading') { <app-loading-state message="Cargando colaboradores…" /> }
+    @case ('error') { <app-error-alert [message]="state.message" retryLabel="Reintentar" (retry)="reload()" /> }
+    @case ('empty') { <app-empty-state [message]="allRecords() ? 'Todavía no hay colaboradores registrados. Puedes iniciar el alta de un colaborador.' : 'No encontramos colaboradores para esta búsqueda. Prueba con otro nombre, legajo o combinación de filtros.'" /> }
+    @case ('ready') {
+      @if (state.data.items.length === 0) {
+        <app-empty-state [message]="allRecords() ? 'Todavía no hay colaboradores registrados. Puedes iniciar el alta de un colaborador.' : 'No encontramos colaboradores para esta búsqueda. Prueba con otro nombre, legajo o combinación de filtros.'" />
+      } @else {
+        <div class="table-wrapper"><table class="data-table"><caption class="visually-hidden">Listado de colaboradores</caption><thead><tr><th scope="col">Legajo</th><th scope="col">Colaborador</th><th scope="col">Categoría</th><th scope="col">Cliente y proyecto</th><th scope="col">Estado</th><th scope="col">Acciones</th></tr></thead><tbody>
+          @for (employee of state.data.items; track employee.id) {
+            <tr><td>{{ employee.employeeNumber }}</td><td><strong>{{ employee.firstName }} {{ employee.lastName }}</strong></td><td>{{ categoryInfo[employee.category] }}</td><td><strong>{{ employee.initialClient || 'Sin cliente' }}</strong><small class="employees-results__project">{{ employee.initialProject || 'Sin asignación vigente' }}</small></td><td><app-status-badge [label]="statusInfo[employee.status].label" [tone]="statusInfo[employee.status].tone" /></td><td><a [routerLink]="employee.id" [attr.aria-label]="'Ver ficha de ' + employee.firstName + ' ' + employee.lastName">Ver ficha</a></td></tr>
+          }
+        </tbody></table></div>
+        <nav class="pagination" aria-label="Paginación de colaboradores"><span>Mostrando {{ state.data.items.length }} de {{ state.data.totalItems }} colaboradores · Página {{ state.data.page + 1 }} de {{ state.data.totalPages }}</span><button type="button" class="button button--secondary" [disabled]="state.data.page === 0" (click)="goToPage(state.data.page - 1)">Anterior</button><button type="button" class="button button--secondary" [disabled]="state.data.page + 1 >= state.data.totalPages" (click)="goToPage(state.data.page + 1)">Siguiente</button></nav>
+      }
     }
   }
-}
+</section>

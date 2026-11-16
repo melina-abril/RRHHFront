@@ -1,31 +1,27 @@
-<a class="detail-back" routerLink="..">← Volver al listado</a>
+<p class="detail-location">Gestión de Empleados / Ficha individual</p>
+<header class="detail-heading"><div><h1>Ficha del colaborador</h1><p>Consulta los datos y antecedentes de este legajo desde un solo lugar.</p></div><a class="button button--secondary" routerLink="..">← Volver al listado</a></header>
+
 @let state = employeeState();
 @switch (state.status) {
-  @case ('loading') {
-    <app-loading-state message="Cargando ficha…" />
-  }
-  @case ('error') {
-    <app-error-alert [message]="state.message" />
-  }
-  @case ('empty') {
-    <app-error-alert message="No se encontró el colaborador." />
-  }
+  @case ('loading') { <app-loading-state message="Cargando la ficha…" /> }
+  @case ('error') { <app-error-alert [message]="state.message" retryLabel="Reintentar" (retry)="reload()" /> }
+  @case ('empty') { <app-error-alert message="No se encontró el colaborador." /> }
   @case ('ready') {
     @let employee = state.data;
-    <app-page-header [title]="employee.firstName + ' ' + employee.lastName" [description]="'Legajo ' + employee.employeeNumber" />
-    <section class="card" aria-label="Ficha del colaborador">
-      <dl class="detail-fields">
-        <div><dt>Estado</dt><dd><app-status-badge [label]="statusInfo[employee.status].label" [tone]="statusInfo[employee.status].tone" /></dd></div>
-        <div><dt>Categoría interna</dt><dd>{{ categories[employee.category] }}</dd></div>
-        <div><dt>Rol laboral</dt><dd>{{ employee.jobRole }}</dd></div>
-        <div><dt>Fecha de ingreso</dt><dd>{{ employee.startDate | date: 'dd/MM/yyyy' }}</dd></div>
-        <div><dt>Fecha de nacimiento</dt><dd>{{ employee.birthDate | date: 'dd/MM/yyyy' }}</dd></div>
-        <div><dt>País de residencia</dt><dd>{{ employee.residenceCountry }}</dd></div>
-        <div><dt>Correo personal</dt><dd>{{ employee.personalEmail }}</dd></div>
-        <div><dt>Cliente inicial</dt><dd>{{ employee.initialClient || 'Sin asignar' }}</dd></div>
-        <div><dt>Proyecto inicial</dt><dd>{{ employee.initialProject || 'Sin asignar' }}</dd></div>
-        <div><dt>Referente inicial</dt><dd>{{ employee.initialManager || 'Sin asignar' }}</dd></div>
-      </dl>
-    </section>
+    <section class="card identity" aria-label="Colaborador"><div class="identity__person"><span class="identity__avatar" aria-hidden="true">{{ employee.firstName.charAt(0) }}{{ employee.lastName.charAt(0) }}</span><div><div class="identity__name"><h2>{{ employee.firstName }} {{ employee.lastName }}</h2><app-status-badge [label]="statusInfo[employee.status].label" [tone]="statusInfo[employee.status].tone" /></div><p>{{ employee.jobRole }} · {{ categoryInfo[employee.category] }} · Ingreso: {{ employee.startDate | date: 'dd/MM/yyyy' }}</p></div></div><div class="identity__number"><small>Legajo permanente · No modificable</small><strong>{{ employee.employeeNumber }}</strong></div></section>
+    <nav class="detail-tabs" aria-label="Secciones de la ficha"><button type="button" [class.detail-tabs__active]="activeSection() === 'datos-personales'" (click)="scrollTo('datos-personales')">Datos personales</button><button type="button" [class.detail-tabs__active]="activeSection() === 'asignaciones'" (click)="scrollTo('asignaciones')">Asignaciones</button><button type="button" [class.detail-tabs__active]="activeSection() === 'documentos'" (click)="scrollTo('documentos')">Documentos</button><button type="button" [class.detail-tabs__active]="activeSection() === 'beneficios'" (click)="scrollTo('beneficios')">Beneficios</button><button type="button" [class.detail-tabs__active]="activeSection() === 'evaluaciones'" (click)="scrollTo('evaluaciones')">Evaluaciones</button></nav>
+    <div class="detail-columns"><div class="detail-column">
+      <section id="datos-personales" class="card detail-section"><div class="detail-section__heading"><h3>Datos personales</h3><a routerLink="edit">Actualizar datos →</a></div><div class="detail-section__body"><p class="detail-section__hint">Información de identificación y contacto de {{ employee.firstName }} {{ employee.lastName }}</p><h4>Identificación</h4><dl class="detail-fields"><div><dt>Nombre</dt><dd>{{ employee.firstName || 'No informado' }}</dd></div><div><dt>Apellido</dt><dd>{{ employee.lastName || 'No informado' }}</dd></div><div><dt>Legajo <small>No modificable</small></dt><dd>{{ employee.employeeNumber }}</dd></div><div><dt>Fecha de nacimiento</dt><dd>{{ employee.birthDate ? (employee.birthDate | date: 'dd/MM/yyyy') : 'No informado' }}</dd></div></dl><h4>Contacto y domicilio</h4><dl class="detail-fields"><div><dt>Correo personal</dt><dd>{{ employee.personalEmail || 'No informado' }}</dd></div><div><dt>País de residencia</dt><dd>{{ employee.residenceCountry || 'No informado' }}</dd></div></dl></div></section>
+      <section class="card detail-section"><div class="detail-section__heading"><h3>Datos laborales</h3><a routerLink="edit">Actualizar datos →</a></div><dl class="detail-fields detail-section__body"><div><dt>Rol laboral</dt><dd>{{ employee.jobRole || 'No informado' }}</dd></div><div><dt>Categoría</dt><dd>{{ categoryInfo[employee.category] }}</dd></div><div><dt>Modalidad</dt><dd>{{ workModeInfo[employee.workMode] }}</dd></div><div><dt>Dedicación</dt><dd>{{ dedicationInfo[employee.dedication] }}</dd></div><div><dt>Fecha de ingreso</dt><dd>{{ employee.startDate | date: 'dd/MM/yyyy' }}</dd></div><div><dt>Referente inicial</dt><dd>{{ employee.initialManager || 'No informado' }}</dd></div></dl></section>
+      <section id="asignaciones" class="card detail-section"><div class="detail-section__heading"><h3>Asignaciones</h3></div><div class="detail-section__body">@if (employee.initialClient || employee.initialProject) { <dl class="detail-fields"><div><dt>Cliente inicial</dt><dd>{{ employee.initialClient || 'No informado' }}</dd></div><div><dt>Proyecto inicial</dt><dd>{{ employee.initialProject || 'No informado' }}</dd></div></dl> } @else { <p class="detail-section__hint">No hay asignaciones registradas en esta ficha.</p> }</div></section>
+      <section class="card detail-section"><div class="detail-section__heading"><h3>Perfil profesional</h3></div><p class="detail-section__body detail-section__hint">No hay información de perfil profesional disponible.</p></section>
+      <section class="card detail-section"><div class="detail-section__heading"><h3>Remuneraciones</h3></div><p class="detail-section__body detail-section__hint">No hay remuneraciones disponibles en esta ficha.</p></section>
+    </div><div class="detail-column">
+      <section id="documentos" class="card detail-section"><div class="detail-section__heading"><h3>Documentos</h3></div><p class="detail-section__body detail-section__hint">No hay documentos registrados.</p></section>
+      <section id="beneficios" class="card detail-section"><div class="detail-section__heading"><h3>Beneficios</h3></div><p class="detail-section__body detail-section__hint">No hay saldos de beneficios disponibles.</p></section>
+      <section id="evaluaciones" class="card detail-section"><div class="detail-section__heading"><h3>Evaluaciones</h3></div><p class="detail-section__body detail-section__hint">No hay evaluaciones registradas.</p></section>
+      <section class="card detail-section"><div class="detail-section__heading"><h3>Bitácora</h3></div><p class="detail-section__body detail-section__hint">No hay registros en la bitácora.</p></section>
+      <section class="card detail-section"><div class="detail-section__heading"><h3>Bonos</h3></div><p class="detail-section__body detail-section__hint">No hay bonos registrados. Los bonos que se asignen aparecerán aquí.</p></section>
+    </div></div><p class="detail-footer">El número de legajo es permanente. Los antecedentes permanecen disponibles incluso después de un egreso.</p>
   }
 }

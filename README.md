@@ -1,19 +1,19 @@
 # Gestión de RR.HH · Frontend
 
-Aplicación Angular 22 para la administración de Recursos Humanos.
+Aplicación Angular 22 para la gestión interna de Recursos Humanos.
 
-## Arranque
+## Desarrollo
 
-Requiere Node.js y npm. Ejecuta `npm install` y `npm start` para abrir la aplicación en `http://localhost:4200` con datos de demostración. En este modo, la contraseña de demostración es `Demo1234!`.
+Requiere una versión de Node.js compatible con Angular 22. Ejecuta `npm install` y `npm start` para abrir la aplicación en `http://localhost:4200` con datos de demostración, sin backend. Para probar la sesión de demostración, usa un correo y la contraseña `Demo1234!`.
 
-Para utilizar el backend local, inícialo en el puerto `8080` y ejecuta `npm run start:backend`. La configuración de desarrollo usa el proxy de `/api` hacia ese puerto. `npm run build` genera siempre una aplicación conectada al backend: la configuración de producción usa `/api` en el mismo origen, sin mocks. Si se despliegan por separado, configura el servidor web para dirigir `/api` al backend.
+Para conectarte al backend local, inicia primero su API en `http://localhost:8080` y ejecuta `npm run start:backend`. El proxy de desarrollo envía las peticiones `/api` a ese puerto. El backend debe permitir el origen `FRONT_URL=http://localhost:4200`. La sesión utiliza `POST /api/auth/login`, `GET /api/auth/me` y `POST /api/auth/logout`; las peticiones de los módulos usan sus endpoints bajo `/api`.
+
+`npm run build` genera siempre la versión de producción con `useMock: false`. Su configuración llama a `/api` en el mismo origen; configura el servidor de despliegue para dirigir ese prefijo al backend. El frontend no se conecta directamente a Firestore: el backend accede a la base, cuyo emulador de desarrollo escucha en `127.0.0.1:8085`.
 
 ## Módulos
 
-- Colaboradores (`/employees`): listado, alta y ficha de colaboradores.
-- Pantalla principal (`/dashboard`): indicadores y próximos eventos.
-- Inicio de sesión (`/login`): pantalla pública, fuera de la navegación administrativa.
+- **Colaboradores** (`/employees`): listado, ficha individual, alta y edición.
+- **Pantalla principal** (`/dashboard`): indicadores y próximos eventos.
+- **Inicio de sesión** (`/login`): acceso a los módulos internos; su ruta pertenece a la sesión compartida y no aparece en el menú.
 
-## Conexión con las otras capas
-
-El frontend consume la API del backend bajo `/api`, en el puerto local `8080`; el backend permite el origen `http://localhost:4200` mediante `FRONT_URL`. La sesión usa `POST /api/auth/login`, `GET /api/auth/me` y `POST /api/auth/logout`. El módulo de colaboradores consume `GET /api/employees`, `GET /api/employees/:id` y `POST /api/employees`; la pantalla principal consume `GET /api/dashboard/summary`. El frontend no se conecta directamente a Firestore: el backend se encarga de acceder a su emulador local en `127.0.0.1:8085`.
+Los módulos internos requieren una sesión con el rol `ADMIN`.
