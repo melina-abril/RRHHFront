@@ -1,0 +1,50 @@
+.employee-detail__back {
+  display: inline-block;
+  margin-bottom: var(--space-lg);
+}
+
+.employee-detail__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.employee-detail__header p {
+  margin: 0 0 var(--space-xs);
+  color: var(--text-secondary);
+}
+
+.employee-detail__header h1 {
+  margin: 0;
+  font-size: 1.75rem;
+}
+
+.employee-detail__section {
+  margin-bottom: var(--space-md);
+}
+
+.employee-detail__section h2 {
+  margin: 0 0 var(--space-md);
+  color: var(--primary);
+  font-size: 1.15rem;
+}
+
+.employee-detail__fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: var(--space-lg);
+  margin: 0;
+}
+
+.employee-detail__fields dt {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.employee-detail__fields dd {
+  margin: var(--space-xs) 0 0;
+  overflow-wrap: anywhere;
+  font-weight: 600;
+}

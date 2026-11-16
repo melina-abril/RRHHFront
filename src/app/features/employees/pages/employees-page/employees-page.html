@@ -1,0 +1,64 @@
+<header class="employees-header">
+  <div>
+    <p class="employees-header__eyebrow">Recursos Humanos / Colaboradores</p>
+    <h1>Colaboradores</h1>
+    <p>Consulta las fichas y encuentra colaboradores por nombre.</p>
+  </div>
+  <a class="button" routerLink="new">Nuevo colaborador</a>
+</header>
+
+<form class="employees-search card" role="search" (submit)="$event.preventDefault(); applySearch()">
+  <div class="form-field">
+    <label for="employee-search">Buscar por nombre</label>
+    <input id="employee-search" type="search" [value]="searchInput()" (input)="searchInput.set($any($event.target).value)" placeholder="Nombre completo o parcial" />
+  </div>
+  <button class="button" type="submit">Buscar</button>
+  <button class="button button--secondary" type="button" (click)="clearSearch()">Limpiar</button>
+</form>
+
+@let state = employeesState();
+@switch (state.status) {
+  @case ('loading') {
+    <app-loading-state message="Cargando colaboradores…" />
+  }
+  @case ('error') {
+    <app-error-alert [message]="state.message" retryLabel="Reintentar" (retry)="reload()" />
+  }
+  @case ('empty') {
+    <app-empty-state message="No se encontraron colaboradores que coincidan con la búsqueda." />
+  }
+  @case ('ready') {
+    <div class="table-wrapper">
+      <table class="data-table">
+        <caption class="visually-hidden">Listado de colaboradores</caption>
+        <thead>
+          <tr>
+            <th scope="col">Colaborador</th>
+            <th scope="col">Legajo</th>
+            <th scope="col">Categoría</th>
+            <th scope="col">Puesto</th>
+            <th scope="col">Fecha de ingreso</th>
+            <th scope="col">Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (employee of state.data.items; track employee.id) {
+            <tr>
+              <td><a [routerLink]="employee.id">{{ employee.firstName }} {{ employee.lastName }}</a></td>
+              <td>{{ employee.employeeNumber }}</td>
+              <td>{{ categoryInfo[employee.category] }}</td>
+              <td>{{ employee.jobRole }}</td>
+              <td>{{ employee.startDate | date: 'dd/MM/yyyy' }}</td>
+              <td><app-status-badge [label]="statusInfo[employee.status].label" [tone]="statusInfo[employee.status].tone" /></td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <nav class="pagination" aria-label="Páginas de colaboradores">
+      <button class="button button--secondary" type="button" [disabled]="state.data.page === 0" (click)="goToPage(state.data.page - 1)">Anterior</button>
+      <span>Página {{ state.data.page + 1 }} de {{ state.data.totalPages }} · {{ state.data.totalItems }} colaboradores</span>
+      <button class="button button--secondary" type="button" [disabled]="state.data.page + 1 >= state.data.totalPages" (click)="goToPage(state.data.page + 1)">Siguiente</button>
+    </nav>
+  }
+}
