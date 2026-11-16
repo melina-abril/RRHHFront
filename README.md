@@ -1,15 +1,19 @@
-# Gestión de RR.HH. · Frontend
+# Gestión de RR.HH · Frontend
 
-Aplicación Angular 22 para TECHFORB. Esta estructura inicial incluye el acceso y una página de inicio; todavía no hay módulos de funcionalidades ni enlaces en la navegación.
+Aplicación Angular 22 para la administración interna de Recursos Humanos. Incluye inicio de sesión, pantalla principal y alta y búsqueda de colaboradores. La navegación interna requiere una sesión con el rol `ADMIN`.
 
-## Arranque
+## Desarrollo
 
-Requiere Node.js compatible con Angular 22. Ejecuta `npm install` y `npm start` para abrir la aplicación en `http://localhost:4200` con el modo de demostración. En ese modo, la sesión acepta cualquier correo válido con la contraseña `Demo1234!`.
+Requiere una versión de Node.js compatible con Angular 22. Ejecuta `npm install` y `npm start` para iniciar la aplicación en `http://localhost:4200` con datos de demostración, sin backend. En modo demostración, el inicio de sesión acepta un correo y la contraseña `Demo1234!`.
 
-Para conectar con el backend local, inicia primero la API en el puerto `8080` y ejecuta `npm run start:backend`. El proxy de desarrollo envía `/api` a `http://localhost:8080`. El backend debe permitir el origen `FRONT_URL=http://localhost:4200`. La pantalla de acceso utiliza `POST /api/auth/login`, `POST /api/auth/logout` y `GET /api/auth/me`; el backend también ofrece `GET /api/health`. No hay otros servicios de funcionalidades en esta etapa. Para iniciar sesión contra el backend se necesita una cuenta administradora creada allí; consulta su documentación y la de la base de datos.
-
-`npm run build` genera la versión de producción con `useMock: false`; espera la API en el mismo origen bajo `/api`. Publica el frontend con HTTPS y configura el backend y su sesión para ese origen.
+Para usar el backend local, inicia primero la API en el puerto `8080` y ejecuta `npm run start:backend`. Esta configuración desactiva los mocks y utiliza el proxy de desarrollo para enviar `/api` al backend. Ejecuta `npm run build` para generar la versión de producción: siempre desactiva los mocks y consulta `/api` en el mismo origen donde se sirve la aplicación. Configura allí un proxy hacia el backend si lo sirves en otro proceso.
 
 ## Módulos
 
-Aún no se han incorporado módulos de funcionalidades. La base de datos Firestore y su emulador en `127.0.0.1:8085` son responsabilidad del backend y de la capa de base de datos; el frontend no se conecta directamente a Firestore.
+- Inicio de sesión: `/login`, gestionado por la sesión común.
+- Pantalla principal: `/dashboard`.
+- Alta y búsqueda de colaboradores: `/employees`.
+
+## Conexión con las otras capas
+
+El frontend se comunica únicamente con el backend, no con Firestore. La API escucha en el puerto `8080` y expone sus rutas bajo `/api`; el proxy de desarrollo conserva los métodos, rutas y cookies de sesión de `/api/auth/login`, `/api/auth/logout` y `/api/auth/me`, además de las rutas del panel y los colaboradores. El backend permite el origen del frontend mediante `FRONT_URL=http://localhost:4200`. La base de datos usa Firestore; su emulador local escucha en `127.0.0.1:8085` y es responsabilidad del backend conectarse a él.

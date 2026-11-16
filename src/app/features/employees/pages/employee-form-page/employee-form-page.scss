@@ -1,0 +1,205 @@
+.employee-form__topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-md);
+  padding-bottom: var(--space-lg);
+  margin-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--border);
+}
+
+.employee-form__topbar strong {
+  color: var(--primary);
+}
+
+.employee-form__topbar a,
+.employee-form__index a {
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+.employee-form__topbar a:hover,
+.employee-form__index a:hover {
+  color: var(--primary);
+}
+
+.employee-form__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-lg);
+}
+
+.employee-form__header h1 {
+  margin: 0 0 var(--space-xs);
+  color: var(--text-primary);
+  font-size: 1.75rem;
+  line-height: 1.2;
+}
+
+.employee-form__header p {
+  margin: var(--space-xs) 0 0;
+  color: var(--text-secondary);
+}
+
+.employee-form__breadcrumb {
+  font-size: 0.85rem;
+}
+
+.employee-form__header-actions {
+  display: flex;
+  flex: none;
+  gap: var(--space-sm);
+}
+
+.employee-form__notice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  margin-bottom: var(--space-lg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--soft-background);
+  color: var(--text-secondary);
+}
+
+.employee-form__notice > span:first-child,
+.employee-form__notice strong {
+  color: var(--primary);
+}
+
+.employee-form__notice--bottom {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.employee-form__layout {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-lg);
+}
+
+.employee-form__index {
+  position: sticky;
+  top: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-sm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.employee-form__index a {
+  padding: var(--space-sm);
+  border-left: 3px solid transparent;
+  border-radius: var(--radius);
+}
+
+.employee-form__index a:focus-visible,
+.employee-form__index a:first-child {
+  border-left-color: var(--primary);
+  background: var(--soft-background);
+  color: var(--primary);
+}
+
+.employee-form__sections {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.employee-form__card {
+  padding: var(--space-lg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  scroll-margin-top: var(--space-lg);
+}
+
+.employee-form__section-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.employee-form__section-heading h2 {
+  margin: 0;
+  color: var(--primary);
+  font-size: 1.125rem;
+}
+
+.employee-form__section-heading p,
+.employee-form__muted {
+  margin: var(--space-xs) 0 0;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.employee-form__icon {
+  display: grid;
+  flex: none;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: var(--radius);
+  background: var(--soft-background);
+  color: var(--primary);
+  font-size: 1.25rem;
+}
+
+.employee-form__card .form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-lg);
+}
+
+.employee-form__card label span {
+  color: var(--primary);
+}
+
+.employee-form__facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-lg);
+  padding-top: var(--space-lg);
+  color: var(--text-primary);
+}
+
+.employee-form__facts p {
+  margin: var(--space-xs) 0 0;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 800px) {
+  .employee-form__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .employee-form__index {
+    position: static;
+  }
+}
+
+@media (max-width: 560px) {
+  .employee-form__header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .employee-form__header-actions {
+    flex-wrap: wrap;
+  }
+
+  .employee-form__card .form-grid,
+  .employee-form__facts {
+    grid-template-columns: 1fr;
+  }
+}
