@@ -2,27 +2,23 @@ import { Observable } from 'rxjs';
 import { mockResponse } from '../../../core/http/mock-response';
 import { DashboardSummaryResponse } from '../models/dashboard.models';
 
-/** Respuesta de demostración con la misma forma que GET /api/dashboard/summary. */
+/** Datos de demostración con la misma forma que la respuesta del backend. */
 export function getDashboardSummaryMock(): Observable<DashboardSummaryResponse> {
-  return mockResponse({
+  const nextMonth = new Date();
+  nextMonth.setUTCMonth(nextMonth.getUTCMonth() + 1, 12);
+  const summary: DashboardSummaryResponse = {
     activeEmployees: 3,
     pendingRequests: null,
-    pendingRequestsMessage: 'Las solicitudes todavía no están disponibles en este panel.',
+    pendingRequestsMessage: 'Las solicitudes pendientes todavía no están disponibles.',
     upcomingEvents: [
       {
         type: 'BIRTHDAY',
-        employeeId: 'EMP-001',
-        employeeNumber: '001',
+        employeeId: 'demo-employee-001',
+        employeeNumber: 'EMP-001',
         employeeName: 'Lucía Fernández',
-        date: '2026-12-08',
-      },
-      {
-        type: 'BIRTHDAY',
-        employeeId: 'EMP-002',
-        employeeNumber: '002',
-        employeeName: 'Paula Medina',
-        date: '2026-12-12',
+        date: nextMonth.toISOString().slice(0, 10),
       },
     ],
-  });
+  };
+  return mockResponse(summary);
 }

@@ -1,4 +1,4 @@
-/** Campos y valores del contrato GET /api/dashboard/summary. */
+/** Respuesta de GET /api/dashboard/summary. */
 export interface DashboardEventResponse {
   type: 'BIRTHDAY';
   employeeId: string;

@@ -1,64 +1,88 @@
-<header class="employees-header">
-  <div>
-    <p class="employees-header__eyebrow">Recursos Humanos / Colaboradores</p>
-    <h1>Colaboradores</h1>
-    <p>Consulta las fichas y encuentra colaboradores por nombre.</p>
-  </div>
-  <a class="button" routerLink="new">Nuevo colaborador</a>
-</header>
+<a class="employees-page__back" routerLink="/dashboard">← Volver al inicio</a>
+<app-page-header title="Colaboradores" description="Busca colaboradores por nombre y consulta los datos registrados." />
 
-<form class="employees-search card" role="search" (submit)="$event.preventDefault(); applySearch()">
-  <div class="form-field">
-    <label for="employee-search">Buscar por nombre</label>
-    <input id="employee-search" type="search" [value]="searchInput()" (input)="searchInput.set($any($event.target).value)" placeholder="Nombre completo o parcial" />
-  </div>
-  <button class="button" type="submit">Buscar</button>
-  <button class="button button--secondary" type="button" (click)="clearSearch()">Limpiar</button>
-</form>
-
-@let state = employeesState();
-@switch (state.status) {
-  @case ('loading') {
-    <app-loading-state message="Cargando colaboradores…" />
-  }
-  @case ('error') {
-    <app-error-alert [message]="state.message" retryLabel="Reintentar" (retry)="reload()" />
-  }
-  @case ('empty') {
-    <app-empty-state message="No se encontraron colaboradores que coincidan con la búsqueda." />
-  }
-  @case ('ready') {
-    <div class="table-wrapper">
-      <table class="data-table">
-        <caption class="visually-hidden">Listado de colaboradores</caption>
-        <thead>
-          <tr>
-            <th scope="col">Colaborador</th>
-            <th scope="col">Legajo</th>
-            <th scope="col">Categoría</th>
-            <th scope="col">Puesto</th>
-            <th scope="col">Fecha de ingreso</th>
-            <th scope="col">Estado</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (employee of state.data.items; track employee.id) {
-            <tr>
-              <td><a [routerLink]="employee.id">{{ employee.firstName }} {{ employee.lastName }}</a></td>
-              <td>{{ employee.employeeNumber }}</td>
-              <td>{{ categoryInfo[employee.category] }}</td>
-              <td>{{ employee.jobRole }}</td>
-              <td>{{ employee.startDate | date: 'dd/MM/yyyy' }}</td>
-              <td><app-status-badge [label]="statusInfo[employee.status].label" [tone]="statusInfo[employee.status].tone" /></td>
-            </tr>
-          }
-        </tbody>
-      </table>
+<section class="card employees-page__filters" aria-labelledby="employee-filters-title">
+  <h2 id="employee-filters-title">Buscar y filtrar</h2>
+  <div class="employees-page__filter-grid">
+    <div class="form-field employees-page__search">
+      <label for="employee-search">Nombre del colaborador</label>
+      <div class="employees-page__search-controls">
+        <input id="employee-search" type="search" [value]="search()" (input)="onSearch($any($event.target).value)" placeholder="Nombre o apellido" autocomplete="off" />
+        <button type="button" class="button button--secondary" (click)="clearSearch()" [disabled]="!search()">Limpiar búsqueda</button>
+      </div>
     </div>
-    <nav class="pagination" aria-label="Páginas de colaboradores">
-      <button class="button button--secondary" type="button" [disabled]="state.data.page === 0" (click)="goToPage(state.data.page - 1)">Anterior</button>
-      <span>Página {{ state.data.page + 1 }} de {{ state.data.totalPages }} · {{ state.data.totalItems }} colaboradores</span>
-      <button class="button button--secondary" type="button" [disabled]="state.data.page + 1 >= state.data.totalPages" (click)="goToPage(state.data.page + 1)">Siguiente</button>
-    </nav>
+    <div class="form-field">
+      <label for="employee-category">Categoría</label>
+      <select id="employee-category" [value]="category()" (change)="onCategory($any($event.target).value)">
+        <option value="">Todas</option>
+        <option value="PERMANENT">Permanente</option>
+        <option value="INTERN">Pasante</option>
+      </select>
+    </div>
+    <div class="form-field">
+      <label for="employee-status">Estado</label>
+      <select id="employee-status" [value]="status()" (change)="onStatus($any($event.target).value)">
+        <option value="">Todos</option>
+        <option value="ACTIVE">Activo</option>
+        <option value="INACTIVE">Inactivo</option>
+      </select>
+    </div>
+    <div class="form-field">
+      <label for="employee-client">Cliente inicial</label>
+      <input id="employee-client" type="search" [value]="client()" (input)="onClient($any($event.target).value)" placeholder="Todos los clientes" />
+    </div>
+    <div class="form-field">
+      <label for="employee-project">Proyecto inicial</label>
+      <input id="employee-project" type="search" [value]="project()" (input)="onProject($any($event.target).value)" placeholder="Todos los proyectos" />
+    </div>
+  </div>
+</section>
+
+<section aria-label="Resultados de colaboradores">
+  @let state = filteredState();
+  @switch (state.status) {
+    @case ('loading') {
+      <app-loading-state message="Cargando colaboradores…" />
+    }
+    @case ('error') {
+      <app-error-alert [message]="state.message" retryLabel="Reintentar" (retry)="reload()" />
+    }
+    @case ('empty') {
+      <app-empty-state message="No se encontraron colaboradores que coincidan con la búsqueda y los filtros." />
+    }
+    @case ('ready') {
+      <p class="employees-page__count">{{ state.data.length }} colaboradores encontrados</p>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <caption class="visually-hidden">Colaboradores encontrados</caption>
+          <thead>
+            <tr>
+              <th scope="col">Colaborador</th>
+              <th scope="col">Legajo</th>
+              <th scope="col">Puesto</th>
+              <th scope="col">Categoría</th>
+              <th scope="col">Cliente inicial</th>
+              <th scope="col">Proyecto inicial</th>
+              <th scope="col">Ingreso</th>
+              <th scope="col">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (employee of state.data; track employee.id) {
+              <tr>
+                <td class="employees-page__name">{{ employee.firstName }} {{ employee.lastName }}</td>
+                <td>{{ employee.employeeNumber }}</td>
+                <td>{{ employee.jobRole }}</td>
+                <td>{{ employee.category === 'PERMANENT' ? 'Permanente' : 'Pasante' }}</td>
+                <td>{{ employee.initialClient ?? '—' }}</td>
+                <td>{{ employee.initialProject ?? '—' }}</td>
+                <td>{{ employee.startDate | date: 'dd/MM/yyyy' }}</td>
+                <td><span class="employees-page__badge" [class.employees-page__badge--inactive]="employee.status === 'INACTIVE'">{{ employee.status === 'ACTIVE' ? 'Activo' : 'Inactivo' }}</span></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
   }
-}
+</section>

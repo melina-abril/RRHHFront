@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { switchMap } from 'rxjs';
-import { EmptyState } from '../../../../shared/components/empty-state';
+import { CurrentUser } from '../../../../core/session/current-user';
 import { ErrorAlert } from '../../../../shared/components/error-alert';
 import { LoadingState } from '../../../../shared/components/loading-state';
 import { LoadState } from '../../../../shared/models/load-state';
@@ -13,16 +13,19 @@ import { DashboardSummaryResponse } from '../../models/dashboard.models';
 
 @Component({
   selector: 'app-dashboard-page',
-  imports: [DatePipe, RouterLink, EmptyState, ErrorAlert, LoadingState],
+  imports: [DatePipe, RouterLink, ErrorAlert, LoadingState],
   templateUrl: './dashboard-page.html',
   styleUrl: './dashboard-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardPage {
   private readonly dashboardService = inject(DashboardService);
+  private readonly currentUser = inject(CurrentUser);
   private readonly reloadCount = signal(0);
-  private readonly request = computed(() => ({ reload: this.reloadCount() }));
+  private readonly request = computed(() => this.reloadCount());
 
+  protected readonly user = this.currentUser.user;
+  protected readonly today = new Date();
   protected readonly summaryState = toSignal(
     toObservable(this.request).pipe(
       switchMap(() => toLoadState(this.dashboardService.getDashboardSummary())),

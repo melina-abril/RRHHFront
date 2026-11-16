@@ -10,7 +10,7 @@ import { getDashboardSummaryMock } from './dashboard.mock';
 export class DashboardService {
   private readonly http = inject(HttpClient);
 
-  /** GET /api/dashboard/summary. */
+  /** GET /api/dashboard/summary */
   getDashboardSummary(): Observable<DashboardSummaryResponse> {
     if (environment.useMock) return getDashboardSummaryMock();
     return this.http.get<DashboardSummaryResponse>(apiUrl('/api/dashboard/summary'));

@@ -1,51 +1,60 @@
-<div class="dashboard">
+<main class="dashboard">
   <header class="dashboard__intro">
     <p class="dashboard__breadcrumb">RH smart / Inicio</p>
     <h1>Inicio</h1>
     <p>Bienvenido al sistema de Recursos Humanos de TECHFORB. Consulta la actividad general y accede a los módulos desde un solo lugar.</p>
+    @if (user(); as sessionUser) {
+      <p class="dashboard__greeting">Hola, {{ sessionUser.name }}</p>
+    }
   </header>
 
-  <section class="dashboard__section" aria-labelledby="summary-title">
-    <h2 id="summary-title">Resumen general</h2>
-    @let summaryStateValue = summaryState();
-    @switch (summaryStateValue.status) {
+  <section class="dashboard__section" aria-labelledby="dashboard-summary-title">
+    <h2 id="dashboard-summary-title">Resumen general</h2>
+    @let summary = summaryState();
+    @switch (summary.status) {
       @case ('loading') {
         <app-loading-state message="Cargando el resumen…" />
       }
       @case ('error') {
-        <app-error-alert [message]="summaryStateValue.message" retryLabel="Reintentar" (retry)="reload()" />
+        <app-error-alert [message]="summary.message" retryLabel="Reintentar" (retry)="reload()" />
       }
       @case ('empty') {
-        <app-empty-state message="Todavía no hay datos para mostrar en el resumen." />
+        <p class="dashboard__notice">Todavía no hay indicadores disponibles.</p>
       }
       @case ('ready') {
         <div class="dashboard__kpis">
           <article class="dashboard__kpi">
             <span class="dashboard__icon" aria-hidden="true">♙</span>
-            <strong class="dashboard__value">{{ summaryStateValue.data.activeEmployees }}</strong>
+            <strong>{{ summary.data.activeEmployees }}</strong>
             <span>Colaboradores activos</span>
             <small>Con vínculo laboral activo</small>
           </article>
           <article class="dashboard__kpi">
             <span class="dashboard__icon" aria-hidden="true">▤</span>
-            <strong class="dashboard__value">{{ summaryStateValue.data.pendingRequests === null ? '—' : summaryStateValue.data.pendingRequests }}</strong>
+            <strong>{{ summary.data.pendingRequests === null ? '—' : summary.data.pendingRequests }}</strong>
             <span>Solicitudes pendientes</span>
-            <small>{{ summaryStateValue.data.pendingRequestsMessage }}</small>
+            <small>{{ summary.data.pendingRequestsMessage }}</small>
           </article>
           <article class="dashboard__kpi">
             <span class="dashboard__icon" aria-hidden="true">▦</span>
-            <strong class="dashboard__value">{{ summaryStateValue.data.upcomingEvents.length }}</strong>
+            <strong>{{ summary.data.upcomingEvents.length }}</strong>
             <span>Próximos eventos</span>
-            <small>Registrados en el sistema</small>
+            <small>Registrados próximamente</small>
+          </article>
+          <article class="dashboard__kpi">
+            <span class="dashboard__icon" aria-hidden="true">▥</span>
+            <strong>5</strong>
+            <span>Módulos disponibles</span>
+            <small>Accesos de esta pantalla</small>
           </article>
         </div>
       }
     }
   </section>
 
-  <section class="dashboard__section" aria-labelledby="modules-title">
+  <section class="dashboard__section" aria-labelledby="dashboard-access-title">
     <div class="dashboard__section-heading">
-      <h2 id="modules-title">Accesos rápidos</h2>
+      <h2 id="dashboard-access-title">Accesos rápidos</h2>
       <p>Ingresa directamente al módulo que necesitas</p>
     </div>
     <div class="dashboard__modules">
@@ -66,7 +75,7 @@
         <span>Revisión y seguimiento de pedidos</span>
       </article>
       <article class="dashboard__module">
-        <span class="dashboard__icon" aria-hidden="true">✉</span>
+        <span class="dashboard__icon" aria-hidden="true">◁</span>
         <strong>Comunicados</strong>
         <span>Mensajes y registro de envíos</span>
       </article>
@@ -79,32 +88,38 @@
   </section>
 
   <div class="dashboard__lower">
-    <section class="dashboard__events" aria-labelledby="events-title">
+    <section class="dashboard__events" aria-labelledby="dashboard-events-title">
       <div class="dashboard__events-heading">
-        <h2 id="events-title">Próximos eventos</h2>
-        <p>Cumpleaños registrados de colaboradores</p>
+        <div>
+          <h2 id="dashboard-events-title">Próximos eventos</h2>
+          <p>Eventos registrados</p>
+        </div>
+        @let eventsState = summaryState();
+        @if (eventsState.status === 'ready') {
+          <span class="dashboard__count">{{ eventsState.data.upcomingEvents.length }} programados</span>
+        }
       </div>
-      @let eventState = summaryState();
-      @switch (eventState.status) {
+      @let eventListState = summaryState();
+      @switch (eventListState.status) {
         @case ('loading') {
           <app-loading-state message="Cargando eventos…" />
         }
         @case ('error') {
-          <p class="dashboard__event-message">No se pudieron cargar los eventos.</p>
+          <p class="dashboard__notice">No se pudieron cargar los eventos.</p>
         }
         @case ('empty') {
-          <app-empty-state message="No hay próximos eventos registrados." />
+          <p class="dashboard__notice">No hay próximos eventos registrados.</p>
         }
         @case ('ready') {
-          @if (eventState.data.upcomingEvents.length === 0) {
-            <app-empty-state message="No hay próximos eventos registrados." />
+          @if (eventListState.data.upcomingEvents.length === 0) {
+            <p class="dashboard__notice">No hay próximos eventos registrados.</p>
           } @else {
             <ul class="dashboard__event-list">
-              @for (event of eventState.data.upcomingEvents; track event.employeeId + event.date) {
+              @for (event of eventListState.data.upcomingEvents; track event.employeeId + event.date) {
                 <li class="dashboard__event">
-                  <span class="dashboard__event-date">{{ event.date | date: 'dd MMM' : 'UTC' }}</span>
-                  <span class="dashboard__event-name">Cumpleaños de {{ event.employeeName }}</span>
-                  <span class="dashboard__event-tag">Cumpleaños</span>
+                  <span class="dashboard__event-date" aria-hidden="true">{{ event.date | date: 'dd' : 'UTC' }}<small>{{ event.date | date: 'MMM' : 'UTC' }}</small></span>
+                  <span class="dashboard__event-description"><strong>Cumpleaños de {{ event.employeeName }}</strong><small>{{ event.date | date: 'dd/MM/yyyy' : 'UTC' }}</small></span>
+                  <span class="dashboard__event-type">Cumpleaños</span>
                 </li>
               }
             </ul>
@@ -112,15 +127,14 @@
         }
       }
     </section>
-    <aside class="dashboard__aside" aria-label="Información del panel">
+    <aside class="dashboard__aside" aria-label="Resumen de eventos">
       <h2>Eventos del mes</h2>
+      <p>{{ today | date: 'MMMM yyyy' }}</p>
       @let asideState = summaryState();
       @if (asideState.status === 'ready') {
-        <p>{{ asideState.data.upcomingEvents.length }} próximos cumpleaños registrados</p>
-      } @else {
-        <p>Consulta los eventos registrados cuando esté disponible el resumen.</p>
+        <div class="dashboard__aside-row"><span>Cumpleaños próximos</span><strong>{{ asideState.data.upcomingEvents.length }}</strong></div>
       }
-      <p class="dashboard__notice">Los indicadores se calculan con los datos registrados. Si no hay registros, verás 0 o un mensaje informativo.</p>
+      <p class="dashboard__aside-note">Los indicadores se calculan con los datos registrados. Si no hay registros, verás 0 o un mensaje informativo.</p>
     </aside>
   </div>
-</div>
+</main>
