@@ -5,6 +5,23 @@ export type EmployeeDedication = 'FULL_TIME' | 'PART_TIME';
 export type EmployeeWorkMode = 'REMOTE' | 'HYBRID' | 'ONSITE';
 export type EmployeeStatus = 'ACTIVE' | 'INACTIVE';
 
+/** Campos enviados en el alta; el legajo y el estado los asigna el backend. */
+export interface EmployeeRequest {
+  firstName: string;
+  lastName: string;
+  birthDate: string;
+  residenceCountry: string;
+  personalEmail: string;
+  startDate: string;
+  category: EmployeeCategory;
+  dedication: EmployeeDedication;
+  workMode: EmployeeWorkMode;
+  jobRole: string;
+  initialClient?: string | null;
+  initialProject?: string | null;
+  initialManager?: string | null;
+}
+
 export interface Employee {
   id: string;
   employeeNumber: string;
@@ -27,31 +44,10 @@ export interface Employee {
   deletedAt: string | null;
 }
 
-export interface EmployeeUpdateRequest {
-  firstName: string;
-  lastName: string;
-  birthDate: string;
-  residenceCountry: string;
-  personalEmail: string;
-  dedication: EmployeeDedication;
-  workMode: EmployeeWorkMode;
-  jobRole: string;
-}
-
-export interface EmployeeCreateRequest extends EmployeeUpdateRequest {
-  startDate: string;
-  category: EmployeeCategory;
-  initialClient?: string | null;
-  initialProject?: string | null;
-  initialManager?: string | null;
-}
-
 export interface EmployeeFilters {
   search: string;
-  category: EmployeeCategory | null;
-  client: string;
-  project: string;
   status: EmployeeStatus | null;
+  category: EmployeeCategory | null;
   page: number;
   size: number;
 }
@@ -60,16 +56,19 @@ export const EMPLOYEE_STATUS: Record<EmployeeStatus, { label: string; tone: Badg
   ACTIVE: { label: 'Activo', tone: 'success' },
   INACTIVE: { label: 'Inactivo', tone: 'neutral' },
 };
+
 export const EMPLOYEE_CATEGORY: Record<EmployeeCategory, string> = {
   PERMANENT: 'Permanente',
   INTERN: 'Pasante',
 };
+
 export const EMPLOYEE_DEDICATION: Record<EmployeeDedication, string> = {
   FULL_TIME: 'Tiempo completo',
   PART_TIME: 'Tiempo parcial',
 };
+
 export const EMPLOYEE_WORK_MODE: Record<EmployeeWorkMode, string> = {
-  REMOTE: 'Remota',
-  HYBRID: 'Híbrida',
+  REMOTE: 'Remoto',
+  HYBRID: 'Híbrido',
   ONSITE: 'Presencial',
 };
