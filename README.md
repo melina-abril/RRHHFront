@@ -1,19 +1,19 @@
-# Gestión de RR.HH. · Frontend
+# Gestión de RR.HH · Frontend
 
-Aplicación Angular 22 para la gestión interna de Recursos Humanos.
+Aplicación Angular 22 para la administración de Recursos Humanos.
 
 ## Arranque
 
-Requiere Node.js y npm. Ejecuta `npm install` y `npm start` para trabajar con los datos de demostración. Abre `http://localhost:4200`. Para usar el backend local, inicia primero su API en el puerto `8080` y ejecuta `npm run start:backend`; el proxy de desarrollo dirige `/api` a esa API. El inicio de sesión utiliza `POST /api/auth/login`, `GET /api/auth/me` y `POST /api/auth/logout`. En el emulador, la cuenta de demostración documentada por la base de datos es `rrhh@example.com` con contraseña `Demo1234!`.
+Requiere Node.js y npm. Ejecuta `npm install` y `npm start` para abrir la aplicación en `http://localhost:4200` con datos de demostración. En este modo, la contraseña de demostración es `Demo1234!`.
 
-`npm run build` genera la versión de producción: utiliza el backend, no los mocks, y espera que la API esté disponible en el mismo origen bajo `/api`. Configura el servidor de despliegue para dirigir ese prefijo al backend.
+Para utilizar el backend local, inícialo en el puerto `8080` y ejecuta `npm run start:backend`. La configuración de desarrollo usa el proxy de `/api` hacia ese puerto. `npm run build` genera siempre una aplicación conectada al backend: la configuración de producción usa `/api` en el mismo origen, sin mocks. Si se despliegan por separado, configura el servidor web para dirigir `/api` al backend.
 
 ## Módulos
 
-- **Colaboradores** (`/employees`): listado, alta y ficha individual.
-- **Inicio** (`/dashboard`): indicadores y próximos eventos.
-- **Inicio de sesión** (`/login`): acceso a los módulos internos.
+- Colaboradores (`/employees`): listado, alta y ficha de colaboradores.
+- Pantalla principal (`/dashboard`): indicadores y próximos eventos.
+- Inicio de sesión (`/login`): pantalla pública, fuera de la navegación administrativa.
 
 ## Conexión con las otras capas
 
-El frontend escucha en el puerto `4200` y consume únicamente la API del backend en el puerto `8080`, con prefijo `/api`. El backend debe permitir `http://localhost:4200` mediante su variable `FRONT_URL`. La base de datos es Firestore; el frontend no se conecta directamente a ella. Para desarrollo con datos persistidos, inicia el emulador de Firestore en `127.0.0.1:8085` y configura el backend con `FIREBASE_PROJECT_ID=demo-app`, `GCLOUD_PROJECT=demo-app` y `FIRESTORE_EMULATOR_HOST=127.0.0.1:8085`, siguiendo los README de esas capas.
+El frontend consume la API del backend bajo `/api`, en el puerto local `8080`; el backend permite el origen `http://localhost:4200` mediante `FRONT_URL`. La sesión usa `POST /api/auth/login`, `GET /api/auth/me` y `POST /api/auth/logout`. El módulo de colaboradores consume `GET /api/employees`, `GET /api/employees/:id` y `POST /api/employees`; la pantalla principal consume `GET /api/dashboard/summary`. El frontend no se conecta directamente a Firestore: el backend se encarga de acceder a su emulador local en `127.0.0.1:8085`.

@@ -10,7 +10,7 @@ import { StatusBadge } from '../../../../shared/components/status-badge';
 import { LoadState } from '../../../../shared/models/load-state';
 import { toLoadState } from '../../../../shared/utils/to-load-state';
 import { EmployeesService } from '../../data-access/employees.service';
-import { EMPLOYEE_CATEGORY, EMPLOYEE_DEDICATION, EMPLOYEE_STATUS, EMPLOYEE_WORK_MODE, EmployeeResponse } from '../../models/employees.models';
+import { EMPLOYEE_CATEGORY, EMPLOYEE_STATUS, EmployeeResponse } from '../../models/employees.models';
 
 @Component({
   selector: 'app-employee-detail-page',
@@ -21,13 +21,11 @@ import { EMPLOYEE_CATEGORY, EMPLOYEE_DEDICATION, EMPLOYEE_STATUS, EMPLOYEE_WORK_
 })
 export class EmployeeDetailPage {
   readonly id = input.required<string>();
-  private readonly employeesService = inject(EmployeesService);
+  private readonly service = inject(EmployeesService);
   protected readonly statusInfo = EMPLOYEE_STATUS;
   protected readonly categories = EMPLOYEE_CATEGORY;
-  protected readonly dedications = EMPLOYEE_DEDICATION;
-  protected readonly workModes = EMPLOYEE_WORK_MODE;
   protected readonly employeeState = toSignal(
-    toObservable(this.id).pipe(switchMap((id) => toLoadState(this.employeesService.get(id)))),
+    toObservable(this.id).pipe(switchMap((id) => toLoadState(this.service.get(id)))),
     { initialValue: { status: 'loading' } as LoadState<EmployeeResponse> },
   );
 }

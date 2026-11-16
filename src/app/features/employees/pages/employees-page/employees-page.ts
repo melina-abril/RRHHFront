@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { switchMap } from 'rxjs';
 import { EmptyState } from '../../../../shared/components/empty-state';
@@ -16,19 +15,19 @@ import { EMPLOYEE_STATUS, EmployeeResponse } from '../../models/employees.models
 
 @Component({
   selector: 'app-employees-page',
-  imports: [RouterLink, DatePipe, EmptyState, ErrorAlert, LoadingState, PageHeader, StatusBadge],
+  imports: [RouterLink, EmptyState, ErrorAlert, LoadingState, PageHeader, StatusBadge],
   templateUrl: './employees-page.html',
   styleUrl: './employees-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmployeesPage {
-  private readonly employeesService = inject(EmployeesService);
+  private readonly service = inject(EmployeesService);
   protected readonly statusInfo = EMPLOYEE_STATUS;
   protected readonly page = signal(0);
   private readonly reloadCount = signal(0);
   private readonly request = computed(() => ({ page: this.page(), reload: this.reloadCount() }));
   protected readonly employeesState = toSignal(
-    toObservable(this.request).pipe(switchMap(({ page }) => toLoadState(this.employeesService.list(page, 10)))),
+    toObservable(this.request).pipe(switchMap(({ page }) => toLoadState(this.service.list(page, 10)))),
     { initialValue: { status: 'loading' } as LoadState<Page<EmployeeResponse>> },
   );
 

@@ -37,14 +37,3 @@ export const EMPLOYEE_CATEGORY: Record<EmployeeCategory, string> = {
   PERMANENT: 'Permanente',
   INTERN: 'Pasante',
 };
-
-export const EMPLOYEE_DEDICATION: Record<EmployeeDedication, string> = {
-  FULL_TIME: 'Tiempo completo',
-  PART_TIME: 'Tiempo parcial',
-};
-
-export const EMPLOYEE_WORK_MODE: Record<EmployeeWorkMode, string> = {
-  REMOTE: 'Remoto',
-  HYBRID: 'Híbrido',
-  ONSITE: 'Presencial',
-};

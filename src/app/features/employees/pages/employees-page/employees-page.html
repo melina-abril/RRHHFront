@@ -1,4 +1,4 @@
-<app-page-header title="Colaboradores" description="Consulta la nómina y registra nuevas incorporaciones.">
+<app-page-header title="Colaboradores" description="Consulta los colaboradores registrados y abre sus fichas.">
   <a class="button" routerLink="new">Nuevo colaborador</a>
 </app-page-header>
 
@@ -15,30 +15,29 @@
   }
   @case ('ready') {
     @if (state.data.items.length === 0) {
-      <app-empty-state message="Todavía no hay colaboradores en esta página." />
+      <app-empty-state message="Todavía no hay colaboradores registrados." />
     } @else {
       <div class="table-wrapper">
         <table class="data-table">
-          <caption class="visually-hidden">Colaboradores registrados</caption>
-          <thead><tr><th scope="col">Legajo</th><th scope="col">Colaborador</th><th scope="col">Puesto</th><th scope="col">Ingreso</th><th scope="col">Estado</th></tr></thead>
+          <caption class="visually-hidden">Listado de colaboradores</caption>
+          <thead><tr><th scope="col">Colaborador</th><th scope="col">Legajo</th><th scope="col">Puesto</th><th scope="col">Estado</th></tr></thead>
           <tbody>
             @for (employee of state.data.items; track employee.id) {
               <tr>
-                <td>{{ employee.employeeNumber }}</td>
                 <td><a [routerLink]="employee.id">{{ employee.firstName }} {{ employee.lastName }}</a></td>
+                <td>{{ employee.employeeNumber }}</td>
                 <td>{{ employee.jobRole }}</td>
-                <td>{{ employee.startDate | date: 'dd/MM/yyyy' }}</td>
                 <td><app-status-badge [label]="statusInfo[employee.status].label" [tone]="statusInfo[employee.status].tone" /></td>
               </tr>
             }
           </tbody>
         </table>
       </div>
+      <nav class="pagination" aria-label="Páginas de colaboradores">
+        <button type="button" class="button button--secondary" [disabled]="state.data.page === 0" (click)="goToPage(state.data.page - 1)">Anterior</button>
+        <span>Página {{ state.data.page + 1 }} de {{ state.data.totalPages }} · {{ state.data.totalItems }} colaboradores</span>
+        <button type="button" class="button button--secondary" [disabled]="state.data.page + 1 >= state.data.totalPages" (click)="goToPage(state.data.page + 1)">Siguiente</button>
+      </nav>
     }
-    <nav class="pagination" aria-label="Páginas de colaboradores">
-      <button type="button" class="button button--secondary" [disabled]="state.data.page === 0" (click)="goToPage(state.data.page - 1)">Anterior</button>
-      <span>Página {{ state.data.page + 1 }} de {{ state.data.totalPages }} · {{ state.data.totalItems }} colaboradores</span>
-      <button type="button" class="button button--secondary" [disabled]="state.data.page + 1 >= state.data.totalPages" (click)="goToPage(state.data.page + 1)">Siguiente</button>
-    </nav>
   }
 }
