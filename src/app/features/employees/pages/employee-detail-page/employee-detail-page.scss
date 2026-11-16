@@ -1,0 +1,23 @@
+.employee-detail__back {
+  display: inline-block;
+  margin-bottom: var(--space-md);
+  color: var(--color-primary);
+}
+
+.employee-detail__fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: var(--space-lg);
+  margin: 0;
+}
+
+.employee-detail__fields dt {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.employee-detail__fields dd {
+  margin: var(--space-xs) 0 0;
+  overflow-wrap: anywhere;
+  font-weight: 600;
+}
