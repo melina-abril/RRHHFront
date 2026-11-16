@@ -1,32 +1,72 @@
-<header class="form-heading"><div><p class="form-heading__location">Colaboradores / {{ isEdit() ? 'Editar colaborador' : 'Nuevo colaborador' }}</p><h1>{{ isEdit() ? 'Editar información' : 'Nuevo colaborador' }}</h1>@if (isEdit()) { <p>Actualiza los datos del colaborador sin perder el historial de cambios.</p> } @else { <p>Registra los datos iniciales del colaborador.</p> }</div><a class="button button--secondary" routerLink="..">{{ isEdit() ? '← Volver a la ficha' : '← Volver al listado' }}</a></header>
-
-@let state = loadState();
-@if (isEdit() && state.status === 'loading') { <app-loading-state message="Cargando el colaborador…" /> }
-@else if (isEdit() && state.status === 'error') { <app-error-alert [message]="state.message" /> }
-@else if (isEdit() && state.status === 'empty') { <app-error-alert message="No se encontró el colaborador." /> }
-@else {
-  <p class="form-required">Los campos marcados con * son obligatorios.</p>
-  <div class="form-layout"><form [formGroup]="form" (ngSubmit)="submit()" novalidate class="form-content">
-    @if (submitError(); as message) { <app-error-alert [message]="message" /> }
-    <section class="card form-section"><h2>Datos personales</h2><p>Información de identificación y contacto personal.</p><div class="form-grid">
-      <div class="form-field"><label for="employee-first-name">Nombre *</label>@let firstNameError = errorFor('firstName');<input id="employee-first-name" formControlName="firstName" [attr.aria-invalid]="firstNameError ? 'true' : null" [attr.aria-describedby]="firstNameError ? 'first-name-error' : null" />@if (firstNameError) { <span id="first-name-error" class="form-field__error">{{ firstNameError }}</span> }</div>
-      <div class="form-field"><label for="employee-last-name">Apellido *</label>@let lastNameError = errorFor('lastName');<input id="employee-last-name" formControlName="lastName" [attr.aria-invalid]="lastNameError ? 'true' : null" [attr.aria-describedby]="lastNameError ? 'last-name-error' : null" />@if (lastNameError) { <span id="last-name-error" class="form-field__error">{{ lastNameError }}</span> }</div>
-      @if (state.status === 'ready') { <div class="form-field"><span class="form-field__label">Legajo</span><strong class="form-readonly">{{ state.data.employeeNumber }}</strong><small>No modificable</small></div> }
-      <div class="form-field"><label for="employee-birth-date">Fecha de nacimiento *</label>@let birthError = errorFor('birthDate');<input id="employee-birth-date" type="date" formControlName="birthDate" [attr.aria-invalid]="birthError ? 'true' : null" [attr.aria-describedby]="birthError ? 'birth-error' : null" />@if (birthError) { <span id="birth-error" class="form-field__error">{{ birthError }}</span> }</div>
-      <div class="form-field"><label for="employee-country">País de residencia *</label>@let countryError = errorFor('residenceCountry');<input id="employee-country" formControlName="residenceCountry" [attr.aria-invalid]="countryError ? 'true' : null" [attr.aria-describedby]="countryError ? 'country-error' : null" />@if (countryError) { <span id="country-error" class="form-field__error">{{ countryError }}</span> }</div>
-      <div class="form-field"><label for="employee-email">Correo personal *</label>@let emailError = errorFor('personalEmail');<input id="employee-email" type="email" formControlName="personalEmail" [attr.aria-invalid]="emailError ? 'true' : null" [attr.aria-describedby]="emailError ? 'email-error' : null" />@if (emailError) { <span id="email-error" class="form-field__error">{{ emailError }}</span> }</div>
-    </div></section>
-    <section class="card form-section"><h2>Datos laborales generales</h2><p>Información actual del vínculo laboral.</p><div class="form-grid">
-      <div class="form-field"><label for="employee-role">Rol laboral *</label>@let roleError = errorFor('jobRole');<input id="employee-role" formControlName="jobRole" [attr.aria-invalid]="roleError ? 'true' : null" [attr.aria-describedby]="roleError ? 'role-error' : null" />@if (roleError) { <span id="role-error" class="form-field__error">{{ roleError }}</span> }</div>
-      <div class="form-field"><label for="employee-dedication">Dedicación *</label>@let dedicationError = errorFor('dedication');<select id="employee-dedication" formControlName="dedication" [attr.aria-invalid]="dedicationError ? 'true' : null" [attr.aria-describedby]="dedicationError ? 'dedication-error' : null"><option value="FULL_TIME">Tiempo completo</option><option value="PART_TIME">Tiempo parcial</option></select>@if (dedicationError) { <span id="dedication-error" class="form-field__error">{{ dedicationError }}</span> }</div>
-      <div class="form-field"><label for="employee-work-mode">Modalidad de trabajo *</label>@let modeError = errorFor('workMode');<select id="employee-work-mode" formControlName="workMode" [attr.aria-invalid]="modeError ? 'true' : null" [attr.aria-describedby]="modeError ? 'mode-error' : null"><option value="REMOTE">Remota</option><option value="HYBRID">Híbrida</option><option value="ONSITE">Presencial</option></select>@if (modeError) { <span id="mode-error" class="form-field__error">{{ modeError }}</span> }</div>
-      @if (!isEdit()) {
-        <div class="form-field"><label for="employee-start-date">Fecha de ingreso *</label>@let startError = errorFor('startDate');<input id="employee-start-date" type="date" formControlName="startDate" [attr.aria-invalid]="startError ? 'true' : null" [attr.aria-describedby]="startError ? 'start-error' : null" />@if (startError) { <span id="start-error" class="form-field__error">{{ startError }}</span> }</div>
-        <div class="form-field"><label for="employee-category">Categoría *</label><select id="employee-category" formControlName="category"><option value="PERMANENT">Permanente</option><option value="INTERN">Pasante</option></select></div>
-      }
-    </div></section>
-    @if (!isEdit()) { <section class="card form-section"><h2>Asignación inicial</h2><p>Estos datos son opcionales.</p><div class="form-grid"><div class="form-field"><label for="employee-client">Cliente inicial</label><input id="employee-client" formControlName="initialClient" /></div><div class="form-field"><label for="employee-project">Proyecto inicial</label><input id="employee-project" formControlName="initialProject" /></div><div class="form-field"><label for="employee-manager">Referente inicial</label><input id="employee-manager" formControlName="initialManager" /></div></div></section> }
-    <p class="form-note">Los cambios de categoría, asignación, remuneración, egreso y reingreso se realizan mediante sus procesos específicos.</p>
-    <footer class="form-actions form-footer"><span>Los cambios se reflejarán en la ficha una vez guardados.</span><a class="button button--secondary" routerLink="..">Cancelar</a><button class="button" type="submit" [disabled]="saving()">{{ saving() ? 'Guardando…' : isEdit() ? 'Guardar cambios' : 'Crear colaborador' }}</button></footer>
-  </form><aside class="card form-history" aria-label="Historial de cambios"><h2>Historial de cambios</h2><p>Las modificaciones conservan la fecha, el usuario responsable y los valores anteriores y nuevos.</p></aside></div>
+<div class="employee-form__top">
+  <span>Recursos Humanos</span>
+  <a routerLink="..">← Volver al listado</a>
+</div>
+<header class="employee-form__header">
+  <div>
+    <p class="employee-form__breadcrumb">Colaboradores / Nuevo colaborador</p>
+    <h1>Nuevo colaborador</h1>
+    <p>Completa los datos para registrar a la persona y crear su ficha individual.</p>
+    <p>Los campos marcados con * son obligatorios.</p>
+  </div>
+  <div class="employee-form__actions">
+    <a class="button button--secondary" routerLink="..">Cancelar</a>
+    <button class="button" type="submit" form="employee-create-form" [disabled]="saving()">{{ saving() ? 'Guardando…' : 'Guardar colaborador' }}</button>
+  </div>
+</header>
+<aside class="employee-form__notice">
+  <span class="employee-form__notice-icon" aria-hidden="true">ⓘ</span>
+  <div><strong>¿Ya trabajó en TECHFORB?</strong> Utiliza el proceso de reingreso para conservar su legajo original.</div>
+</aside>
+@if (submitError(); as message) {
+  <app-error-alert class="employee-form__submit-error" [message]="message" />
 }
+<div class="employee-form__layout">
+  <nav class="employee-form__index" aria-label="Secciones del formulario">
+    <button type="button" [class.employee-form__index-active]="activeSection() === 'personal'" (click)="scrollTo('personal')">Datos personales</button>
+    <button type="button" [class.employee-form__index-active]="activeSection() === 'contact'" (click)="scrollTo('contact')">Contacto</button>
+    <button type="button" [class.employee-form__index-active]="activeSection() === 'work'" (click)="scrollTo('work')">Datos laborales</button>
+    <button type="button" [class.employee-form__index-active]="activeSection() === 'corporate'" (click)="scrollTo('corporate')">Datos corporativos</button>
+    <button type="button" [class.employee-form__index-active]="activeSection() === 'assignment'" (click)="scrollTo('assignment')">Asignación inicial</button>
+  </nav>
+  <form id="employee-create-form" class="employee-form__sections" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <section id="personal" class="employee-form__card" aria-labelledby="personal-title">
+      <div class="employee-form__section-header"><span class="employee-form__section-icon" aria-hidden="true">♙</span><div><h2 id="personal-title">Datos personales</h2><p>Información de identificación y contacto.</p></div></div>
+      <div class="form-grid">
+        <div class="form-field"><label for="first-name">Nombre <span class="employee-form__required">*</span></label>@let firstNameError = errorFor('firstName');<input id="first-name" formControlName="firstName" autocomplete="given-name" [attr.aria-invalid]="firstNameError ? 'true' : null" [attr.aria-describedby]="firstNameError ? 'first-name-error' : null" />@if (firstNameError) { <span id="first-name-error" class="form-field__error">{{ firstNameError }}</span> }</div>
+        <div class="form-field"><label for="last-name">Apellido <span class="employee-form__required">*</span></label>@let lastNameError = errorFor('lastName');<input id="last-name" formControlName="lastName" autocomplete="family-name" [attr.aria-invalid]="lastNameError ? 'true' : null" [attr.aria-describedby]="lastNameError ? 'last-name-error' : null" />@if (lastNameError) { <span id="last-name-error" class="form-field__error">{{ lastNameError }}</span> }</div>
+        <div class="form-field"><label for="birth-date">Fecha de nacimiento <span class="employee-form__required">*</span></label>@let birthDateError = errorFor('birthDate');<input id="birth-date" type="date" formControlName="birthDate" [attr.aria-invalid]="birthDateError ? 'true' : null" [attr.aria-describedby]="birthDateError ? 'birth-date-error' : null" />@if (birthDateError) { <span id="birth-date-error" class="form-field__error">{{ birthDateError }}</span> }</div>
+        <div class="form-field"><label for="residence-country">País de residencia <span class="employee-form__required">*</span></label>@let countryError = errorFor('residenceCountry');<input id="residence-country" formControlName="residenceCountry" autocomplete="country-name" [attr.aria-invalid]="countryError ? 'true' : null" [attr.aria-describedby]="countryError ? 'residence-country-error' : null" />@if (countryError) { <span id="residence-country-error" class="form-field__error">{{ countryError }}</span> }</div>
+      </div>
+    </section>
+    <section id="contact" class="employee-form__card" aria-labelledby="contact-title">
+      <div class="employee-form__section-header"><span class="employee-form__section-icon" aria-hidden="true">✉</span><div><h2 id="contact-title">Contacto</h2><p>Medios para comunicarse con la persona.</p></div></div>
+      <div class="form-grid"><div class="form-field form-field--full"><label for="personal-email">Correo personal <span class="employee-form__required">*</span></label>@let emailError = errorFor('personalEmail');<input id="personal-email" type="email" formControlName="personalEmail" autocomplete="email" [attr.aria-invalid]="emailError ? 'true' : null" [attr.aria-describedby]="emailError ? 'personal-email-error' : null" />@if (emailError) { <span id="personal-email-error" class="form-field__error">{{ emailError }}</span> }</div></div>
+    </section>
+    <section id="work" class="employee-form__card" aria-labelledby="work-title">
+      <div class="employee-form__section-header"><span class="employee-form__section-icon" aria-hidden="true">▣</span><div><h2 id="work-title">Datos laborales</h2><p>Condiciones de ingreso y posición dentro de TECHFORB.</p></div></div>
+      <div class="form-grid">
+        <div class="form-field"><label for="start-date">Fecha de ingreso <span class="employee-form__required">*</span></label>@let startDateError = errorFor('startDate');<input id="start-date" type="date" formControlName="startDate" [attr.aria-invalid]="startDateError ? 'true' : null" [attr.aria-describedby]="startDateError ? 'start-date-error' : null" />@if (startDateError) { <span id="start-date-error" class="form-field__error">{{ startDateError }}</span> }</div>
+        <div class="form-field"><label for="job-role">Rol laboral <span class="employee-form__required">*</span></label>@let jobRoleError = errorFor('jobRole');<input id="job-role" formControlName="jobRole" [attr.aria-invalid]="jobRoleError ? 'true' : null" [attr.aria-describedby]="jobRoleError ? 'job-role-error' : null" />@if (jobRoleError) { <span id="job-role-error" class="form-field__error">{{ jobRoleError }}</span> }</div>
+        <div class="form-field"><label for="category">Categoría interna <span class="employee-form__required">*</span></label>@let categoryError = errorFor('category');<select id="category" formControlName="category" [attr.aria-invalid]="categoryError ? 'true' : null" [attr.aria-describedby]="categoryError ? 'category-error' : null"><option value="">Selecciona una categoría</option><option value="PERMANENT">Permanente</option><option value="INTERN">Pasante</option></select>@if (categoryError) { <span id="category-error" class="form-field__error">{{ categoryError }}</span> }</div>
+        <div class="form-field"><label for="dedication">Dedicación <span class="employee-form__required">*</span></label>@let dedicationError = errorFor('dedication');<select id="dedication" formControlName="dedication" [attr.aria-invalid]="dedicationError ? 'true' : null" [attr.aria-describedby]="dedicationError ? 'dedication-error' : null"><option value="">Selecciona una dedicación</option><option value="FULL_TIME">Tiempo completo</option><option value="PART_TIME">Tiempo parcial</option></select>@if (dedicationError) { <span id="dedication-error" class="form-field__error">{{ dedicationError }}</span> }</div>
+        <div class="form-field"><label for="work-mode">Modalidad de trabajo <span class="employee-form__required">*</span></label>@let workModeError = errorFor('workMode');<select id="work-mode" formControlName="workMode" [attr.aria-invalid]="workModeError ? 'true' : null" [attr.aria-describedby]="workModeError ? 'work-mode-error' : null"><option value="">Selecciona una modalidad</option><option value="REMOTE">Remoto</option><option value="HYBRID">Híbrido</option><option value="ONSITE">Presencial</option></select>@if (workModeError) { <span id="work-mode-error" class="form-field__error">{{ workModeError }}</span> }</div>
+      </div>
+      <div class="employee-form__facts"><div><strong>Legajo automático</strong><span>Se generará al guardar; no se puede editar.</span></div><div><strong>Estado inicial: Activo</strong><span>Se aplicará al registrar al colaborador.</span></div></div>
+      <p class="employee-form__hint">¿Ya trabajó en TECHFORB? Utiliza el proceso de reingreso para conservar su legajo original.</p>
+    </section>
+    <section id="corporate" class="employee-form__card" aria-labelledby="corporate-title">
+      <div class="employee-form__section-header"><span class="employee-form__section-icon" aria-hidden="true">ⓘ</span><div><h2 id="corporate-title">Datos corporativos</h2><p>Opcionales; puedes completarlos después.</p></div></div>
+      <p class="employee-form__hint">El alta del colaborador no crea una cuenta de acceso.</p>
+    </section>
+    <section id="assignment" class="employee-form__card" aria-labelledby="assignment-title">
+      <div class="employee-form__section-header"><span class="employee-form__section-icon" aria-hidden="true">◇</span><div><h2 id="assignment-title">Asignación inicial</h2><p>Opcional; también puedes agregarla después.</p></div></div>
+      <div class="form-grid">
+        <div class="form-field"><label for="initial-client">Cliente</label>@let clientError = errorFor('initialClient');<input id="initial-client" formControlName="initialClient" [attr.aria-invalid]="clientError ? 'true' : null" [attr.aria-describedby]="clientError ? 'initial-client-error' : null" />@if (clientError) { <span id="initial-client-error" class="form-field__error">{{ clientError }}</span> }</div>
+        <div class="form-field"><label for="initial-project">Proyecto</label>@let projectError = errorFor('initialProject');<input id="initial-project" formControlName="initialProject" [attr.aria-invalid]="projectError ? 'true' : null" [attr.aria-describedby]="projectError ? 'initial-project-error' : null" />@if (projectError) { <span id="initial-project-error" class="form-field__error">{{ projectError }}</span> }</div>
+        <div class="form-field"><label for="initial-manager">Referente</label>@let managerError = errorFor('initialManager');<input id="initial-manager" formControlName="initialManager" [attr.aria-invalid]="managerError ? 'true' : null" [attr.aria-describedby]="managerError ? 'initial-manager-error' : null" />@if (managerError) { <span id="initial-manager-error" class="form-field__error">{{ managerError }}</span> }</div>
+      </div>
+    </section>
+    <aside class="employee-form__notice"><span class="employee-form__notice-icon" aria-hidden="true">ⓘ</span><span>Al guardar, se validarán los datos obligatorios y posibles duplicados. Se generará un legajo único, la persona quedará <strong>Activa</strong> y se abrirá su ficha. No se creará una cuenta de acceso.</span></aside>
+  </form>
+</div>
