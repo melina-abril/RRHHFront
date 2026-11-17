@@ -18,14 +18,15 @@
 :root {
   --font-family: Inter, -apple-system, 'Segoe UI', sans-serif;
   --color-primary: var(--primary);
-  --color-primary-hover: #3D2672;
-  --color-primary-soft: var(--soft-background);
+  --color-primary-hover: color-mix(in srgb, var(--primary) 85%, var(--text-primary));
   --color-accent: var(--accent);
-  --color-background: var(--background);
+  --color-bg: var(--background);
   --color-surface: var(--surface);
+  --color-soft-background: var(--soft-background);
+  --color-active-item: var(--active-item);
   --color-border: var(--border);
   --color-text: var(--text-primary);
-  --color-text-muted: var(--text-secondary);
+  --color-text-secondary: var(--text-secondary);
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-danger: var(--error);
@@ -34,13 +35,16 @@
   --space-md: 1rem;
   --space-lg: 1.5rem;
   --space-xl: 2rem;
+  --space-2xl: 3rem;
   --radius: 8px;
 }
 
 /* theme-tokens:start — variables del kit que el tema no definía (completadas al generar) */
 :root {
   --color-on-primary: #ffffff;
+  --color-background: var(--background);
   --color-surface-muted: var(--soft-background);
+  --color-text-muted: var(--text-secondary);
   --color-focus: var(--accent);
   --color-info: var(--primary);
   --color-info-surface: #edeaf4;

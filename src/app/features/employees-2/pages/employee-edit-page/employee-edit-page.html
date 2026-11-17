@@ -1,0 +1,60 @@
+<main class="employee-edit">
+  @let state = loadState();
+  @switch (state.status) {
+    @case ('loading') { <app-loading-state message="Cargando colaborador…" /> }
+    @case ('error') { <app-error-alert [message]="state.message" /> }
+    @case ('empty') { <app-error-alert message="No se encontró el colaborador." /> }
+    @case ('ready') {
+      <header class="employee-edit__header">
+        <div>
+          <p class="employee-edit__breadcrumb">Colaboradores / {{ state.data.firstName }} {{ state.data.lastName }} / Edición</p>
+          <h1>Editar colaborador</h1>
+          <p>Corrige los datos vigentes de la ficha de {{ state.data.firstName }} {{ state.data.lastName }}.</p>
+        </div>
+        <div class="employee-edit__identity">
+          <strong>{{ state.data.firstName }} {{ state.data.lastName }}</strong>
+          <small>Legajo {{ state.data.employeeNumber }} · {{ statuses[state.data.status].label }}</small>
+        </div>
+      </header>
+      @if (submitError(); as message) { <app-error-alert [message]="message" /> }
+      @if (saved()) { <p class="employee-edit__success" role="status">Los cambios se guardaron correctamente.</p> }
+      <div class="employee-edit__columns">
+        <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+          <section class="card employee-edit__section" aria-labelledby="edit-information-title">
+            <h2 id="edit-information-title">Editar información</h2>
+            <p>Actualiza los datos del colaborador sin perder el historial de cambios.</p>
+            <p class="employee-edit__required">Los campos marcados con * son obligatorios.</p>
+            <h3>Datos personales</h3>
+            <div class="form-grid">
+              <div class="form-field"><label for="edit-first-name">Nombre *</label>@let firstNameError = errorFor('firstName');<input id="edit-first-name" formControlName="firstName" [attr.aria-invalid]="firstNameError ? 'true' : null" [attr.aria-describedby]="firstNameError ? 'edit-first-name-error' : null" />@if (firstNameError) { <span id="edit-first-name-error" class="form-field__error">{{ firstNameError }}</span> }</div>
+              <div class="form-field"><label for="edit-last-name">Apellido *</label>@let lastNameError = errorFor('lastName');<input id="edit-last-name" formControlName="lastName" [attr.aria-invalid]="lastNameError ? 'true' : null" [attr.aria-describedby]="lastNameError ? 'edit-last-name-error' : null" />@if (lastNameError) { <span id="edit-last-name-error" class="form-field__error">{{ lastNameError }}</span> }</div>
+              <div class="form-field"><label for="edit-number">Legajo</label><input id="edit-number" [value]="state.data.employeeNumber" disabled /><small>Este dato no se puede editar.</small></div>
+              <div class="form-field"><label for="edit-birth-date">Fecha de nacimiento *</label>@let birthDateError = errorFor('birthDate');<input id="edit-birth-date" type="date" formControlName="birthDate" [attr.aria-invalid]="birthDateError ? 'true' : null" [attr.aria-describedby]="birthDateError ? 'edit-birth-date-error' : null" />@if (birthDateError) { <span id="edit-birth-date-error" class="form-field__error">{{ birthDateError }}</span> }</div>
+              <div class="form-field"><label for="edit-country">País de residencia *</label>@let countryError = errorFor('residenceCountry');<input id="edit-country" formControlName="residenceCountry" [attr.aria-invalid]="countryError ? 'true' : null" [attr.aria-describedby]="countryError ? 'edit-country-error' : null" />@if (countryError) { <span id="edit-country-error" class="form-field__error">{{ countryError }}</span> }</div>
+              <div class="form-field"><label for="edit-email">Correo personal *</label>@let emailError = errorFor('personalEmail');<input id="edit-email" type="email" formControlName="personalEmail" [attr.aria-invalid]="emailError ? 'true' : null" [attr.aria-describedby]="emailError ? 'edit-email-error' : null" />@if (emailError) { <span id="edit-email-error" class="form-field__error">{{ emailError }}</span> }</div>
+            </div>
+          </section>
+          <section class="card employee-edit__section" aria-labelledby="edit-work-title">
+            <h2 id="edit-work-title">Datos laborales generales</h2>
+            <p>Información actual del vínculo laboral.</p>
+            <div class="form-grid">
+              <div class="form-field"><label for="edit-dedication">Dedicación *</label>@let dedicationError = errorFor('dedication');<select id="edit-dedication" formControlName="dedication" [attr.aria-invalid]="dedicationError ? 'true' : null" [attr.aria-describedby]="dedicationError ? 'edit-dedication-error' : null"><option value="FULL_TIME">{{ dedications.FULL_TIME }}</option><option value="PART_TIME">{{ dedications.PART_TIME }}</option></select>@if (dedicationError) { <span id="edit-dedication-error" class="form-field__error">{{ dedicationError }}</span> }</div>
+              <div class="form-field"><label for="edit-mode">Modalidad de trabajo *</label>@let modeError = errorFor('workMode');<select id="edit-mode" formControlName="workMode" [attr.aria-invalid]="modeError ? 'true' : null" [attr.aria-describedby]="modeError ? 'edit-mode-error' : null"><option value="REMOTE">{{ workModes.REMOTE }}</option><option value="HYBRID">{{ workModes.HYBRID }}</option><option value="ONSITE">{{ workModes.ONSITE }}</option></select>@if (modeError) { <span id="edit-mode-error" class="form-field__error">{{ modeError }}</span> }</div>
+              <div class="form-field form-field--full"><label for="edit-role">Rol laboral *</label>@let roleError = errorFor('jobRole');<input id="edit-role" formControlName="jobRole" [attr.aria-invalid]="roleError ? 'true' : null" [attr.aria-describedby]="roleError ? 'edit-role-error' : null" />@if (roleError) { <span id="edit-role-error" class="form-field__error">{{ roleError }}</span> }</div>
+            </div>
+          </section>
+          <p class="employee-edit__notice">Los cambios de categoría, asignación, remuneración, egreso y reingreso se realizan mediante sus procesos específicos.</p>
+          <footer class="employee-edit__footer">
+            <span>Los cambios se reflejarán en la ficha del colaborador una vez guardados.</span>
+            <div class="form-actions"><a class="button button--secondary" [routerLink]="['/employees', id()]">Cancelar</a><button class="button" type="submit" [disabled]="saving()">{{ saving() ? 'Guardando…' : 'Guardar cambios' }}</button></div>
+          </footer>
+        </form>
+        <aside class="card employee-edit__history" aria-labelledby="edit-history-title">
+          <h2 id="edit-history-title">Historial de cambios</h2>
+          <p>Las modificaciones conservan la fecha, el usuario responsable y los valores anteriores y nuevos.</p>
+          <a [routerLink]="['/employees', id()]">Volver a la ficha</a>
+        </aside>
+      </div>
+    }
+  }
+</main>

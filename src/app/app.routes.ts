@@ -2,16 +2,11 @@ import type { Routes } from '@angular/router';
 import { roleGuard } from './core/session/role.guard';
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
+  { path: '', pathMatch: 'full', redirectTo: 'employees-2' },
   {
-    path: 'dashboard',
+    path: 'employees-2',
     canMatch: [roleGuard('ADMIN')],
-    loadChildren: () => import('./features/dashboard/dashboard.routes').then(m => m.DASHBOARD_ROUTES)
-  },
-  {
-    path: 'employees',
-    canMatch: [roleGuard('ADMIN')],
-    loadChildren: () => import('./features/employees/employees.routes').then(m => m.EMPLOYEES_ROUTES)
+    loadChildren: () => import('./features/employees-2/employees-2.routes').then(m => m.EMPLOYEES_2_ROUTES)
   },
   {
     path: 'employment-movements',
@@ -32,6 +27,16 @@ export const routes: Routes = [
     path: 'remunerations',
     canMatch: [roleGuard('ADMIN')],
     loadChildren: () => import('./features/remuneration/remuneration.routes').then(m => m.REMUNERATION_ROUTES)
+  },
+  {
+    path: 'employees',
+    canMatch: [roleGuard('ADMIN')],
+    loadChildren: () => import('./features/employees/employees.routes').then(m => m.EMPLOYEES_ROUTES)
+  },
+  {
+    path: 'dashboard',
+    canMatch: [roleGuard('ADMIN')],
+    loadChildren: () => import('./features/dashboard/dashboard.routes').then(m => m.DASHBOARD_ROUTES)
   },
   { path: '**', redirectTo: '' }
 ];
