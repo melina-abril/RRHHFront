@@ -1,21 +1,24 @@
 # Gestión de RR.HH · Frontend
 
-Aplicación Angular 22 para la gestión interna de Recursos Humanos.
+Aplicación Angular 22 para la administración interna de Recursos Humanos.
 
 ## Arranque
 
-Requiere Node.js compatible con Angular 22. Ejecuta `npm install` y `npm start` para abrir la aplicación en `http://localhost:4200` con datos de demostración, sin backend. El inicio de sesión de demostración acepta un correo y la contraseña `Demo1234!`.
+Requiere Node.js compatible con Angular 22. Ejecuta `npm install` y `npm start` para abrir la aplicación en `http://localhost:4200` con datos de demostración, sin necesidad de iniciar el backend. La contraseña del modo de demostración es `Demo1234!`.
 
-Para usar la API local, inicia primero el backend en el puerto `8080` y ejecuta `npm run start:backend`. El proxy de desarrollo envía las peticiones `/api` a `http://localhost:8080`. Configura `FRONT_URL=http://localhost:4200` en el backend para permitir el origen del frontend. La sesión utiliza `POST /api/auth/login`, `GET /api/auth/me` y `POST /api/auth/logout`.
-
-`npm run build` genera siempre la versión conectada al backend: `environment.production.ts` usa `/api` en el mismo origen, sin datos mock. Al desplegarla, configura el servidor web para dirigir `/api` al backend y servir la aplicación Angular en las demás rutas.
+Para usar datos reales, inicia primero el backend en `http://localhost:8080` y ejecuta `npm run start:backend`. El proxy de desarrollo dirige las solicitudes `/api` al backend. `npm run build` genera siempre la versión de producción con `useMock: false`: sirve el frontend y la API bajo el mismo origen, con la API en `/api`.
 
 ## Módulos
 
-- Colaboradores (`/employees`): listado, alta y ficha del colaborador.
-- Pantalla principal (`/dashboard`): indicadores y próximos eventos.
-- Inicio de sesión (`/login`): acceso a los módulos internos; no aparece en el menú.
+- Pantalla principal (`/dashboard`).
+- Colaboradores (`/employees`).
+- Movimientos laborales (`/employment-movements`).
+- Perfil profesional y documentación (`/professional-profiles`).
+- Beneficios y saldos (`/benefits`).
+- Remuneraciones e historial salarial (`/remunerations`).
+
+El inicio de sesión tiene la ruta pública `/login`; no aparece en la navegación. Los módulos administrativos requieren el rol `ADMIN`.
 
 ## Conexión con las otras capas
 
-El frontend solo consume la API del backend en el puerto `8080`; no accede directamente a Firestore. Para desarrollo local con datos persistidos, inicia el emulador de Firestore del proyecto `demo-app` en `127.0.0.1:8085` según el README de la base de datos y configura el backend con `FIREBASE_PROJECT_ID=demo-app` y `FIRESTORE_EMULATOR_HOST=127.0.0.1:8085`. Después inicia el backend y este frontend con `npm run start:backend`.
+El frontend escucha en el puerto `4200` y consume exclusivamente la API del backend en el puerto `8080`, con el prefijo `/api`. Para desarrollo con backend, configura allí `FRONT_URL=http://localhost:4200` y utiliza `npm run start:backend`. El backend se conecta a Firestore mediante `FIREBASE_PROJECT_ID=demo-app` y, en desarrollo local, `FIRESTORE_EMULATOR_HOST=127.0.0.1:8085`. El frontend no accede directamente a Firestore.

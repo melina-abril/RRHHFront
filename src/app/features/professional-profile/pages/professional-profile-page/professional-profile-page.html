@@ -1,0 +1,86 @@
+<div class="profile-page">
+  <p class="profile-page__breadcrumb">Gestión de Empleados / Ficha individual / Perfil técnico y documentación</p>
+  <header class="profile-page__heading">
+    <div>
+      <h1>Perfil profesional y documentación</h1>
+      <p>Información profesional y archivos vinculados al legajo.</p>
+    </div>
+    <span class="profile-page__access">Acceso exclusivo de Recursos Humanos</span>
+  </header>
+
+  @let state = profileState();
+  @switch (state.status) {
+    @case ('loading') {
+      <app-loading-state message="Cargando el perfil…" />
+    }
+    @case ('error') {
+      <app-error-alert [message]="state.message" retryLabel="Reintentar" (retry)="reload()" />
+    }
+    @case ('empty') {
+      <app-empty-state message="Selecciona un colaborador desde su ficha para consultar el perfil." />
+    }
+    @case ('ready') {
+      <section class="profile-page__identity" aria-label="Legajo seleccionado">
+        <span class="profile-page__avatar" aria-hidden="true">RH</span>
+        <div>
+          <strong>Perfil del colaborador</strong>
+          <p>Legajo seleccionado: {{ state.data.employeeId }}</p>
+        </div>
+      </section>
+
+      <div class="profile-page__tabs" role="tablist" aria-label="Secciones del perfil">
+        <button type="button" role="tab" id="profile-tab" [attr.aria-selected]="tab() === 'profile'" aria-controls="profile-panel" (click)="tab.set('profile')">Perfil técnico</button>
+        <button type="button" role="tab" id="documents-tab" [attr.aria-selected]="tab() === 'documents'" aria-controls="documents-panel" (click)="tab.set('documents')">Documentación</button>
+      </div>
+
+      @if (actionError(); as message) {
+        <app-error-alert [message]="message" />
+      }
+
+      @if (tab() === 'profile') {
+        <div id="profile-panel" role="tabpanel" aria-labelledby="profile-tab">
+          @if (editing()) {
+            <form class="profile-page__card profile-page__form" [formGroup]="profileForm" (ngSubmit)="saveProfile()" novalidate>
+              <h2>Editar perfil técnico</h2>
+              <p>Separa los elementos de cada lista con comas.</p>
+              <div class="form-grid">
+                <div class="form-field"><label for="profile-technologies">Tecnologías</label><textarea id="profile-technologies" rows="3" formControlName="technologies" [attr.aria-invalid]="!!errorFor('technologies')" [attr.aria-describedby]="errorFor('technologies') ? 'technologies-error' : null"></textarea>@if (errorFor('technologies'); as message) { <span id="technologies-error" class="form-field__error">{{ message }}</span> }</div>
+                <div class="form-field"><label for="profile-skills">Habilidades</label><textarea id="profile-skills" rows="3" formControlName="skills" [attr.aria-invalid]="!!errorFor('skills')" [attr.aria-describedby]="errorFor('skills') ? 'skills-error' : null"></textarea>@if (errorFor('skills'); as message) { <span id="skills-error" class="form-field__error">{{ message }}</span> }</div>
+                <div class="form-field"><label for="profile-years">Años de experiencia total</label><input id="profile-years" type="number" min="0" max="80" step="0.1" formControlName="experienceYears" [attr.aria-invalid]="!!errorFor('experienceYears')" [attr.aria-describedby]="errorFor('experienceYears') ? 'years-error' : 'experience-hint'" /><small id="experience-hint">Trayectoria profesional, no antigüedad en TECHFORB</small>@if (errorFor('experienceYears'); as message) { <span id="years-error" class="form-field__error">{{ message }}</span> }</div>
+                <div class="form-field"><label for="profile-description">Experiencia profesional</label><textarea id="profile-description" rows="3" formControlName="experienceDescription" [attr.aria-invalid]="!!errorFor('experienceDescription')" [attr.aria-describedby]="errorFor('experienceDescription') ? 'description-error' : null"></textarea>@if (errorFor('experienceDescription'); as message) { <span id="description-error" class="form-field__error">{{ message }}</span> }</div>
+                <div class="form-field form-field--full"><label for="profile-certifications">Certificaciones</label><textarea id="profile-certifications" rows="3" formControlName="certifications" [attr.aria-invalid]="!!errorFor('certifications')" [attr.aria-describedby]="errorFor('certifications') ? 'certifications-error' : 'certifications-hint'"></textarea><small id="certifications-hint">Los archivos se pueden asociar desde Documentación; no son obligatorios</small>@if (errorFor('certifications'); as message) { <span id="certifications-error" class="form-field__error">{{ message }}</span> }</div>
+              </div>
+              <div class="form-actions"><button type="button" class="button button--secondary" (click)="editing.set(false)">Cancelar</button><button type="submit" class="button" [disabled]="saving()">{{ saving() ? 'Guardando…' : 'Guardar cambios' }}</button></div>
+            </form>
+          } @else {
+            <div class="profile-page__grid">
+              <section class="profile-page__card"><div class="profile-page__section-head"><h2>Tecnologías</h2><button type="button" class="profile-page__link" (click)="edit(state.data)">Editar tecnologías</button></div>@if (state.data.technologies.length) { <div class="profile-page__tags">@for (item of state.data.technologies; track $index) { <span>{{ item }}</span> }</div> } @else { <p>Todavía no hay tecnologías cargadas.</p> }</section>
+              <section class="profile-page__card"><div class="profile-page__section-head"><h2>Habilidades</h2><button type="button" class="profile-page__link" (click)="edit(state.data)">Editar habilidades</button></div>@if (state.data.skills.length) { <div class="profile-page__tags">@for (item of state.data.skills; track $index) { <span>{{ item }}</span> }</div> } @else { <p>Todavía no hay habilidades cargadas.</p> }</section>
+              <section class="profile-page__card"><div class="profile-page__section-head"><h2>Experiencia profesional</h2><button type="button" class="profile-page__link" (click)="edit(state.data)">Agregar experiencia</button></div><div><strong>Años de experiencia total</strong><p class="profile-page__hint">Trayectoria profesional, no antigüedad en TECHFORB</p><p>{{ state.data.experienceYears === null ? 'Sin información registrada' : state.data.experienceYears + ' años' }}</p></div><p>{{ state.data.experienceDescription || 'Todavía no hay experiencia profesional registrada.' }}</p></section>
+              <section class="profile-page__card"><div class="profile-page__section-head"><h2>Certificaciones</h2></div>@if (state.data.certifications.length) { <div class="profile-page__tags">@for (item of state.data.certifications; track $index) { <span>{{ item }}</span> }</div> } @else { <div class="profile-page__empty"><strong>Todavía no hay certificaciones cargadas</strong><button type="button" class="button button--secondary" (click)="edit(state.data)">+ Agregar certificación</button></div> }<p class="profile-page__hint">Los archivos se pueden asociar desde Documentación; no son obligatorios</p></section>
+            </div>
+          }
+        </div>
+      } @else {
+        <section id="documents-panel" class="profile-page__card" role="tabpanel" aria-labelledby="documents-tab">
+          <div class="profile-page__section-head"><div><h2>Documentación del legajo</h2><p>{{ state.data.documents.length }} documentos · Título y categoría asociados al legajo.</p></div><button type="button" class="button" (click)="addingDocument.set(true)">Agregar documento</button></div>
+          @if (addingDocument()) {
+            <form class="profile-page__form" [formGroup]="documentForm" (ngSubmit)="saveDocument()" novalidate>
+              <div class="form-grid">
+                <div class="form-field"><label for="document-title">Título *</label><input id="document-title" formControlName="title" [attr.aria-invalid]="!!errorFor('title')" [attr.aria-describedby]="errorFor('title') ? 'title-error' : null" />@if (errorFor('title'); as message) { <span id="title-error" class="form-field__error">{{ message }}</span> }</div>
+                <div class="form-field"><label for="document-category">Categoría *</label><input id="document-category" formControlName="category" [attr.aria-invalid]="!!errorFor('category')" [attr.aria-describedby]="errorFor('category') ? 'category-error' : null" />@if (errorFor('category'); as message) { <span id="category-error" class="form-field__error">{{ message }}</span> }</div>
+                <div class="form-field form-field--full"><label for="document-description">Descripción</label><textarea id="document-description" rows="2" formControlName="description" [attr.aria-invalid]="!!errorFor('description')" [attr.aria-describedby]="errorFor('description') ? 'document-description-error' : null"></textarea>@if (errorFor('description'); as message) { <span id="document-description-error" class="form-field__error">{{ message }}</span> }</div>
+                <div class="form-field form-field--full"><label for="document-file">Archivo (opcional, hasta 400 KB)</label><input id="document-file" type="file" accept=".pdf,.png,.jpg,.jpeg" (change)="selectFile($event)" [attr.aria-invalid]="!!fileError()" [attr.aria-describedby]="fileError() ? 'file-error' : null" />@if (fileError(); as message) { <span id="file-error" class="form-field__error">{{ message }}</span> }</div>
+              </div>
+              <div class="form-actions"><button type="button" class="button button--secondary" (click)="addingDocument.set(false); selectedFile.set(null); fileError.set(null)">Cancelar</button><button type="submit" class="button" [disabled]="saving()">{{ saving() ? 'Guardando…' : 'Guardar documento' }}</button></div>
+            </form>
+          }
+          @if (state.data.documents.length) {
+            <div class="table-wrapper"><table class="data-table"><caption class="visually-hidden">Documentos del colaborador</caption><thead><tr><th scope="col">Documento</th><th scope="col">Categoría</th><th scope="col">Fecha de carga</th><th scope="col">Acciones</th></tr></thead><tbody>@for (document of state.data.documents; track document.id) { <tr><td><strong>{{ document.title }}</strong><small class="profile-page__filename">{{ document.fileName || 'Sin archivo adjunto' }}</small></td><td>{{ document.category }}</td><td>{{ document.createdAt | date: 'dd/MM/yyyy' }}</td><td><div class="profile-page__actions">@if (document.contentBase64) { <button type="button" class="profile-page__link" (click)="openDocument(document, false)">Consultar</button><button type="button" class="profile-page__link" (click)="openDocument(document, true)">Descargar</button> } @else { <span>Sin archivo</span> }</div></td></tr> }</tbody></table></div>
+          } @else { <p>Todavía no hay documentos cargados.</p> }
+        </section>
+      }
+      <a class="profile-page__back" [routerLink]="['/employees', state.data.employeeId]">← Volver a la ficha</a>
+    }
+  }
+</div>

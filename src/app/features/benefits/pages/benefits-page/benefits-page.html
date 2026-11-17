@@ -1,0 +1,141 @@
+<main class="benefits-page">
+  <header class="benefits-page__heading">
+    <div>
+      <p class="benefits-page__breadcrumb">Gestión de Empleados / Ficha individual / Beneficios y saldos</p>
+      <h1>Beneficios y saldos</h1>
+      <p>Consulta de períodos, disponibilidad y movimientos de cada beneficio.</p>
+    </div>
+    @let balances = balanceState();
+    @if (balances.status === 'ready' && updatedAt(); as consultationTime) {
+      <span class="benefits-page__updated">Actualizado el {{ consultationTime | date: "dd/MM/yyyy 'a las' HH:mm" }} · Consulta de Recursos Humanos</span>
+    }
+  </header>
+
+  @let state = balanceState();
+  @switch (state.status) {
+    @case ('loading') {
+      <app-loading-state message="Cargando beneficios…" />
+    }
+    @case ('error') {
+      <app-error-alert [message]="state.message" retryLabel="Reintentar" (retry)="retry()" />
+    }
+    @case ('empty') {
+      <app-empty-state message="Selecciona un colaborador desde su ficha para consultar sus beneficios." />
+    }
+    @case ('ready') {
+      <section class="benefits-page__employee card" aria-label="Legajo consultado">
+        <span class="benefits-page__avatar" aria-hidden="true">{{ state.data.employeeNumber.slice(0, 2) }}</span>
+        <div>
+          <strong>Legajo {{ state.data.employeeNumber }}</strong>
+          <p>Colaborador {{ categories[state.data.category] }}</p>
+        </div>
+      </section>
+
+      <section class="benefits-page__panel" aria-labelledby="benefits-summary">
+        <div class="benefits-page__panel-heading">
+          <div>
+            <h2 id="benefits-summary">Resumen de beneficios</h2>
+            <p>Saldos vigentes de la categoría {{ categories[state.data.category] }}. Los períodos anteriores se consultan en el historial.</p>
+          </div>
+          <span>Saldos expresados en días</span>
+        </div>
+        @if (state.data.balances.length) {
+          <div class="table-wrapper">
+            <table class="data-table">
+              <caption class="visually-hidden">Resumen por beneficio del legajo {{ state.data.employeeNumber }}</caption>
+              <thead><tr><th scope="col">Beneficio</th><th scope="col">Período</th><th scope="col">Otorgados</th><th scope="col">Utilizados</th><th scope="col">Disponibles</th><th scope="col">Vencidos</th><th scope="col">Estado</th><th scope="col">Detalle</th></tr></thead>
+              <tbody>
+                @for (balance of state.data.balances; track balance.benefitType) {
+                  <tr [class.benefits-page__selected]="selectedBalance()?.benefitType === balance.benefitType">
+                    <td><strong>{{ labels[balance.benefitType] }}</strong> @if (selectedBalance()?.benefitType === balance.benefitType) { <span class="benefits-page__detail-label">En detalle</span> }</td>
+                    <td>@if (balance.periodStart && balance.periodEnd) { {{ balance.periodStart | date: 'dd/MM/yyyy' }} – {{ balance.periodEnd | date: 'dd/MM/yyyy' }} } @else { — }</td>
+                    <td>{{ balance.granted ?? '—' }}</td>
+                    <td>{{ balance.used ?? '—' }}</td>
+                    <td>{{ balance.available ?? '—' }}</td>
+                    <td>{{ balance.expired ?? '—' }}</td>
+                    <td>{{ statuses[balance.status] }}</td>
+                    <td><button class="benefits-page__text-button" type="button" (click)="selectBenefit(balance.benefitType)" [attr.aria-pressed]="selectedBalance()?.benefitType === balance.benefitType">Ver detalle</button></td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        } @else {
+          <app-empty-state message="No hay beneficios disponibles para este legajo." />
+        }
+      </section>
+
+      <div class="benefits-page__columns">
+        <section class="benefits-page__panel" aria-label="Detalle e historial del beneficio">
+          @if (selectedBalance(); as selected) {
+            <div class="benefits-page__panel-heading">
+              <div>
+                <h2>{{ labels[selected.benefitType] }}</h2>
+                <p>@if (selected.periodStart && selected.periodEnd) { Período: {{ selected.periodStart | date: 'dd/MM/yyyy' }} – {{ selected.periodEnd | date: 'dd/MM/yyyy' }} } @else { {{ statuses[selected.status] }} }</p>
+              </div>
+              <span class="benefits-page__badge">{{ statuses[selected.status] }}</span>
+            </div>
+            <div class="benefits-page__metrics">
+              <div><span>Otorgados</span><strong>{{ selected.granted ?? '—' }}</strong></div>
+              <div><span>Utilizados</span><strong>{{ selected.used ?? '—' }}</strong></div>
+              <div class="benefits-page__metric-highlight"><span>Disponibles</span><strong>{{ selected.available ?? '—' }}</strong></div>
+              <div><span>Vencidos</span><strong>{{ selected.expired ?? '—' }}</strong></div>
+            </div>
+            <div class="benefits-page__history">
+              <h3>Historial de movimientos</h3>
+              <p>Ordenado del más reciente al más antiguo · Los saldos son los resultantes en cada período</p>
+              @let movements = movementState();
+              @switch (movements.status) {
+                @case ('loading') { <app-loading-state message="Cargando movimientos…" /> }
+                @case ('error') { <app-error-alert [message]="movements.message" retryLabel="Reintentar" (retry)="retry()" /> }
+                @case ('empty') { <app-empty-state message="No hay movimientos registrados." /> }
+                @case ('ready') {
+                  @if (visibleMovements().length) {
+                    <div class="table-wrapper">
+                      <table class="data-table">
+                        <caption class="visually-hidden">Movimientos de {{ labels[selected.benefitType] }}</caption>
+                        <thead><tr><th scope="col">Fecha</th><th scope="col">Movimiento y detalle</th><th scope="col">Días</th><th scope="col">Saldo resultante</th></tr></thead>
+                        <tbody>
+                          @for (movement of visibleMovements(); track movement.id) {
+                            <tr><td>{{ movement.occurredAt | date: 'dd/MM/yyyy' }}</td><td>{{ movement.reason }}</td><td>{{ movement.amount > 0 ? '+' : '' }}{{ movement.amount }}</td><td>{{ movement.resultingBalance }}</td></tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                  } @else { <app-empty-state message="No hay movimientos para este beneficio." /> }
+                }
+              }
+            </div>
+          }
+        </section>
+
+        <aside class="benefits-page__panel benefits-page__adjustment" aria-labelledby="adjustment-title">
+          <div class="benefits-page__panel-heading"><div><h2 id="adjustment-title">Registrar ajuste</h2><p>Todo ajuste queda registrado en el historial.</p></div></div>
+          @if (saveError(); as message) { <app-error-alert [message]="message" /> }
+          @if (saved()) { <p role="status">Ajuste registrado correctamente.</p> }
+          <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+            <div class="form-field">
+              <label for="adjustment-direction">Tipo de ajuste</label>
+              <select id="adjustment-direction" formControlName="direction"><option value="add">Agregar días</option><option value="subtract">Descontar días</option></select>
+            </div>
+            <div class="form-field">
+              <label for="adjustment-amount">Cantidad de días</label>
+              @let amountError = errorFor('amount');
+              <input id="adjustment-amount" type="number" min="1" step="1" formControlName="amount" [attr.aria-invalid]="amountError ? 'true' : null" [attr.aria-describedby]="amountError ? 'adjustment-amount-error' : null" />
+              @if (amountError) { <span id="adjustment-amount-error" class="form-field__error">{{ amountError }}</span> }
+            </div>
+            <div class="form-field">
+              <label for="adjustment-reason">Justificación *</label>
+              @let reasonError = errorFor('reason');
+              <textarea id="adjustment-reason" rows="3" formControlName="reason" placeholder="Describe el motivo del ajuste" [attr.aria-invalid]="reasonError ? 'true' : null" [attr.aria-describedby]="reasonError ? 'adjustment-reason-error' : null"></textarea>
+              @if (reasonError) { <span id="adjustment-reason-error" class="form-field__error">{{ reasonError }}</span> }
+            </div>
+            <p>La justificación es obligatoria para registrar el movimiento.</p>
+            <button class="button" type="submit" [disabled]="saving() || selectedBalance()?.status === 'NOT_APPLICABLE'">{{ saving() ? 'Guardando…' : 'Guardar ajuste' }}</button>
+          </form>
+        </aside>
+      </div>
+    }
+  }
+  <p class="benefits-page__note">Los saldos se descuentan únicamente al aprobar solicitudes. Las pendientes, rechazadas y ausencias médicas justificadas no consumen beneficios. Las solicitudes se gestionan en el módulo Solicitudes.</p>
+</main>
