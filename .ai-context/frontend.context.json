@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "layer": "frontend",
   "kind": "features",
-  "generatedAt": "2026-11-16T20:48:33.017Z",
+  "generatedAt": "2026-11-17T13:04:41.617Z",
   "system": {
     "uid": "3gwNp1rgzqO2F7l1sxjV",
     "name": "Gestión de RR.HH"
@@ -20,6 +20,114 @@
   ],
   "environment": [],
   "modules": [
+    {
+      "moduleName": "employment-movements",
+      "title": "Movimientos laborales",
+      "featureKeys": [
+        "0623c847-a92f-4a70-a035-97ba5fcfcde2"
+      ],
+      "services": [
+        {
+          "method": "GET",
+          "path": "/api/employment-movements/:id",
+          "name": "getEmploymentMovements",
+          "description": "Devuelve los datos laborales disponibles del colaborador y sus movimientos registrados."
+        },
+        {
+          "method": "POST",
+          "path": "/api/employment-movements/:id/category-change",
+          "name": "changeCategory",
+          "description": "Registra un cambio de categoría con fecha efectiva y responsable."
+        },
+        {
+          "method": "POST",
+          "path": "/api/employment-movements/:id/departure",
+          "name": "registerDeparture",
+          "description": "Registra un egreso y cambia el estado del colaborador a inactivo sin eliminar su ficha."
+        },
+        {
+          "method": "POST",
+          "path": "/api/employment-movements/:id/rehire",
+          "name": "registerRehire",
+          "description": "Registra un reingreso y reactiva el legajo existente."
+        }
+      ]
+    },
+    {
+      "moduleName": "professional-profile",
+      "title": "Perfil profesional y documentación",
+      "featureKeys": [
+        "b05105f4-374f-4e0d-8d6b-46db67321afb"
+      ],
+      "services": [
+        {
+          "method": "GET",
+          "path": "/api/professional-profiles/:id",
+          "name": "getProfessionalProfile",
+          "description": "Devuelve el perfil profesional y la documentación disponible del colaborador."
+        },
+        {
+          "method": "PUT",
+          "path": "/api/professional-profiles/:id",
+          "name": "updateProfessionalProfile",
+          "description": "Actualiza habilidades, tecnologías, experiencia y certificaciones del colaborador."
+        },
+        {
+          "method": "POST",
+          "path": "/api/professional-profiles/:id/documents",
+          "name": "addDocument",
+          "description": "Registra un documento vinculado al legajo con título y categoría."
+        }
+      ]
+    },
+    {
+      "moduleName": "benefits",
+      "title": "Beneficios y saldos",
+      "featureKeys": [
+        "0f57ec03-7a12-4298-8731-89931beed5fe"
+      ],
+      "services": [
+        {
+          "method": "GET",
+          "path": "/api/benefits/:id",
+          "name": "getBenefitBalances",
+          "description": "Devuelve la categoría vigente y los saldos de beneficios por período para el colaborador."
+        },
+        {
+          "method": "GET",
+          "path": "/api/benefits/:id/movements",
+          "name": "listBenefitMovements",
+          "description": "Devuelve los movimientos de beneficios del colaborador, ordenados del más reciente al más antiguo."
+        },
+        {
+          "method": "POST",
+          "path": "/api/benefits/:id/adjustments",
+          "name": "createBenefitAdjustment",
+          "description": "Registra un ajuste justificado del saldo con su responsable."
+        }
+      ]
+    },
+    {
+      "moduleName": "remuneration",
+      "title": "Remuneraciones e historial salarial",
+      "featureKeys": [
+        "5e5bd67b-6658-44c9-977a-01afd5442722"
+      ],
+      "services": [
+        {
+          "method": "GET",
+          "path": "/api/remunerations/:id",
+          "name": "listRemunerationPeriods",
+          "description": "Devuelve todas las vigencias salariales del colaborador, incluidas las programadas, vigentes e históricas."
+        },
+        {
+          "method": "POST",
+          "path": "/api/remunerations/:id",
+          "name": "createRemunerationPeriod",
+          "description": "Registra una nueva vigencia salarial con importe, moneda, fecha, motivo y responsable."
+        }
+      ]
+    },
     {
       "moduleName": "employees",
       "title": "Alta de colaborador",
@@ -97,6 +205,90 @@
     "useMock": true,
     "consumedEndpoints": [
       {
+        "moduleName": "employment-movements",
+        "method": "GET",
+        "path": "/api/employment-movements/:id",
+        "name": "getEmploymentMovements",
+        "description": "Devuelve los datos laborales disponibles del colaborador y sus movimientos registrados."
+      },
+      {
+        "moduleName": "employment-movements",
+        "method": "POST",
+        "path": "/api/employment-movements/:id/category-change",
+        "name": "changeCategory",
+        "description": "Registra un cambio de categoría con fecha efectiva y responsable."
+      },
+      {
+        "moduleName": "employment-movements",
+        "method": "POST",
+        "path": "/api/employment-movements/:id/departure",
+        "name": "registerDeparture",
+        "description": "Registra un egreso y cambia el estado del colaborador a inactivo sin eliminar su ficha."
+      },
+      {
+        "moduleName": "employment-movements",
+        "method": "POST",
+        "path": "/api/employment-movements/:id/rehire",
+        "name": "registerRehire",
+        "description": "Registra un reingreso y reactiva el legajo existente."
+      },
+      {
+        "moduleName": "professional-profile",
+        "method": "GET",
+        "path": "/api/professional-profiles/:id",
+        "name": "getProfessionalProfile",
+        "description": "Devuelve el perfil profesional y la documentación disponible del colaborador."
+      },
+      {
+        "moduleName": "professional-profile",
+        "method": "PUT",
+        "path": "/api/professional-profiles/:id",
+        "name": "updateProfessionalProfile",
+        "description": "Actualiza habilidades, tecnologías, experiencia y certificaciones del colaborador."
+      },
+      {
+        "moduleName": "professional-profile",
+        "method": "POST",
+        "path": "/api/professional-profiles/:id/documents",
+        "name": "addDocument",
+        "description": "Registra un documento vinculado al legajo con título y categoría."
+      },
+      {
+        "moduleName": "benefits",
+        "method": "GET",
+        "path": "/api/benefits/:id",
+        "name": "getBenefitBalances",
+        "description": "Devuelve la categoría vigente y los saldos de beneficios por período para el colaborador."
+      },
+      {
+        "moduleName": "benefits",
+        "method": "GET",
+        "path": "/api/benefits/:id/movements",
+        "name": "listBenefitMovements",
+        "description": "Devuelve los movimientos de beneficios del colaborador, ordenados del más reciente al más antiguo."
+      },
+      {
+        "moduleName": "benefits",
+        "method": "POST",
+        "path": "/api/benefits/:id/adjustments",
+        "name": "createBenefitAdjustment",
+        "description": "Registra un ajuste justificado del saldo con su responsable."
+      },
+      {
+        "moduleName": "remuneration",
+        "method": "GET",
+        "path": "/api/remunerations/:id",
+        "name": "listRemunerationPeriods",
+        "description": "Devuelve todas las vigencias salariales del colaborador, incluidas las programadas, vigentes e históricas."
+      },
+      {
+        "moduleName": "remuneration",
+        "method": "POST",
+        "path": "/api/remunerations/:id",
+        "name": "createRemunerationPeriod",
+        "description": "Registra una nueva vigencia salarial con importe, moneda, fecha, motivo y responsable."
+      },
+      {
         "moduleName": "employees",
         "method": "GET",
         "path": "/api/employees",
@@ -151,8 +343,8 @@
     "Backend: el front arma cada llamada con apiBaseUrl /api (src/environments/environment.backend.ts), /api (src/environments/environment.production.ts), /api (src/environments/environment.ts) + el path del servicio.",
     "Backend: en desarrollo el front redirige /api → http://localhost:8080: el backend tiene que levantar ahí.",
     "Backend: el front levanta en el puerto 4200: ese origen va en la configuración de CORS del backend.",
-    "Backend: el front consume 7 endpoints (frontend.consumedEndpoints); cualquier cambio de method, path o forma de los DTOs lo rompe.",
+    "Backend: el front consume 19 endpoints (frontend.consumedEndpoints); cualquier cambio de method, path o forma de los DTOs lo rompe.",
     "useMock está en true: el front todavía responde con datos mock."
   ],
-  "readme": "# Gestión de RR.HH · Frontend\n\nAplicación Angular 22 para la gestión interna de Recursos Humanos.\n\n## Arranque\n\nRequiere Node.js compatible con Angular 22. Ejecuta `npm install` y `npm start` para abrir la aplicación en `http://localhost:4200` con datos de demostración, sin backend. El inicio de sesión de demostración acepta un correo y la contraseña `Demo1234!`.\n\nPara usar la API local, inicia primero el backend en el puerto `8080` y ejecuta `npm run start:backend`. El proxy de desarrollo envía las peticiones `/api` a `http://localhost:8080`. Configura `FRONT_URL=http://localhost:4200` en el backend para permitir el origen del frontend. La sesión utiliza `POST /api/auth/login`, `GET /api/auth/me` y `POST /api/auth/logout`.\n\n`npm run build` genera siempre la versión conectada al backend: `environment.production.ts` usa `/api` en el mismo origen, sin datos mock. Al desplegarla, configura el servidor web para dirigir `/api` al backend y servir la aplicación Angular en las demás rutas.\n\n## Módulos\n\n- Colaboradores (`/employees`): listado, alta y ficha del colaborador.\n- Pantalla principal (`/dashboard`): indicadores y próximos eventos.\n- Inicio de sesión (`/login`): acceso a los módulos internos; no aparece en el menú.\n\n## Conexión con las otras capas\n\nEl frontend solo consume la API del backend en el puerto `8080`; no accede directamente a Firestore. Para desarrollo local con datos persistidos, inicia el emulador de Firestore del proyecto `demo-app` en `127.0.0.1:8085` según el README de la base de datos y configura el backend con `FIREBASE_PROJECT_ID=demo-app` y `FIRESTORE_EMULATOR_HOST=127.0.0.1:8085`. Después inicia el backend y este frontend con `npm run start:backend`.\n"
+  "readme": "# Gestión de RR.HH · Frontend\n\nAplicación Angular 22 para la administración interna de Recursos Humanos.\n\n## Arranque\n\nRequiere Node.js compatible con Angular 22. Ejecuta `npm install` y `npm start` para abrir la aplicación en `http://localhost:4200` con datos de demostración, sin necesidad de iniciar el backend. La contraseña del modo de demostración es `Demo1234!`.\n\nPara usar datos reales, inicia primero el backend en `http://localhost:8080` y ejecuta `npm run start:backend`. El proxy de desarrollo dirige las solicitudes `/api` al backend. `npm run build` genera siempre la versión de producción con `useMock: false`: sirve el frontend y la API bajo el mismo origen, con la API en `/api`.\n\n## Módulos\n\n- Pantalla principal (`/dashboard`).\n- Colaboradores (`/employees`).\n- Movimientos laborales (`/employment-movements`).\n- Perfil profesional y documentación (`/professional-profiles`).\n- Beneficios y saldos (`/benefits`).\n- Remuneraciones e historial salarial (`/remunerations`).\n\nEl inicio de sesión tiene la ruta pública `/login`; no aparece en la navegación. Los módulos administrativos requieren el rol `ADMIN`.\n\n## Conexión con las otras capas\n\nEl frontend escucha en el puerto `4200` y consume exclusivamente la API del backend en el puerto `8080`, con el prefijo `/api`. Para desarrollo con backend, configura allí `FRONT_URL=http://localhost:4200` y utiliza `npm run start:backend`. El backend se conecta a Firestore mediante `FIREBASE_PROJECT_ID=demo-app` y, en desarrollo local, `FIRESTORE_EMULATOR_HOST=127.0.0.1:8085`. El frontend no accede directamente a Firestore.\n"
 }

@@ -1,0 +1,158 @@
+<main class="remuneration">
+  <header class="remuneration__heading">
+    <div>
+      <p class="remuneration__breadcrumb"><a routerLink="/employees">Ficha de colaborador</a> / Remuneraciones</p>
+      <h1>Remuneraciones e historial salarial</h1>
+      <p>Consulta los importes anteriores y registra cambios sin reemplazar el historial.</p>
+    </div>
+    @if (id()) {
+      <div class="remuneration__employee" aria-label="Legajo seleccionado">
+        <span class="remuneration__avatar" aria-hidden="true">RH</span>
+        <span><strong>Colaborador</strong><small>Legajo {{ id() }}</small></span>
+      </div>
+    }
+  </header>
+
+  @let history = historyState();
+  @switch (history.status) {
+    @case ('loading') {
+      <app-loading-state message="Cargando el historial salarial…" />
+    }
+    @case ('error') {
+      <app-error-alert [message]="history.message" retryLabel="Reintentar" (retry)="retry()" />
+    }
+    @case ('empty') {
+      <app-empty-state message="Selecciona un colaborador para consultar sus remuneraciones.">
+        <a class="button" routerLink="/employees">Ver colaboradores</a>
+      </app-empty-state>
+    }
+    @case ('ready') {
+      @let periods = history.data.periods;
+      @if (currentPeriod(periods); as current) {
+        <section class="remuneration__summary" aria-label="Remuneración vigente">
+          <div class="remuneration__stat">
+            <span class="remuneration__stat-icon" aria-hidden="true">▤</span>
+            <span class="remuneration__label">Base vigente</span>
+            <strong>{{ current.amount | money: current.currency }}</strong>
+            <small>Desde el {{ current.effectiveDate | date: 'dd/MM/yyyy' }}</small>
+          </div>
+          <div class="remuneration__stat">
+            <span class="remuneration__stat-icon" aria-hidden="true">%</span>
+            <span class="remuneration__label">Adicional por pasantía · 1 %</span>
+            <strong>{{ current.internSupplement | money: current.currency }}</strong>
+            <small>Según la vigencia registrada</small>
+          </div>
+          <div class="remuneration__stat">
+            <span class="remuneration__stat-icon" aria-hidden="true">↗</span>
+            <span class="remuneration__label">Base y adicional vigente</span>
+            <strong class="remuneration__total">{{ current.amount + current.internSupplement | money: current.currency }}</strong>
+            <small>No incluye bonos ni pagos excepcionales</small>
+          </div>
+        </section>
+      }
+
+      <div class="remuneration__columns">
+        <section class="remuneration__panel" aria-labelledby="history-title">
+          <div class="remuneration__panel-heading">
+            <div>
+              <h2 id="history-title"><span class="remuneration__heading-icon" aria-hidden="true">↗</span> Historial salarial</h2>
+              <p>{{ periods.length }} registros · ordenados por fecha de vigencia</p>
+            </div>
+            <span class="remuneration__pill">Historial conservado</span>
+          </div>
+          @if (periods.length === 0) {
+            <div class="remuneration__empty"><app-empty-state message="Todavía no hay vigencias salariales para este colaborador." /></div>
+          } @else {
+            <div class="table-wrapper">
+              <table class="data-table remuneration__table">
+                <caption class="visually-hidden">Vigencias salariales del colaborador</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Vigencia</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col" class="data-table__number">Base</th>
+                    <th scope="col" class="data-table__number">Adicional</th>
+                    <th scope="col" class="data-table__number">Base + adicional</th>
+                    <th scope="col">Registro</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (period of periods; track period.id) {
+                    <tr>
+                      <td><strong>{{ period.effectiveDate | date: 'dd/MM/yyyy' }}</strong></td>
+                      <td><app-status-badge [label]="statusInfo[period.status].label" [tone]="statusInfo[period.status].tone" /></td>
+                      <td class="data-table__number">{{ period.amount | money: period.currency }}</td>
+                      <td class="data-table__number">{{ period.internSupplement | money: period.currency }}</td>
+                      <td class="data-table__number"><strong>{{ period.amount + period.internSupplement | money: period.currency }}</strong></td>
+                      <td>
+                        <span>{{ period.reason }}</span>
+                        <small class="remuneration__audit">{{ period.registeredById }} · {{ period.registeredAt | date: 'dd/MM/yyyy HH:mm' }}</small>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+          <div class="remuneration__history-note">
+            <p>Cada importe se aplica desde su fecha de vigencia hasta el inicio del siguiente registro. El adicional del 1 % se calcula solo en los períodos como Pasante.</p>
+            <p>Las versiones anteriores se conservan para auditoría: quién registró cada cambio, cuándo y por qué. No se eliminan ni se modifican silenciosamente.</p>
+          </div>
+        </section>
+
+        @if (canEdit()) {
+          <section class="remuneration__panel" aria-labelledby="new-period-title">
+            <div class="remuneration__panel-heading">
+              <div>
+                <h2 id="new-period-title"><span class="remuneration__heading-icon" aria-hidden="true">＋</span> Nueva modificación</h2>
+                <p>El valor vigente se conservará en el historial.</p>
+              </div>
+            </div>
+            <form class="remuneration__form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+              @if (saveError(); as message) {
+                <app-error-alert [message]="message" />
+              }
+              <div class="form-field">
+                <label for="remuneration-amount">Nuevo importe base *</label>
+                @let amountError = errorFor('amount');
+                <input id="remuneration-amount" type="number" min="0.01" step="0.01" inputmode="decimal" formControlName="amount" [attr.aria-invalid]="amountError ? 'true' : null" [attr.aria-describedby]="amountError ? 'remuneration-amount-error' : 'remuneration-amount-hint'" />
+                <small id="remuneration-amount-hint">Ingresa un importe mayor a 0.</small>
+                @if (amountError) { <span id="remuneration-amount-error" class="form-field__error">{{ amountError }}</span> }
+              </div>
+              <div class="remuneration__form-row">
+                <div class="form-field">
+                  <label for="remuneration-currency">Moneda *</label>
+                  @let currencyError = errorFor('currency');
+                  <select id="remuneration-currency" formControlName="currency" [attr.aria-invalid]="currencyError ? 'true' : null" [attr.aria-describedby]="currencyError ? 'remuneration-currency-error' : null">
+                    @for (currency of currencies; track currency) { <option [value]="currency">{{ currency }}</option> }
+                  </select>
+                  @if (currencyError) { <span id="remuneration-currency-error" class="form-field__error">{{ currencyError }}</span> }
+                </div>
+                <div class="form-field">
+                  <label for="remuneration-date">Vigencia *</label>
+                  @let dateError = errorFor('effectiveDate');
+                  <input id="remuneration-date" type="date" formControlName="effectiveDate" [attr.aria-invalid]="dateError ? 'true' : null" [attr.aria-describedby]="dateError ? 'remuneration-date-error' : null" />
+                  @if (dateError) { <span id="remuneration-date-error" class="form-field__error">{{ dateError }}</span> }
+                </div>
+              </div>
+              <div class="form-field">
+                <label for="remuneration-reason">Motivo *</label>
+                @let reasonError = errorFor('reason');
+                <textarea id="remuneration-reason" rows="3" maxlength="500" formControlName="reason" [attr.aria-invalid]="reasonError ? 'true' : null" [attr.aria-describedby]="reasonError ? 'remuneration-reason-error' : null"></textarea>
+                @if (reasonError) { <span id="remuneration-reason-error" class="form-field__error">{{ reasonError }}</span> }
+              </div>
+              <p class="remuneration__hint">El nuevo importe se aplicará desde la fecha de vigencia. Las versiones anteriores permanecerán en el historial.</p>
+              <div class="remuneration__actions">
+                <button class="button button--secondary" type="button" [disabled]="saving()" (click)="cancel()">Cancelar</button>
+                <button class="button" type="submit" [disabled]="saving()">{{ saving() ? 'Guardando…' : 'Guardar modificación' }}</button>
+              </div>
+              <small class="remuneration__required">* Campos obligatorios</small>
+            </form>
+          </section>
+        }
+      </div>
+    }
+  }
+
+  <footer class="remuneration__footer">El sueldo base aplicable a cada mes se consulta desde liquidaciones. Bonos, pagos excepcionales y facturas se gestionan por separado; las monedas se conservan por registro, sin conversiones ni sumas automáticas.</footer>
+</main>
