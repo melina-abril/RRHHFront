@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "layer": "frontend",
+  "kind": "structure",
+  "generatedAt": "2026-11-18T13:26:50.805Z",
+  "system": {
+    "uid": "3gwNp1rgzqO2F7l1sxjV",
+    "name": "Gestión de RR.HH"
+  },
+  "architecture": {
+    "name": "Angular 22 · standalone + signals",
+    "stack": "angular"
+  },
+  "repositoryPath": "https://github.com/melina-abril/RRHHFront",
+  "ports": [
+    {
+      "port": 4200,
+      "file": "angular.json"
+    }
+  ],
+  "environment": [],
+  "modules": [],
+  "shared": [],
+  "frontend": {
+    "apiBaseUrls": [
+      {
+        "file": "src/environments/environment.backend.ts",
+        "value": "/api"
+      },
+      {
+        "file": "src/environments/environment.production.ts",
+        "value": "/api"
+      },
+      {
+        "file": "src/environments/environment.ts",
+        "value": "/api"
+      }
+    ],
+    "proxies": [
+      {
+        "file": "proxy.conf.json",
+        "context": "/api",
+        "target": "http://localhost:8080"
+      }
+    ],
+    "useMock": true,
+    "consumedEndpoints": [
+      {
+        "moduleName": "",
+        "method": "GET",
+        "path": "/api/auth/me",
+        "name": "me",
+        "description": "Archivo fijo o compartido: src/app/core/session/current-user.ts"
+      },
+      {
+        "moduleName": "",
+        "method": "POST",
+        "path": "/api/auth/login",
+        "name": "login",
+        "description": "Archivo fijo o compartido: src/app/core/session/current-user.ts"
+      },
+      {
+        "moduleName": "",
+        "method": "POST",
+        "path": "/api/auth/logout",
+        "name": "logout",
+        "description": "Archivo fijo o compartido: src/app/core/session/current-user.ts"
+      }
+    ]
+  },
+  "relations": [
+    "Backend: el front arma cada llamada con apiBaseUrl /api (src/environments/environment.backend.ts), /api (src/environments/environment.production.ts), /api (src/environments/environment.ts) + el path del servicio.",
+    "Backend: en desarrollo el front redirige /api → http://localhost:8080: el backend tiene que levantar ahí.",
+    "Backend: el front levanta en el puerto 4200: ese origen va en la configuración de CORS del backend.",
+    "Backend: el front consume 3 endpoints (frontend.consumedEndpoints); cualquier cambio de method, path o forma de los DTOs lo rompe.",
+    "useMock está en true: el front todavía responde con datos mock."
+  ],
+  "readme": "# Gestión de RR.HH\n\nInterfaz Angular para RH smart. Esta estructura inicial incluye la sesión, la navegación vacía y una página de bienvenida; todavía no hay módulos de funcionalidades.\n\n## Desarrollo\n\nRequiere Node.js compatible con Angular 22 y npm.\n\n```sh\nnpm install\nnpm start\n```\n\nAbre `http://localhost:4200`. Este modo utiliza la sesión de demostración: ingresa un correo y la contraseña `Demo1234!`. Para usar el backend local, inicia primero el backend en el puerto `8080` y ejecuta:\n\n```sh\nnpm run start:backend\n```\n\nEl proxy envía `/api` al backend. El backend debe permitir el origen `http://localhost:4200` mediante `FRONT_URL`. La sesión consume `POST /api/auth/login`, `POST /api/auth/logout` y `GET /api/auth/me`; no se consumen otros servicios hasta que se incorporen módulos.\n\n`npm run build` genera la versión de producción con `useMock: false` y la API en el mismo origen bajo `/api`. Configura el servidor de despliegue para reenviar ese prefijo al backend.\n\n## Módulos\n\nAún no se han incorporado módulos de funcionalidades.\n"
+}

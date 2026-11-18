@@ -1,0 +1,61 @@
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100dvh;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  width: 100%;
+  min-height: 100dvh;
+  background: var(--background, var(--color-bg));
+  color: var(--text-primary, var(--color-text));
+  font-family: var(--font-family, Inter, sans-serif);
+}
+
+app-side-nav {
+  min-width: 0;
+}
+
+.app-workspace {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 100dvh;
+}
+
+.app-content {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  padding: 32px;
+}
+
+@media (max-width: 760px) {
+  .app-shell {
+    display: flex;
+    flex-direction: column;
+  }
+
+  app-side-nav {
+    order: 1;
+  }
+
+  .app-workspace {
+    display: contents;
+  }
+
+  app-header {
+    order: 0;
+  }
+
+  .app-content {
+    order: 2;
+    padding: 20px 16px;
+  }
+
+  app-footer {
+    order: 3;
+  }
+}
