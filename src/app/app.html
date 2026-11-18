@@ -1,0 +1,15 @@
+@if (currentUser.isAuthenticated()) {
+  <button type="button" class="skip-link" [attr.aria-current]="activeSection() === 'contenido' ? 'location' : null" (click)="scrollTo('contenido')">Ir al contenido</button>
+  <div class="app-shell">
+    <app-side-nav />
+    <div class="app-work">
+      <app-header />
+      <main id="contenido" class="app-content" tabindex="-1">
+        <router-outlet />
+      </main>
+      <app-footer />
+    </div>
+  </div>
+} @else {
+  <router-outlet />
+}
