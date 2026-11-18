@@ -1,0 +1,108 @@
+<div class="dashboard">
+  <header class="dashboard__introduction">
+    <h1>Inicio</h1>
+    <p>Bienvenido al sistema de Recursos Humanos de TECHFORB. Consulta la actividad general y accede a los módulos desde un solo lugar.</p>
+  </header>
+
+  <section class="dashboard__section" aria-labelledby="dashboard-summary">
+    <h2 id="dashboard-summary">Resumen general</h2>
+    <div class="dashboard__metrics">
+      <div class="dashboard__metric">
+        <span class="dashboard__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 19v-1.5a5.5 5.5 0 0 1 11 0V19H3.5ZM17 11a3 3 0 1 0-1-5.8M17 14a4 4 0 0 1 4 4v1h-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        @let summary = dashboardState();
+        @switch (summary.status) {
+          @case ('loading') {
+            <app-loading-state message="Cargando colaboradores activos…" />
+          }
+          @case ('error') {
+            <app-error-alert [message]="summary.message" retryLabel="Reintentar" (retry)="reload()" />
+          }
+          @case ('empty') {
+            <strong class="dashboard__number">0</strong>
+          }
+          @case ('ready') {
+            <strong class="dashboard__number">{{ summary.data.activeEmployees }}</strong>
+          }
+        }
+        <span class="dashboard__label">Colaboradores activos</span>
+        <small>Con vínculo laboral activo</small>
+      </div>
+      <div class="dashboard__metric">
+        <span class="dashboard__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 8h8M8 12h8M8 16h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </span>
+        <strong class="dashboard__unavailable">Sin datos disponibles</strong>
+        <span class="dashboard__label">Solicitudes pendientes</span>
+        <small>El resumen aún no incluye solicitudes.</small>
+      </div>
+      <div class="dashboard__metric">
+        <span class="dashboard__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M7 3v4m10-4v4M3 10h18m-13 5h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <strong class="dashboard__unavailable">Sin datos disponibles</strong>
+        <span class="dashboard__label">Próximos eventos</span>
+        <small>El resumen aún no incluye eventos.</small>
+      </div>
+      <div class="dashboard__metric">
+        <span class="dashboard__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.8"/></svg>
+        </span>
+        <strong class="dashboard__number">1</strong>
+        <span class="dashboard__label">Módulos disponibles</span>
+        <small>Accesos habilitados desde esta pantalla</small>
+      </div>
+    </div>
+  </section>
+
+  <section class="dashboard__section" aria-labelledby="dashboard-shortcuts">
+    <div class="dashboard__section-heading">
+      <h2 id="dashboard-shortcuts">Accesos rápidos</h2>
+      <p>Ingresa directamente al módulo que necesitas.</p>
+    </div>
+    <div class="dashboard__shortcuts">
+      <a class="dashboard__shortcut dashboard__shortcut--linked" routerLink="/employees">
+        <span class="dashboard__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M3 19a6 6 0 0 1 12 0H3Zm14-9h4m-2-2v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+        <strong>Gestión de Empleados</strong>
+        <span>Legajos, perfiles y asignaciones</span>
+        <span class="dashboard__shortcut-action">Entrar al módulo →</span>
+      </a>
+      <div class="dashboard__shortcut">
+        <span class="dashboard__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M3 10h18m-5 5h2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+        <strong>Sueldos y Bonos</strong><span>Remuneraciones y beneficios</span>
+        <span class="dashboard__shortcut-unavailable">Próximamente</span>
+      </div>
+      <div class="dashboard__shortcut">
+        <span class="dashboard__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M8 4h8l3 3v13H5V4h3Zm0 5h8m-8 4h8m-8 4h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <strong>Solicitudes</strong><span>Revisión y seguimiento de pedidos</span>
+        <span class="dashboard__shortcut-unavailable">Próximamente</span>
+      </div>
+      <div class="dashboard__shortcut">
+        <span class="dashboard__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 10v4h4l9 4V6l-9 4H4Zm4 4 1 5h3m8-10a4 4 0 0 1 0 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <strong>Comunicados</strong><span>Mensajes y registro de envíos</span>
+        <span class="dashboard__shortcut-unavailable">Próximamente</span>
+      </div>
+      <div class="dashboard__shortcut">
+        <span class="dashboard__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="12" r="8" stroke="currentColor" stroke-width="1.8"/><path d="M11 7v5l3 2m6 2v5m-2.5-2.5h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <strong>Horas Extras</strong><span>Autorizaciones y compensaciones</span>
+        <span class="dashboard__shortcut-unavailable">Próximamente</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="dashboard__lower">
+    <section class="dashboard__events" aria-labelledby="dashboard-events">
+      <div class="dashboard__events-heading">
+        <h2 id="dashboard-events">Próximos eventos</h2>
+        <p>Los eventos aparecerán aquí cuando estén disponibles.</p>
+      </div>
+      <p class="dashboard__events-empty">Todavía no hay información de eventos para mostrar.</p>
+    </section>
+    <aside class="dashboard__aside" aria-label="Información del resumen">
+      <h2>Eventos del mes</h2>
+      <p>Todavía no hay información de eventos para mostrar.</p>
+      <div class="dashboard__notice">Los indicadores se calculan con los datos registrados. Los apartados sin información disponible no muestran cantidades estimadas.</div>
+    </aside>
+  </div>
+</div>

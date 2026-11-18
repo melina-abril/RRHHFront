@@ -1,13 +1,15 @@
 @if (currentUser.isAuthenticated()) {
-  <a class="skip-link" href="#contenido">Ir al contenido</a>
-  <app-header />
+  <button class="skip-link" type="button" (click)="content.focus()">Ir al contenido</button>
   <div class="app-shell">
     <app-side-nav />
-    <main id="contenido" class="app-content" tabindex="-1">
-      <router-outlet />
-    </main>
+    <div class="app-work">
+      <app-header />
+      <main #content id="contenido" class="app-content" tabindex="-1">
+        <router-outlet />
+      </main>
+      <app-footer />
+    </div>
   </div>
-  <app-footer />
 } @else {
   <router-outlet />
 }

@@ -1,15 +1,19 @@
 # Gestión de RR.HH
 
-Frontend Angular para RH smart. Esta estructura inicial incluye el acceso y una página de bienvenida; todavía no hay módulos de funcionalidades.
+Aplicación interna de Recursos Humanos para TECHFORB, desarrollada con Angular 22.
 
-## Ejecutar
+## Desarrollo
 
-Se requiere Node.js y npm. Ejecuta `npm install` y `npm start` para iniciar la aplicación en `http://localhost:4200` con la sesión de demostración. En ese modo, puedes usar un correo válido y la contraseña `Demo1234!`.
+Requiere Node.js y npm. Ejecuta `npm install` y `npm start` para abrir la aplicación en `http://localhost:4200` con datos de demostración, sin necesidad de iniciar el backend. En modo demostración, la contraseña de acceso es `Demo1234!`.
 
-Para conectarte al backend local, inicia primero el backend en el puerto 8080 y ejecuta `npm run start:backend`. El proxy de desarrollo envía `/api` a `http://localhost:8080`. El backend permite el origen `http://localhost:4200` mediante `FRONT_URL` y expone `POST /api/auth/login`, `POST /api/auth/logout`, `GET /api/auth/me` y `GET /api/health`. La sesión usa una cookie HttpOnly; para iniciar sesión contra el backend necesitas una cuenta creada allí. La base Firestore y su emulador, si se usan, se configuran en el repositorio del backend con `FIREBASE_PROJECT_ID` y `FIRESTORE_EMULATOR_HOST`.
+Para usar datos reales, inicia el backend por separado en el puerto `8080` y ejecuta `npm run start:backend`. El proxy de desarrollo dirige `/api` a `http://localhost:8080`. El backend permite el origen del frontend mediante `FRONT_URL=http://localhost:4200`. Para consultar datos persistidos, el backend necesita conectarse a Firestore; en desarrollo puede usar `FIREBASE_PROJECT_ID=demo-app` y `FIRESTORE_EMULATOR_HOST=127.0.0.1:8085`. Consulta las instrucciones del repositorio de la base de datos para iniciar el emulador y cargar sus datos de ejemplo.
 
-`npm run build` genera la versión de producción con `useMock: false`: espera que el backend esté disponible bajo `/api` en el mismo origen. Configura el servidor de despliegue para dirigir ese prefijo al backend.
+`npm run build` genera la versión de producción **siempre conectada al backend**, sin mocks. La API debe estar disponible en el mismo origen bajo `/api`; configura el servidor que aloje el frontend para dirigir ese prefijo al backend.
 
 ## Módulos
 
-Aún no se han incorporado módulos de funcionalidades. El inicio de sesión utiliza la sesión compartida de la aplicación.
+- Inicio (`/dashboard`): indicador disponible de colaboradores activos.
+- Gestión de Empleados (`/employees`): listado, ficha y alta de colaboradores.
+- Inicio de sesión (`/login`): pantalla pública, fuera de la navegación interna.
+
+La sesión utiliza `POST /api/auth/login`, `POST /api/auth/logout` y `GET /api/auth/me`. Inicio consume `GET /api/dashboard`; Gestión de Empleados consume `GET /api/employees`, `GET /api/employees/:id` y `POST /api/employees`. El acceso a las pantallas internas requiere una sesión con rol `ADMIN`.
