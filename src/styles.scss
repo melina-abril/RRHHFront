@@ -1,0 +1,319 @@
+// Estilos globales FIJOS de la arquitectura. Los colores salen de src/theme.scss (lo genera cada sistema a
+// partir de su guía de estilos); acá solo se usan las variables, nunca colores sueltos.
+@use 'theme';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--font-family);
+  color: var(--color-text);
+  background: var(--color-background);
+}
+
+body {
+  margin: 0;
+  min-width: 280px;
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+}
+
+a {
+  color: var(--color-primary);
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  max-width: 100%;
+}
+
+input,
+select,
+textarea {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.5rem 0.7rem;
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+input[aria-invalid='true'],
+select[aria-invalid='true'],
+textarea[aria-invalid='true'] {
+  border-color: var(--color-danger);
+}
+
+// Botones: <button class="button"> (principal), button--secondary, button--danger.
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius);
+  padding: 0.55rem 0.9rem;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    filter: brightness(1.08);
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  &--secondary {
+    background: var(--color-surface);
+    color: var(--color-primary);
+  }
+
+  &--danger {
+    border-color: var(--color-danger);
+    background: var(--color-danger);
+    color: var(--color-on-primary);
+  }
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-lg);
+}
+
+// Formularios: .form-grid > .form-field > label + control + .form-field__error.
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: var(--space-md);
+}
+
+.form-field {
+  display: grid;
+  align-content: start;
+  gap: var(--space-xs);
+
+  &--full {
+    grid-column: 1 / -1;
+  }
+
+  label {
+    font-weight: 600;
+  }
+}
+
+.form-field__error {
+  color: var(--color-danger);
+  font-size: 0.875rem;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+// Tablas: envolver en .table-wrapper para que scrolleen en pantallas angostas.
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--color-surface);
+
+  th,
+  td {
+    padding: var(--space-sm) var(--space-md);
+    border-bottom: 1px solid var(--color-border);
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  th {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+  }
+
+  .data-table__number {
+    text-align: right;
+    white-space: nowrap;
+  }
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+
+  h1 {
+    margin: 0;
+  }
+
+  p {
+    margin: var(--space-xs) 0 0;
+    color: var(--color-text-muted);
+  }
+}
+
+.page-header__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.loading-state,
+.empty-state {
+  padding: var(--space-lg);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.loading-state__spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  margin-right: var(--space-sm);
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  vertical-align: -0.15rem;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error-alert {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  border-radius: var(--radius);
+  color: var(--color-danger);
+  background: var(--color-danger-surface);
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.15rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+
+  &--info {
+    background: var(--color-info-surface);
+    color: var(--color-info);
+  }
+
+  &--success {
+    background: var(--color-success-surface);
+    color: var(--color-success);
+  }
+
+  &--warning {
+    background: var(--color-warning-surface);
+    color: var(--color-warning);
+  }
+
+  &--danger {
+    background: var(--color-danger-surface);
+    color: var(--color-danger);
+  }
+}
+
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: var(--space-md);
+  background: rgb(0 0 0 / 0.45);
+}
+
+.dialog {
+  width: min(28rem, 100%);
+  padding: var(--space-lg);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+
+  h2 {
+    margin-top: 0;
+  }
+}
+
+.dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--space-md);
+  top: -5rem;
+  z-index: 60;
+  padding: var(--space-sm);
+  background: var(--color-surface);
+
+  &:focus {
+    top: var(--space-md);
+  }
+}
+
+@media (max-width: 600px) {
+  .card {
+    padding: var(--space-md);
+  }
+}
+
+// Texto solo para lectores de pantalla (ej. <caption> de una tabla).
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
