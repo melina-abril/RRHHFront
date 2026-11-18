@@ -1,0 +1,124 @@
+.detail__location, .detail__header p, .detail__person p, .detail__card p, .detail__footnote {
+  color: var(--text-secondary);
+}
+.detail__location {
+  margin: 0 0 var(--space-sm);
+  font-size: 0.75rem;
+}
+.detail__header, .detail__identity, .detail__person, .detail__name {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+.detail__header {
+  margin-bottom: var(--space-lg);
+}
+.detail__header h1 {
+  margin: 0;
+  font-size: 1.75rem;
+}
+.detail__identity {
+  margin-bottom: var(--space-lg);
+  padding: var(--space-lg);
+}
+.detail__person, .detail__name {
+  justify-content: flex-start;
+}
+.detail__person p {
+  margin: var(--space-xs) 0 0;
+}
+.detail__name h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+.detail__avatar {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background: var(--soft-background);
+  color: var(--primary);
+  font-weight: 700;
+}
+.detail__number {
+  display: grid;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--soft-background);
+}
+.detail__number strong {
+  color: var(--primary);
+}
+.detail__tabs {
+  display: flex;
+  gap: var(--space-lg);
+  overflow-x: auto;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: var(--space-lg);
+}
+.detail__tabs button {
+  padding: var(--space-sm) 0;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.detail__tabs .detail__tab--active {
+  border-bottom-color: var(--primary);
+  color: var(--primary);
+  font-weight: 600;
+}
+.detail__columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: var(--space-md);
+}
+.detail__stack {
+  display: grid;
+  align-content: start;
+  gap: var(--space-md);
+  min-width: 0;
+}
+.detail__card {
+  padding: var(--space-lg);
+  scroll-margin-top: var(--space-lg);
+}
+.detail__card h2 {
+  margin: 0 0 var(--space-sm);
+  font-size: 1.125rem;
+}
+.detail__card h3 {
+  margin: var(--space-lg) 0 var(--space-sm);
+  font-size: 0.95rem;
+  color: var(--primary);
+}
+.detail__card dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: var(--space-md);
+  margin: 0;
+}
+.detail__card dt {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+.detail__card dd {
+  margin: var(--space-xs) 0 0;
+  overflow-wrap: anywhere;
+  font-weight: 600;
+}
+.detail__footnote {
+  font-size: 0.75rem;
+}
+@media (max-width: 750px) {
+  .detail__columns {
+    grid-template-columns: 1fr;
+  }
+}

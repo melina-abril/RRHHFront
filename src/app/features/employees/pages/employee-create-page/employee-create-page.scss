@@ -1,0 +1,98 @@
+.create__back {
+  display: inline-block;
+  margin-bottom: var(--space-lg);
+}
+.create__header, .create__actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+.create__header {
+  margin-bottom: var(--space-lg);
+}
+.create__header h1 {
+  margin: var(--space-xs) 0;
+  font-size: 1.75rem;
+}
+.create__header p, .create__header small, .create__section p {
+  color: var(--text-secondary);
+}
+.create__notice {
+  padding: var(--space-md);
+  margin-bottom: var(--space-lg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--soft-background);
+  color: var(--text-secondary);
+}
+.create__notice strong {
+  color: var(--primary);
+}
+.create__layout {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: var(--space-lg);
+  align-items: start;
+}
+.create__index {
+  position: sticky;
+  top: var(--space-lg);
+  display: grid;
+  gap: var(--space-xs);
+  padding: var(--space-sm);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.create__index button {
+  padding: var(--space-sm);
+  border: 0;
+  border-left: 3px solid transparent;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text-secondary);
+  text-align: left;
+  cursor: pointer;
+}
+.create__index .create__step--active {
+  border-left-color: var(--primary);
+  background: var(--soft-background);
+  color: var(--primary);
+  font-weight: 600;
+}
+.create__layout form {
+  display: grid;
+  gap: var(--space-lg);
+  min-width: 0;
+}
+.create__section {
+  padding: var(--space-lg);
+  scroll-margin-top: var(--space-lg);
+}
+.create__section h2 {
+  margin: 0;
+  color: var(--primary);
+  font-size: 1.125rem;
+}
+.create__section p {
+  margin: var(--space-xs) 0 var(--space-lg);
+}
+.create__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+  margin-top: var(--space-lg);
+}
+.create__facts p {
+  margin: 0;
+}
+@media (max-width: 760px) {
+  .create__layout {
+    grid-template-columns: 1fr;
+  }
+  .create__index {
+    position: static;
+  }
+}
